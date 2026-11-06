@@ -1,0 +1,19 @@
+/* CSS in napoletano: culore è color, sfunno è background, :passanno è :hover */
+@chiamm "par-o-css"
+
+.carta {
+  sfunno-culore: janco
+  bordo-tunno: 1.5rem
+  ombra: 0 12px 40px rgb(15 43 64 / 0.15)
+}
+
+citofono {
+  @applica spazio-x-6 spazio-y-3 bordo-tunno-chino grassetto
+  culore: janco
+  sfunno-culore: #1572b6
+  cursore: manella
+}
+
+citofono:passanno {
+  sfunno-culore: niro
+}

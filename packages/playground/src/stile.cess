@@ -1,0 +1,377 @@
+/* The playground's own stylesheet, written in par-o-css: the theme, the
+   reset and the classes index.emmurt uses, then the parts classes do not
+   cover. Rules here are outside @layer, so they win over the classes. */
+@chiamm "par-o-css"
+
+@tema {
+  --culore-spuma: #f5f8fa
+  --culore-carta: #ffffff
+  --culore-mare: #0f2b40
+  --culore-mare-tenue: #4d6578
+  /* The blue of the shield: 5.1:1 on paper, 4.8:1 on the page */
+  --culore-accento: #1572b6
+  --culore-tufo: #dfe6ec
+  /* Borders of fields: 3:1 against paper and page */
+  --culore-filo: #7f92a3
+  /* Crimson, away from the blue accent */
+  --culore-sbaglio: #b0103a
+  --culore-riga-attiva: #f0f5f9
+  --culore-selezione: #d3e6f6
+
+  /* Highlighting: tags, properties, values, classes */
+  --culore-tag: #1a5f8f
+  --culore-proprieta: #8a5a00
+  --culore-valore: #1d7a4c
+  --culore-classe: #7a3e9d
+  --culore-commento: #5c6f7f
+  --culore-punteggiatura: #56697a
+
+  --scrittura-sans: "Instrument Sans", system-ui, sans-serif
+  --scrittura-mono: "IBM Plex Mono", ui-monospace, monospace
+  --scrittura-targa: "Bodoni Moda", "Didot", serif
+}
+
+:radice {
+  color-scheme: light
+}
+
+@quanno (prefers-color-scheme: dark) {
+  :radice {
+    --culore-spuma: #0c1a24
+    --culore-carta: #0f2130
+    --culore-mare: #e3edf4
+    --culore-mare-tenue: #9fb3c3
+    /* The light blue of the shield */
+    --culore-accento: #33a9dc
+    --culore-tufo: #1f3647
+    --culore-filo: #557089
+    --culore-sbaglio: #ff8fa3
+    --culore-riga-attiva: #13293b
+    --culore-selezione: #173a55
+
+    --culore-tag: #6cc0f0
+    --culore-proprieta: #e6b45c
+    --culore-valore: #7fd3a4
+    --culore-classe: #d2a8ff
+    --culore-commento: #879cad
+    --culore-punteggiatura: #8aa0b2
+
+    color-scheme: dark
+  }
+}
+
+cristian,
+panz {
+  altezza: 100%
+}
+
+panz {
+  mostra: flessibile
+  direzione: colonna
+  scrittura-grannezza: 15px
+  altezza-riga: 1.5
+}
+
+vattenn {
+  culore: var(--culore-accento)
+}
+
+vattenn:passanno {
+  decorazione-testo: sottolineato
+}
+
+:fuoco-visibile {
+  contorno: 2px continuo var(--culore-accento)
+  outline-offset: 2px
+}
+
+/* Testata: the shield, the marble plaque of the alleys, the motto */
+
+.targa {
+  mostra: blocco-in-linea
+  spazio: 0.35rem 1.4rem 0.5rem
+  scrittura: var(--scrittura-targa)
+  scrittura-grannezza: 1.4rem
+  scrittura-peso: 600
+  altezza-riga: 1.15
+  spazio-lettere: 0.08em
+  /* The small optical size has sturdier hairlines */
+  font-optical-sizing: nisciuno
+  font-variation-settings: "opsz" 11
+  trasforma-testo: maiuscolo
+  culore: #2b2925
+  sfunno:
+    radial-gradient(ellipse at 20% 30%, rgb(255 255 255 / 0.6), trasparente 60%),
+    linear-gradient(115deg, #eceae4 0%, #e2dfd8 45%, #eceae4 70%, #dedad2 100%)
+  bordo: 1px continuo #b9b3a7
+  ombra:
+    inset 0 0 0 4px #eceae4,
+    inset 0 0 0 5px #8f897d,
+    0 1px 2px rgb(15 43 64 / 0.18)
+  ombra-testo: 0 1px 0 rgb(255 255 255 / 0.75)
+}
+
+.motto codice {
+  scrittura-grannezza: 0.9em
+  culore: var(--culore-tag)
+}
+
+scegli,
+miett {
+  spazio: 0.35rem 0.5rem
+  sfunno: var(--culore-carta)
+  bordo: 1px continuo var(--culore-filo)
+  bordo-tunno: 6px
+}
+
+::esempio {
+  culore: var(--culore-mare-tenue)
+}
+
+#condividi {
+  /* Sharing comes second to writing: an outline, so the plaque leads */
+  @applica spazio-x-3.5 spazio-y-1.5 bordo-tunno-md cursore-manella transizione
+  culore: var(--culore-accento)
+  bordo: 1px continuo var(--culore-accento)
+}
+
+/* Filled: a tint of the accent would take its text under 4.5:1 */
+#condividi:passanno {
+  culore: var(--culore-carta)
+  sfunno: var(--culore-accento)
+}
+
+/* Wide enough for "Copialo d'a barra", so the bar does not jump when the
+   label changes. On touch screens the row is too short for it */
+@quanno (hover: hover) {
+  #condividi {
+    larghezza-minima: 10.5em
+  }
+}
+
+/* Banco: the sources on the left, the result on the right */
+
+.banco {
+  flessibile: 1
+  altezza-minima: 0
+  mostra: griglia
+  /* minmax(0, …): long editor lines must not widen the columns */
+  colonne: minmax(0, 1fr) minmax(0, 1fr)
+  spazio-mmiez: 1px
+  sfunno: var(--culore-tufo)
+  bordo-ncoppa: 1px continuo var(--culore-tufo)
+  bordo-sotto: 1px continuo var(--culore-tufo)
+}
+
+.pannello {
+  larghezza-minima: 0
+  altezza-minima: 0
+  mostra: flessibile
+  direzione: colonna
+  sfunno: var(--culore-carta)
+}
+
+.barra {
+  mostra: flessibile
+  allinea-cose: miezo
+  spazio-mmiez: 0.25rem 0.75rem
+  altezza-minima: 2.4rem
+  spazio: 0 0.75rem
+  culore: var(--culore-mare-tenue)
+  scrittura-grannezza: 0.85rem
+  bordo-sotto: 1px continuo var(--culore-tufo)
+}
+
+/* The second file starts under the first one */
+.editor + .barra {
+  bordo-ncoppa: 1px continuo var(--culore-tufo)
+}
+
+.file {
+  /* inline-flex has no word in stile yet (flessibile-in-linea would pass as it is) */
+  mostra: inline-flex
+  allinea-cose: miezo
+  spazio-mmiez: 0.4rem
+  scrittura: var(--scrittura-mono)
+  culore: var(--culore-mare)
+}
+
+.nota {
+  margine-manca: automatico
+  trabocca: nascosto
+  white-space: nun-va-a-capo
+  text-overflow: ellipsis
+}
+
+.editor {
+  flessibile: 1
+  altezza-minima: 0
+  trabocca: nascosto
+}
+
+.stato {
+  spazio: 0.5rem 0.9rem
+  scrittura: var(--scrittura-mono)
+  scrittura-grannezza: 0.82rem
+  culore: var(--culore-mare-tenue)
+  bordo-ncoppa: 1px continuo var(--culore-tufo)
+}
+
+.stato.sbagliato {
+  culore: var(--culore-sbaglio)
+  sfunno: color-mix(in srgb, var(--culore-sbaglio) 8%, var(--culore-carta))
+}
+
+/* Schede */
+
+.schede {
+  spazio-mmiez: 0
+  spazio: 0
+}
+
+.scheda {
+  spazio: 0 0.9rem
+  altezza-minima: 2.4rem
+  bordo-sotto: 2px continuo trasparente
+  culore: var(--culore-mare-tenue)
+  cursore: manella
+}
+
+.scheda[aria-selected="true"] {
+  culore: var(--culore-mare)
+  border-bottom-color: var(--culore-accento)
+}
+
+.vista {
+  flessibile: 1
+  altezza-minima: 0
+}
+
+#anteprima {
+  posizione: relativo
+}
+
+#anteprima fenestella {
+  larghezza: 100%
+  altezza: 100%
+  sfunno: janco
+}
+
+/* After a compile error the preview and the CSS are the last good build */
+.vista[data-vecchia] > * {
+  opacità: 0.4
+  filtro: grayscale(1)
+}
+
+#anteprima[data-vecchia]::primma {
+  contenuto: "Chesta è 'a paggena d'apprimma. Aggiusta l'errore e se ricarica."
+  posizione: assoluto
+  inset: 0.75rem 0.75rem automatico
+  livello: 1
+  spazio: 0.5rem 0.75rem
+  scrittura-grannezza: 0.85rem
+  culore: var(--culore-sbaglio)
+  sfunno: var(--culore-carta)
+  bordo: 1px continuo culore-corrente
+  bordo-tunno: 6px
+}
+
+/* Classi: the table of every alias, root and variant */
+
+.tavule {
+  trabocca: automatico
+  spazio: 0.75rem 1rem 1.5rem
+}
+
+.cerca {
+  mostra: griglia
+  spazio-mmiez: 0.3rem
+  larghezza-massima: 24rem
+  margine-sotto: 0.5rem
+  culore: var(--culore-mare-tenue)
+  scrittura-grannezza: 0.85rem
+}
+
+.tavule luccolo {
+  margine: 1.25rem 0 0.4rem
+  scrittura-peso: 600
+}
+
+.tavule tavulat {
+  larghezza: 100%
+  scrittura-grannezza: 0.85rem
+}
+
+.tavule capocasella,
+.tavule casella {
+  spazio: 0.3rem 0.5rem
+  bordo-sotto: 1px continuo var(--culore-tufo)
+  allinea-testo: manca
+}
+
+.tavule capocasella {
+  scrittura-peso: 500
+  culore: var(--culore-mare-tenue)
+}
+
+.tavule casella {
+  scrittura: var(--scrittura-mono)
+  culore: var(--culore-mare-tenue)
+}
+
+.tavule casella:primmo-figlio {
+  culore: var(--culore-classe)
+}
+
+@quanno (prefers-reduced-motion: reduce) {
+  .cm-cursorLayer {
+    animazione: nisciuno !importante
+  }
+}
+
+/* Touch: 44px targets, and 16px fields so iOS does not zoom in on focus.
+   The links in the footer are in a sentence: padding would break its lines.
+   (hover: none), since (pointer: coarse) cannot be written in a .cess yet */
+@quanno (hover: nisciuno) {
+  .comandi vattenn {
+    mostra: blocco-in-linea
+    spazio-ncoppa: 0.75rem
+    spazio-sotto: 0.75rem
+  }
+
+  .comandi scegli,
+  #condividi,
+  .scheda,
+  .cerca miett {
+    altezza-minima: 44px
+    scrittura-grannezza: 16px
+  }
+}
+
+/* Narrow screens: one column, and the page scrolls */
+@quanno (larghezza-massima: 54rem) {
+  panz {
+    altezza: automatico
+  }
+
+  .banco {
+    colonne: minmax(0, 1fr)
+  }
+
+  /* Short enough that both files show, and the tabs and the top of the
+     preview on the next screen */
+  .editor {
+    altezza: 32vh
+    flessibile: nisciuno
+  }
+
+  #anteprima {
+    altezza: 70vh
+    flessibile: nisciuno
+  }
+
+  .tavule,
+  #css {
+    altezza-massima: 70vh
+  }
+}

@@ -1,0 +1,17 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>Uè, munno!</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="flessibile allinea-cose-miezo giustifica-miezo altezza-minima-schermo spazio-6 sfunno-azzurro-50">
+    <!-- E 'e classi pure: spazio-10 è p-10, culore-blu-900 è text-blue-900 -->
+    <cascett classe="carta larghezza-massima-md spazio-10 allinea-testo-miezo">
+      <luccolone classe="scrittura-grannezza-4xl grassetto culore-blu-900">Uè, munno!</luccolone>
+      <chiacchier classe="margine-y-4 culore-grigio-600">
+        Prova: int'o stile scrive <codice>sfunno-culore: russo</codice>,
+        o mietti <codice>maiuscolo</codice> int'e classi d'o titolo.
+      </chiacchier>
+      <citofono tipo="buttone">Trase</citofono>
+    </cascett>
+  </panz>
+</cristian>

@@ -4,6 +4,8 @@
 
 CSS, ma comme si deve 🤌
 
+Provalo nel [playground](https://bitoesposito.github.io/par-o-css/): a sinistra scrivi il `.cess` e una pagina htmlemmurt con le classi, a destra vedi la pagina vera, il CSS che esce e tutte le classi.
+
 par-o-css è CSS in napoletano, con le classi pronte alla Tailwind. È il fratello di [htmlemmurt](https://github.com/bitoesposito/htmlemmurt) e di [FratmScript](https://github.com/kkratterf/fratmscript), e ne usa le stesse parole: `cascett` è `div`, `culore` è `color`, `:passanno` è `:hover`.
 
 I file `.cess` sono CSS con le parole dello `stile` di FratmScript, e diventano CSS normale:
@@ -222,6 +224,8 @@ parocss guida                       # le istruzioni per gli agenti (llms.txt)
 Le classi si cercano nei file della cartella dove lanci il comando (`.emmurt`, `.fratm`, `.html`, `.js`, `.jsx`, `.ts`, `.tsx`, `.vue`, `.svelte`, `.astro`, `.md`), saltando `node_modules`, `dist`, `target` e le cartelle nascoste; `--pagine <cartella>` ne sceglie un'altra. Come Tailwind, la ricerca non conosce il linguaggio del file: trova anche le classi scritte dentro le stringhe del codice. In una cartella, un `.cess` chiamato da un altro con `@chiamm` è un pezzo e non diventa un `.css` per conto suo.
 
 `--json` stampa un solo oggetto JSON con gli errori (file, riga, colonna, suggerimento), utile per editor e agenti. `-` legge da stdin.
+
+Per gli agenti AI c'è [`llms.txt`](https://bitoesposito.github.io/par-o-css/llms.txt): le regole su cui sbagliano più spesso, le parole di `stile` e le classi. `parocss guida` stampa lo stesso testo senza rete.
 
 ## Con Vite
 
