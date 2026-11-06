@@ -1369,7 +1369,10 @@ mod tests {
                 "variante" => format!("`{name}:`"),
                 _ => format!("`{name}`"),
             };
-            assert!(readme.contains(&written), "{written} missing from README.md");
+            assert!(
+                readme.contains(&written),
+                "{written} missing from README.md"
+            );
         }
     }
 
