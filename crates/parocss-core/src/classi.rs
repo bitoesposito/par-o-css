@@ -1013,6 +1013,47 @@ fn add(word: &str, into: &mut BTreeSet<String>) {
     }
 }
 
+/// Classes to offer while typing, with the starting theme: the aliases, the
+/// curated `proprietà-valore` classes and each root with the usual values
+/// (spacing steps, fractions, theme keys, colours with their shades).
+pub fn examples() -> Vec<String> {
+    let theme = Theme::default();
+    let mut values: Vec<String> = [
+        "0", "0.5", "1", "1.5", "2", "2.5", "3", "4", "5", "6", "8", "10", "12", "16", "20", "24",
+        "32", "40", "48", "64", "96", "px", "1/2", "1/3", "2/3", "1/4", "3/4", "16/9", "1/1", "25",
+        "50", "75", "100", "200", "300", "400", "500", "600", "700", "800", "900",
+    ]
+    .iter()
+    .map(|v| v.to_string())
+    .collect();
+    for (name, _) in THEME {
+        if let Some((_, key)) = name.split_once('-') {
+            values.push(key.to_string());
+            if let Some(color) = key.strip_prefix("russo-") {
+                values.push(color.to_string());
+            }
+        }
+    }
+    values.extend(stile::VALUES.iter().map(|(nap, _)| nap.to_string()));
+    let mut out: Vec<String> = ALIASES.iter().map(|(nap, _, _)| nap.to_string()).collect();
+    out.extend(TAILWIND.iter().map(|(_, nap)| nap.to_string()));
+    for root in ROOTS {
+        for value in &values {
+            if root.fixed.iter().any(|(f, _)| f == value)
+                || root_value(root, value, &theme, false).is_some()
+            {
+                out.push(format!("{}-{value}", root.nap));
+            }
+        }
+        for (fixed, _) in root.fixed {
+            out.push(format!("{}-{fixed}", root.nap));
+        }
+    }
+    let mut seen = BTreeSet::new();
+    out.retain(|c| seen.insert(c.clone()));
+    out
+}
+
 /// Every alias, root, variant and breakpoint, for `parocss classi` and the
 /// editors: (name, what it is, Tailwind name).
 pub fn names() -> Vec<(&'static str, &'static str, &'static str)> {
@@ -1372,6 +1413,30 @@ mod tests {
             assert!(
                 readme.contains(&written),
                 "{written} missing from README.md"
+            );
+        }
+    }
+
+    #[test]
+    fn examples_are_classes() {
+        let all = examples();
+        for class in [
+            "flessibile",
+            "spazio-4",
+            "culore-russo-500",
+            "bordo-tunno-lg",
+            "larghezza-1/2",
+            "giustifica-spartuto",
+            "sfunno-janco",
+            "scrittura-grannezza-2xl",
+        ] {
+            assert!(all.iter().any(|c| c == class), "{class} missing");
+        }
+        let theme = Theme::default();
+        for class in &all {
+            assert!(
+                is_class(class, &theme),
+                "{class} is offered but is not a class"
             );
         }
     }

@@ -91,6 +91,7 @@ dependencies = [
 name = "parocss-wasm"
 version = "0.1.0"
 dependencies = [
+ "fratm-core",
  "js-sys",
  "parocss-core",
  "serde",

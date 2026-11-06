@@ -31,7 +31,7 @@ use std::fmt;
 use fratm_core::stile;
 use serde::Serialize;
 
-pub use classi::{generate, is_class, names, scan, suggestion, Theme};
+pub use classi::{examples, generate, is_class, names, scan, suggestion, Theme};
 
 pub struct Options<'a> {
     /// Name of the file, used in errors and to resolve `@chiamm` paths.

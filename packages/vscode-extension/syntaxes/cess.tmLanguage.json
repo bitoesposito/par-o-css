@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "par-o-css",
+  "scopeName": "source.cess",
+  "patterns": [{ "include": "source.css" }]
+}

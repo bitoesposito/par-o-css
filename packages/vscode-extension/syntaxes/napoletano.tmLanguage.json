@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "cess.napoletano.injection",
+  "injectionSelector": "L:source.cess -comment -string, L:text.html.emmurt meta.embedded.block.css -comment -string",
+  "patterns": [
+    {
+      "begin": "(@applica)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.at-rule.cess"
+        }
+      },
+      "end": "(?=[;{}\\n])",
+      "patterns": [
+        {
+          "match": "[^\\s;{}]+",
+          "name": "entity.other.attribute-name.class.css"
+        }
+      ]
+    },
+    {
+      "match": "@(?:chiamm|tema|quanno)\\b",
+      "name": "keyword.control.at-rule.cess"
+    },
+    {
+      "match": "!importante\\b",
+      "name": "keyword.other.important.css"
+    },
+    {
+      "match": "(?<=:)fuoco-visibile|primmo-figlio|urdemo-figlio|disattivato|segnaposto|passanno|spuntato|esempio|premuto|stutato|vacante|primma|radice|doppo|fuoco(?![\\w-])",
+      "name": "entity.other.attribute-name.pseudo-class.css"
+    },
+    {
+      "match": "(?<![\\w.#-])(?:scrittura-grannezza|decorazione-testo|larghezza-massima|larghezza-minima|sfunno-grannezza|altezza-massima|bordo-larghezza|scrittura-stile|sfunno-immagine|trasforma-testo|adatta-oggetto|altezza-minima|margine-destra|margine-ncoppa|scrittura-peso|spazio-lettere|allinea-testo|margine-manca|margine-sotto|sfunno-culore|spazio-destra|spazio-ncoppa|allinea-cose|altezza-riga|area-griglia|bordo-culore|bordo-destra|bordo-ncoppa|spazio-manca|spazio-mmiez|spazio-sotto|bordo-manca|bordo-sotto|bordo-stile|bordo-tunno|lista-stile|ombra-testo|proporzione|transizione|allinea-me|animazione|flessibile|giustifica|visibilita|visibilità|contenuto|direzione|galleggia|larghezza|posizione|puntatore|scrittura|selezione|trasforma|contorno|trabocca|altezza|colonne|cursore|livello|margine|opacita|opacità|scatola|a-capo|cresce|culore|destra|filtro|mostra|ncoppa|sfunno|spazio|bordo|manca|ombra|righe|sotto)(?![\\w-])(?=\\s*:)",
+      "name": "support.type.property-name.css"
+    },
+    {
+      "match": "(?<![\\w.#-])(?:blocco-in-linea|culore-corrente|bordo-incluso|nun-va-a-capo|sottolineato|stiracchiato|tratteggiato|appiccecata|appiccecato|trasparente|automatico|flessibile|nun-ripete|alternato|arancione|ereditato|grassetto|maiuscolo|minuscolo|puntinato|argiento|assoluta|assoluto|attuorno|contiene|continuo|in-linea|infinito|iniziale|nascosto|nisciuno|relativa|relativo|sbarrato|spartuto|visibile|aspetta|azzurro|celeste|colonna|corsivo|griglia|lineare|manella|marrone|normale|statico|a-capo|blocco|destra|facile|giallo|grigio|inizio|mmiezo|ncoppa|niente|ripete|scorre|copre|fissa|fisso|janco|manca|miezo|russo|sotto|verde|viola|fine|nero|niro|riga|rosa|blu|oro)(?![\\w-])",
+      "name": "support.constant.property-value.css"
+    },
+    {
+      "match": "(?<![\\w.#-])(?:abbreviazione|cuorpotavula|luccolicchio|ragionamento|sottolineato|suggerimenti|avanzamento|capocasella|definizione|evidenziato|fattariello|luccoliello|significato|vocabolario|cancellato|capotavula|chiacchier|didascalia|fenestella|luccolillo|peretavula|senzafratm|virgulette|citazione|culunnato|etichetta|incognita|indirizzo|luccolata|luccolino|luccolone|parentesi|piccirill|pronuncia|risultato|scatulell|schermata|aggiunto|allevers|anteprim|cappiell|cartello|cartulin|citofono|cristian|forsacap|leggenda|tastiera|accussi|accussì|attacca|cascett|casella|cornice|corsivo|culonna|dialogo|disegno|fessura|filmato|funtana|inciucc|isolato|listino|luccolo|ncastro|opzione|recinto|spoiler|stuorto|tavulat|traccia|vattenn|allato|codice|elenco|glossa|gruppo|levato|misura|modulo|ncoppa|parola|quadro|scegli|stampo|tiempo|titolo|tomtom|cerca|cunte|fonte|fratm|guapp|mappa|miett|ogget|piezz|sotto|stacc|suono|acap|basa|capa|cess|core|dato|fila|fort|list|panz|pere|tela|voce|zona)(?![\\w-])(?=[^;{}]*\\{)",
+      "name": "entity.name.tag.css"
+    }
+  ]
+}
