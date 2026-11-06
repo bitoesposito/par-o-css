@@ -18,7 +18,6 @@ par-o-css è CSS in napoletano, con le classi pronte alla Tailwind. I file `.ces
 | `packages/playground` | Playground web su GitHub Pages, scritto in htmlemmurt e par-o-css |
 | `packages/playground/public/llms.txt` | Istruzioni per gli agenti AI: il sito le serve come `llms.txt`, `parocss guida` le stampa |
 | `examples/` | `.cess` d'esempio con snapshot golden |
-| `docs/guida.md` | Guida passo passo |
 
 ## Lingua
 
@@ -56,7 +55,7 @@ Dopo una modifica al compilatore, `npm run build` in `packages/par-o-css` rigene
 
 ## Documentazione e backlog
 
-- Niente `PLAN.md`, `ROADMAP.md` o note di progetto nel repo. Documentazione ammessa: i README, i commenti nel codice, questo file, `CLAUDE.md`, `docs/guida.md` e `packages/playground/public/llms.txt`.
+- Niente `PLAN.md`, `ROADMAP.md` o note di progetto nel repo. Documentazione ammessa: i README, i commenti nel codice, questo file, `CLAUDE.md` e `packages/playground/public/llms.txt`.
 - Il backlog sta nelle issue di GitHub.
 
 ## Commit e PR
@@ -68,4 +67,4 @@ Dopo una modifica al compilatore, `npm run build` in `packages/par-o-css` rigene
 
 ## Rilasci
 
-SemVer. La versione sta in `Cargo.toml` (`[workspace.package]`), `packages/par-o-css/package.json` e `packages/vscode-extension/package.json`: si cambiano insieme. Fa eccezione l'estensione, che sale da sola quando cambia solo lei (grammatica, completamento).
+Un tag `vX.Y.Z` fa partire `.github/workflows/release.yml`: binari di `parocss`, il pacchetto npm (messo in attesa su npmjs.com, si approva a mano) e il `.vsix`, tutti nella release di GitHub. SemVer. La versione sta in `Cargo.toml` (`[workspace.package]`), `packages/par-o-css/package.json` e `packages/vscode-extension/package.json`: si cambiano insieme. Fa eccezione l'estensione, che sale da sola quando cambia solo lei (grammatica, completamento).

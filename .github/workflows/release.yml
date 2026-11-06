@@ -1,0 +1,155 @@
+name: Release
+
+# A tag vX.Y.Z builds the parocss binaries, the .vsix and the npm tarball,
+# stages the npm package if that version is not on npm yet (it goes live
+# once approved on npmjs.com) and creates the GitHub release. Run by hand,
+# it releases an existing tag again.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to release, e.g. v0.1.0
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  versions:
+    name: Versions match the tag
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG }}
+      - run: |
+          tag="${TAG#v}"
+          cargo="$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)"
+          npm="$(node -p "require('./packages/par-o-css/package.json').version")"
+          echo "tag $tag, Cargo.toml $cargo, npm $npm"
+          [ "$tag" = "$cargo" ] && [ "$tag" = "$npm" ]
+
+  cli:
+    name: parocss for ${{ matrix.target }}
+    needs: versions
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - { os: ubuntu-24.04, target: x86_64-unknown-linux-gnu }
+          - { os: ubuntu-24.04-arm, target: aarch64-unknown-linux-gnu }
+          - { os: macos-15, target: aarch64-apple-darwin }
+          - { os: macos-15-intel, target: x86_64-apple-darwin }
+          - { os: windows-2025, target: x86_64-pc-windows-msvc }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - run: cargo build --release --locked -p parocss-cli --target ${{ matrix.target }}
+      - name: Archive
+        shell: bash
+        run: |
+          name="parocss-$TAG-${{ matrix.target }}"
+          mkdir "$name"
+          cp README.md LICENSE "$name/"
+          if [ "$RUNNER_OS" = Windows ]; then
+            cp "target/${{ matrix.target }}/release/parocss.exe" "$name/"
+            7z a -bd "$name.zip" "$name" > /dev/null
+          else
+            cp "target/${{ matrix.target }}/release/parocss" "$name/"
+            tar -czf "$name.tar.gz" "$name"
+          fi
+      - uses: actions/upload-artifact@v7
+        with:
+          name: cli-${{ matrix.target }}
+          path: |
+            parocss-*.tar.gz
+            parocss-*.zip
+
+  packages:
+    name: npm tarball and .vsix
+    needs: versions
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Install wasm-pack
+        run: curl -fsSL https://github.com/rustwasm/wasm-pack/releases/download/v0.15.0/wasm-pack-v0.15.0-x86_64-unknown-linux-musl.tar.gz | tar -xz -C ~/.cargo/bin --strip-components=1 --wildcards '*/wasm-pack'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: npm package
+        working-directory: packages/par-o-css
+        run: npm run build && npm test && npm pack --pack-destination "$GITHUB_WORKSPACE"
+      - name: VS Code extension
+        working-directory: packages/vscode-extension
+        run: npm run compiler && npm test && npm run package && mv ./*.vsix "$GITHUB_WORKSPACE/"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: packages
+          path: |
+            par-o-css-*.tgz
+            *.vsix
+
+  npm:
+    name: Stage on npm
+    needs: packages
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+      - name: Stage with trusted publishing
+        run: |
+          version="${TAG#v}"
+          if npm view "par-o-css@$version" version > /dev/null 2>&1; then
+            echo "par-o-css@$version is on npm already"
+            exit 0
+          fi
+          # Trusted publishing and npm stage need a recent npm
+          npm install -g npm@latest
+          tar -xzf "par-o-css-$version.tgz"
+          cd package
+          # The trusted publisher may only stage: approve the version on npmjs.com
+          npm stage publish --access public --provenance
+
+  release:
+    name: GitHub release
+    needs: [cli, packages]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          merge-multiple: true
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          files=(parocss-*.tar.gz parocss-*.zip par-o-css-*.tgz par-o-css-*.vsix)
+          sha256sum "${files[@]}" > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes \
+            "${files[@]}" SHA256SUMS.txt

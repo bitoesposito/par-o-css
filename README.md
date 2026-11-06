@@ -203,6 +203,8 @@ Un valore che non sta nel tema va tra parentesi quadre, con `_` al posto degli s
 
 ## La CLI
 
+Ogni [release](https://github.com/bitoesposito/par-o-css/releases) ha i binari di `parocss` per Linux, macOS e Windows. Con Rust installato va bene anche:
+
 ```bash
 cargo install --git https://github.com/bitoesposito/par-o-css parocss-cli
 ```
