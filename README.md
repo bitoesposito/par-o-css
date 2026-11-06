@@ -247,6 +247,10 @@ Un `.cess` si collega da una pagina, `<attacca rapporto="stile" addo="stile.cess
 
 Ogni `<link type="text/cess">` e `<style type="text/cess">` diventa uno `<style>` col CSS compilato e le classi della pagina; senza nessun `.cess`, la pagina ha comunque tema, pulizia e classi. Quando il codice aggiunge una classe nuova, il CSS si ricompila. Serve un server (anche `python3 -m http.server`), perché il browser deve scaricare i file. Il resto dell'API, per Node e per il browser, sta nel [README del pacchetto](packages/par-o-css/README.md).
 
+## VS Code
+
+L'estensione in [`packages/vscode-extension`](packages/vscode-extension) colora i `.cess` e mostra gli errori mentre scrivi. Completa le classi dentro `classe="…"`, `class="…"`, `className` e `@applica`, col nome Tailwind accanto e il CSS che generano; passando il mouse su una classe vedi il suo CSS. Ogni CI ne costruisce il `.vsix` tra gli artefatti.
+
 ## Sviluppo
 
 Le regole per chi contribuisce, persone o agenti, stanno in [`AGENTS.md`](AGENTS.md).
@@ -255,6 +259,7 @@ Le regole per chi contribuisce, persone o agenti, stanno in [`AGENTS.md`](AGENTS
 cargo test --workspace                                   # compilatore, CLI, golden test
 cargo build -p parocss-cli && ./target/debug/parocss check examples
 cd packages/par-o-css && npm run build && npm test       # WebAssembly e pacchetto npm (serve wasm-pack)
+cd packages/vscode-extension && npm run compiler && npm test   # estensione, dopo il WebAssembly
 ```
 
 ## Licenza

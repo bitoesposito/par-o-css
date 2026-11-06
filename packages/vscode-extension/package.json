@@ -1,0 +1,99 @@
+{
+  "name": "par-o-css",
+  "displayName": "par-o-css: CSS in napoletano",
+  "description": "CSS in napoletano e classi alla Tailwind: colori, completamento delle classi ed errori mentre scrivi",
+  "version": "0.1.0",
+  "publisher": "bitoesposito",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#f5f8fa",
+    "theme": "light"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitoesposito/par-o-css"
+  },
+  "homepage": "https://github.com/bitoesposito/par-o-css/tree/main/packages/vscode-extension#readme",
+  "bugs": {
+    "url": "https://github.com/bitoesposito/par-o-css/issues"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "par-o-css",
+    "htmlemmurt",
+    "fratmscript",
+    "napoletano",
+    "css",
+    "tailwind"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:htmlemmurt",
+    "onLanguage:html",
+    "onLanguage:fratmscript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact",
+    "onLanguage:vue",
+    "onLanguage:svelte",
+    "onLanguage:astro"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "cess",
+        "aliases": [
+          "par-o-css",
+          "cess"
+        ],
+        "extensions": [
+          ".cess"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./images/file-light.svg",
+          "dark": "./images/file-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cess",
+        "scopeName": "source.cess",
+        "path": "./syntaxes/cess.tmLanguage.json"
+      },
+      {
+        "scopeName": "cess.napoletano.injection",
+        "path": "./syntaxes/napoletano.tmLanguage.json",
+        "injectTo": [
+          "source.cess",
+          "text.html.emmurt"
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "par-o-css",
+      "properties": {
+        "parocss.diagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Mostra gli errori del compilatore mentre scrivi nei file .cess"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "node scripts/copy-compiler.mjs",
+    "compiler": "node scripts/copy-compiler.mjs",
+    "test": "node --test test/*.test.js",
+    "package": "npx --yes @vscode/vsce package --no-dependencies",
+    "publish": "npx --yes @vscode/vsce publish --no-dependencies"
+  },
+  "author": "Vito Esposito"
+}

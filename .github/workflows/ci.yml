@@ -52,3 +52,10 @@ jobs:
       - name: npm package
         working-directory: packages/par-o-css
         run: npm run build && npm test && npm pack --dry-run
+      - name: VS Code extension
+        working-directory: packages/vscode-extension
+        run: npm run compiler && npm test && npx --yes @vscode/vsce package --no-dependencies
+      - uses: actions/upload-artifact@v7
+        with:
+          name: par-o-css-vscode
+          path: packages/vscode-extension/*.vsix

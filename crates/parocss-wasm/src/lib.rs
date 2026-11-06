@@ -93,6 +93,32 @@ pub fn names() -> String {
     serde_json::Value::Array(list).to_string()
 }
 
+/// Classes to offer while typing.
+#[wasm_bindgen]
+pub fn examples() -> Vec<String> {
+    parocss_core::examples()
+}
+
+/// The `.cess` files a source pastes in with `@chiamm`.
+#[wasm_bindgen]
+pub fn pieces(source: &str, filename: &str) -> Vec<String> {
+    parocss_core::pieces(source, filename)
+}
+
+/// The words of CSS in Neapolitan, as JSON: `{ properties, values, pseudo,
+/// tags }`, each a list of `[Neapolitan, CSS]`.
+#[wasm_bindgen]
+pub fn vocabulary() -> String {
+    use fratm_core::{html, stile};
+    serde_json::json!({
+        "properties": stile::PROPERTIES,
+        "values": stile::VALUES,
+        "pseudo": stile::PSEUDO,
+        "tags": html::TAGS.iter().map(|(nap, tag, _)| (nap, tag)).collect::<Vec<_>>(),
+    })
+    .to_string()
+}
+
 #[wasm_bindgen]
 pub fn version() -> String {
     env!("CARGO_PKG_VERSION").to_string()
