@@ -1,0 +1,69 @@
+{
+  "name": "par-o-css",
+  "version": "0.1.0",
+  "description": "par-o-css compiler (WebAssembly), Vite plugin and browser runtime: CSS, ma comme si deve 🤌",
+  "license": "MIT",
+  "author": "Vito Esposito",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitoesposito/par-o-css.git",
+    "directory": "packages/par-o-css"
+  },
+  "homepage": "https://github.com/bitoesposito/par-o-css#readme",
+  "bugs": {
+    "url": "https://github.com/bitoesposito/par-o-css/issues"
+  },
+  "keywords": [
+    "par-o-css",
+    "htmlemmurt",
+    "fratmscript",
+    "napoletano",
+    "css",
+    "tailwind",
+    "utility-classes",
+    "wasm",
+    "vite-plugin"
+  ],
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./vite": {
+      "types": "./vite.d.ts",
+      "default": "./vite.js"
+    },
+    "./web": {
+      "types": "./web.d.ts",
+      "default": "./web.js"
+    },
+    "./browser": {
+      "types": "./browser.d.ts",
+      "default": "./browser.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "vite.js",
+    "vite.d.ts",
+    "web.js",
+    "web.d.ts",
+    "browser.js",
+    "browser.d.ts",
+    "lib/",
+    "wasm/node/package.json",
+    "wasm/node/parocss_wasm.js",
+    "wasm/node/parocss_wasm_bg.wasm",
+    "wasm/web/parocss_wasm.js",
+    "wasm/web/parocss_wasm_bg.wasm"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build-wasm.js",
+    "test": "node --test test/*.test.js"
+  }
+}

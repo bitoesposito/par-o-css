@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "crates/parocss-core",
     "crates/parocss-cli",
+    "crates/parocss-wasm",
 ]
 
 [workspace.package]

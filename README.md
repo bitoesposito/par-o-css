@@ -221,6 +221,32 @@ Le classi si cercano nei file della cartella dove lanci il comando (`.emmurt`, `
 
 `--json` stampa un solo oggetto JSON con gli errori (file, riga, colonna, suggerimento), utile per editor e agenti. `-` legge da stdin.
 
+## Con Vite
+
+```bash
+npm i -D par-o-css vite
+```
+
+```js
+// vite.config.js
+import htmlemmurt from 'htmlemmurt/vite';
+import fratmscript from 'fratmscript/vite';
+import parocss from 'par-o-css/vite';
+
+export default { plugins: [htmlemmurt(), fratmscript(), parocss()] };
+```
+
+Un `.cess` si collega da una pagina, `<attacca rapporto="stile" addo="stile.cess">`, o si importa da un modulo, `chiamm "./stile.cess"`. Il plugin lo compila con le classi che trova nei file del progetto, e lo ricompila quando una pagina usa una classe nuova. Un errore compare nel terminale e nella pagina, con file, riga e colonna.
+
+## Nel browser, senza build
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/npm/par-o-css@0.1/browser.js"></script>
+<link rel="stylesheet" type="text/cess" href="stile.cess">
+```
+
+Ogni `<link type="text/cess">` e `<style type="text/cess">` diventa uno `<style>` col CSS compilato e le classi della pagina; senza nessun `.cess`, la pagina ha comunque tema, pulizia e classi. Quando il codice aggiunge una classe nuova, il CSS si ricompila. Serve un server (anche `python3 -m http.server`), perché il browser deve scaricare i file. Il resto dell'API, per Node e per il browser, sta nel [README del pacchetto](packages/par-o-css/README.md).
+
 ## Sviluppo
 
 Le regole per chi contribuisce, persone o agenti, stanno in [`AGENTS.md`](AGENTS.md).
@@ -228,6 +254,7 @@ Le regole per chi contribuisce, persone o agenti, stanno in [`AGENTS.md`](AGENTS
 ```bash
 cargo test --workspace                                   # compilatore, CLI, golden test
 cargo build -p parocss-cli && ./target/debug/parocss check examples
+cd packages/par-o-css && npm run build && npm test       # WebAssembly e pacchetto npm (serve wasm-pack)
 ```
 
 ## Licenza

@@ -11,6 +11,13 @@
 5. A new line ends a declaration, so `;` is optional, as in FratmScript.
 6. Check before you finish: `parocss check stile.cess --json` prints one JSON object with every error, its line and column and a `suggestion`.
 
+## Where it runs
+
+- CLI: `parocss build stile.cess` writes `stile.css`; the classes are looked for in the page files of the current folder (`--pagine <folder>` for another one).
+- Vite: `import parocss from 'par-o-css/vite'` next to `htmlemmurt/vite` and `fratmscript/vite`. Link the stylesheet from an htmlemmurt page with `<attacca rapporto="stile" addo="stile.cess">`, or import it from a module.
+- Browser, no build: `<script type="module" src="https://cdn.jsdelivr.net/npm/par-o-css@0.1/browser.js"></script>` and `<link rel="stylesheet" type="text/cess" href="stile.cess">` (or `<style type="text/cess">`).
+- Node: `compile(source, { filename, classes: findClasses('.') })` from `par-o-css`.
+
 ## A .cess file
 
 ```css

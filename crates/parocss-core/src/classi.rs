@@ -53,7 +53,7 @@ impl Theme {
 
     /// `:root` with the starting values of the custom properties in `used`,
     /// except the ones a `@tema` writes.
-    pub(crate) fn root(&self, used: &BTreeSet<String>) -> String {
+    pub fn root(&self, used: &BTreeSet<String>) -> String {
         let mut out = String::new();
         for (name, value) in THEME {
             if used.contains(*name) && !self.user.contains_key(*name) {
