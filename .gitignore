@@ -1,0 +1,6 @@
+target/
+node_modules/
+dist/
+packages/par-o-css/wasm/
+packages/vscode-extension/compiler/
+*.vsix
