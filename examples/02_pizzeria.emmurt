@@ -1,0 +1,30 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>'A Pizzeria</titolo>
+    <attacca rapporto="stile" addo="02_pizzeria.css">
+  </capa>
+  <panz classe="sfunno-grigio-50 culore-grigio-900">
+    <core classe="larghezza-massima-3xl margine-x-automatico spazio-6 md:spazio-10">
+      <luccolone classe="scrittura-grannezza-4xl grassetto allinea-testo-miezo margine-sotto-8">'O menù</luccolone>
+      <list classe="griglia spazio-mmiez-6 md:colonne-2">
+        <voce classe="carta">
+          <luccolo>Margherita</luccolo>
+          <chiacchier classe="culore-grigio-600">Pummarola, mozzarella e vasenicola.</chiacchier>
+          <cascett classe="flessibile giustifica-spartuto allinea-cose-miezo margine-ncoppa-4">
+            <scatulell classe="scrittura-grannezza-lg scrittura-peso-600">5 €</scatulell>
+            <citofono tipo="buttone" classe="ordina">Ordina</citofono>
+          </cascett>
+        </voce>
+        <voce classe="carta">
+          <luccolo>Marinara</luccolo>
+          <chiacchier classe="culore-grigio-600">Pummarola, aglio, uoglio e arecheta.</chiacchier>
+          <cascett classe="flessibile giustifica-spartuto allinea-cose-miezo margine-ncoppa-4">
+            <scatulell classe="scrittura-grannezza-lg scrittura-peso-600">4 €</scatulell>
+            <citofono tipo="buttone" classe="ordina" stutato>Fernuta</citofono>
+          </cascett>
+        </voce>
+      </list>
+      <chiacchier classe="annascuso md:blocco allinea-testo-miezo scrittura-grannezza-sm culore-grigio-500 margine-ncoppa-8 notte:culore-grigio-300">Aperti 'a sera, tranne 'o lunedì.</chiacchier>
+    </core>
+  </panz>
+</cristian>

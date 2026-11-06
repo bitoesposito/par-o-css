@@ -1,0 +1,2 @@
+crates/parocss-core/tests/golden/cases/chiamm_senza_virgolette.sbagliato.cess:1:1: @chiamm vo' nu nomme tra virgolette.
+  Scrive @chiamm "par-o-css"; o @chiamm "pezzi/carta.cess";

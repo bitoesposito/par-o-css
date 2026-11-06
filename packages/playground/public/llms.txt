@@ -1,0 +1,59 @@
+# par-o-css
+
+> CSS in Neapolitan, with Tailwind-style classes. `.cess` files are CSS written with the Neapolitan words of FratmScript's `stile`, compiled to plain CSS by `parocss`. The compiler is strict: an English name that has a Neapolitan word is an error. Sibling of htmlemmurt (HTML in Neapolitan) and FratmScript (JavaScript in Neapolitan).
+
+## Rules agents get wrong
+
+1. Write the Neapolitan word whenever there is one. `color: red` is an error: write `culore: russo`. `:hover` is `:passanno`, `@media` is `@quanno`, `div` is `cascett`, `!important` is `!importante`. CSS names without a Neapolitan word (`grid-column`, `:nth-child`, `rotate`) are written as they are.
+2. Class names are Neapolitan too. `p-4` is `spazio-4`, `flex` is `flessibile`, `hidden` is `annascuso`, `text-red-500` is `culore-russo-500`, `bg-white` is `sfunno-janco`, `hover:` is `passanno:`, `dark:` is `notte:`. Sizes and breakpoints keep Tailwind's codes: `sm`, `md`, `lg`, `xl`, `2xl` (`md:colonne-2`, `bordo-tunno-lg`, `ombra-md`).
+3. Colours need a shade: `culore-russo-500`, not `culore-russo`. The palettes are `russo`, `arancione`, `giallo`, `verde`, `azzurro`, `blu`, `viola`, `rosa`, `grigio` (50 to 950), plus `janco`, `niro`, `trasparente`, `culore-corrente`. An opacity goes after `/`: `sfunno-niro/50`.
+4. Classes only get CSS when a stylesheet has `@chiamm "par-o-css";`. Put it first in one `.cess` file of the project.
+5. A new line ends a declaration, so `;` is optional, as in FratmScript.
+6. Check before you finish: `parocss check stile.cess --json` prints one JSON object with every error, its line and column and a `suggestion`.
+
+## A .cess file
+
+```css
+@chiamm "par-o-css"
+
+@tema {
+  --culore-pummarola-500: oklch(58% 0.21 28)
+}
+
+.carta {
+  @applica spazio-6 bordo-tunno-xl sfunno-janco ombra-md
+  culore: grigio
+}
+
+citofono:passanno {
+  sfunno-culore: giallo
+}
+
+@quanno (larghezza-massima: 600px) {
+  .carta { spazio: 1rem }
+}
+```
+
+- `@chiamm "par-o-css"`: the theme (custom properties), a base reset and a rule for every class the pages use.
+- `@chiamm "pezzi/carta.cess"`: pastes another `.cess` file in. Any other path stays an `@import`.
+- `@tema { … }`: changes or adds theme properties. `--culore-pummarola-500` makes `culore-pummarola-500`, `sfunno-pummarola-500`, `bordo-pummarola-500` work.
+- `@applica class class…`: writes the declarations of those classes inside a rule; variants become nested rules.
+
+## Words of stile
+
+Properties: `culore` color, `sfunno` background, `sfunno-culore` background-color, `scrittura` font-family, `scrittura-grannezza` font-size, `scrittura-peso` font-weight, `allinea-testo` text-align, `altezza-riga` line-height, `larghezza` width, `altezza` height, `margine` margin, `spazio` padding (`-ncoppa`, `-sotto`, `-manca`, `-destra`), `bordo` border, `bordo-tunno` border-radius, `mostra` display, `posizione` position, `ncoppa`/`sotto`/`manca`/`destra` top/bottom/left/right, `livello` z-index, `trabocca` overflow, `opacità` opacity, `ombra` box-shadow, `cursore` cursor, `spazio-mmiez` gap, `direzione` flex-direction, `allinea-cose` align-items, `giustifica` justify-content, `colonne` grid-template-columns, `transizione` transition, `trasforma` transform, `contenuto` content.
+
+Values: `russo` red, `janco` white, `niro` black, `verde`, `blu`, `giallo`, `grigio`, `trasparente`, `nisciuno` none, `blocco` block, `flessibile` flex, `griglia` grid, `miezo` center, `spartuto` space-between, `colonna` column, `assoluto` absolute, `relativo` relative, `fisso` fixed, `grassetto` bold, `automatico` auto, `manella` pointer, `continuo` solid, `copre` cover, `facile` ease.
+
+Pseudo-classes: `:passanno` hover, `:fuoco` focus, `:fuoco-visibile` focus-visible, `:premuto` active, `:stutato` disabled, `:spuntato` checked, `:primmo-figlio`, `:urdemo-figlio`, `::primma` before, `::doppo` after, `::esempio` placeholder. `@quanno schermo e (larghezza-minima: 600px)` is `@media screen and (min-width: 600px)`. In `@keyframes`, `da` and `a` are `from` and `to`.
+
+## Classes
+
+- Aliases: `flessibile`, `griglia`, `blocco`, `in-linea`, `annascuso`, `annascuso-all-uocchie` (sr-only), `assoluto`, `relativo`, `fisso`, `appiccecato`, `a-capo`, `cresce`, `grassetto`, `corsivo`, `sottolineato`, `maiuscolo`, `bordo`, `bordo-tunno`, `ombra`, `transizione`.
+- Spacing (`4` is `calc(var(--spazio) * 4)`, 1rem): `spazio`, `spazio-x`, `spazio-y`, `spazio-ncoppa`… `margine` (also negative: `-margine-ncoppa-2`), `spazio-mmiez` (gap).
+- Sizes: `larghezza-1/2`, `larghezza-chino` (100%), `altezza-schermo` (100vh), `larghezza-massima-md`.
+- Any stile property with one of its value words: `giustifica-spartuto`, `allinea-cose-miezo`, `direzione-colonna`, `trabocca-nascosto`, `cursore-manella`.
+- Arbitrary values in brackets, `_` for spaces: `larghezza-[37px]`, `colonne-[1fr_2fr]`, `[grid-column:span_2]`.
+- Variants: `passanno:`, `fuoco:`, `fuoco-visibile:`, `premuto:`, `stutato:`, `spuntato:`, `primmo-figlio:`, `urdemo-figlio:`, `primma:`, `doppo:`, `notte:`, `stampa:`, `sm:` `md:` `lg:` `xl:` `2xl:`. A trailing `!` adds `!important`.
+
+`parocss classi` lists every alias, root and variant; `parocss classi spazio-4 md:flessibile` prints their CSS.

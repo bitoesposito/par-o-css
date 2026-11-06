@@ -1,0 +1,3 @@
+@media (larghezza-massima: 600px) {
+  core { spazio: 0 }
+}

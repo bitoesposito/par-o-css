@@ -1,0 +1,11 @@
+/* Valori e nomi senza parola napoletana passano comme so' */
+.galleria > pizza-card:nth-child(2n) {
+  grid-column: span 2;
+  color: color-mix(in oklab, red 50%, transparent);
+  background: url(pizza.png) no-repeat center / cover
+}
+
+@keyframes trase {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}

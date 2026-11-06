@@ -1,0 +1,15 @@
+[package]
+name = "parocss-cli"
+description = "The parocss command: compiles .cess files to CSS"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "parocss"
+path = "src/main.rs"
+
+[dependencies]
+parocss-core = { path = "../parocss-core" }
+serde_json.workspace = true

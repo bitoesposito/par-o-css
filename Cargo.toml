@@ -1,0 +1,19 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/parocss-core",
+    "crates/parocss-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/bitoesposito/par-o-css"
+
+[workspace.dependencies]
+# FratmScript's stile: the words of CSS in Neapolitan and their translation.
+# ponytail: the fork's branch with kkratterf/fratmscript#264 and #266 until they are released, then the tag
+fratm-core = { git = "https://github.com/bitoesposito/fratmscript", rev = "9a9ee8b3713e10d0c8e9b856f1f38750f08d624e" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
