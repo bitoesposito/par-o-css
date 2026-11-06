@@ -422,10 +422,12 @@ fn directives(text: &str) -> Vec<Directive> {
                     }
                 } else {
                     let stop = statement_end(b, name_end);
+                    // The `;` is part of it; without one, the spaces before
+                    // the `}` stay where they are
                     let end = if b.get(stop) == Some(&b';') {
                         stop + 1
                     } else {
-                        stop
+                        name_end + text[name_end..stop].trim_end().len()
                     };
                     (end, text[name_end..stop].trim().to_string())
                 };
@@ -737,6 +739,10 @@ mod tests {
         assert_eq!(e.suggestion.as_deref(), Some("Vuoi dire 'spazio-4'?"));
         assert_eq!((e.line, e.column), (2, 23));
         assert_eq!(error(".carta { @applica pizza }").suggestion, None);
+        assert_eq!(
+            css(".carta { @applica bordo }"),
+            ".carta { border-width: 1px; }"
+        );
     }
 
     #[test]
