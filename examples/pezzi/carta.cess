@@ -1,0 +1,9 @@
+/* Na carta d'o menù: se chiamma da 02_pizzeria.cess */
+.carta {
+  @applica spazio-6 bordo-tunno-xl sfunno-mozzarella ombra-md
+  @applica md:spazio-8
+
+  luccolo {
+    scrittura-grannezza: 1.25rem
+  }
+}

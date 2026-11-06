@@ -1,0 +1,41 @@
+/* CSS in napoletano: 'e parole so' chelle 'e stile 'e FratmScript */
+panz {
+  scrittura: system-ui, sans-serif
+  sfunno-culore: janco
+  culore: #222
+  margine: 0
+}
+
+core {
+  larghezza-massima: 40rem
+  margine: 0 automatico
+  spazio: 2rem 1rem
+}
+
+luccolone {
+  scrittura-grannezza: 2rem
+  allinea-testo: miezo
+}
+
+vattenn:passanno {
+  decorazione-testo: sottolineato
+}
+
+citofono {
+  spazio: 8px 16px
+  bordo: 1px continuo grigio
+  bordo-tunno: 8px
+  cursore: manella
+  transizione: sfunno-culore 0.2s facile
+}
+
+citofono:stutato {
+  opacità: 0.5
+  cursore: automatico
+}
+
+@quanno schermo e (larghezza-massima: 600px) {
+  core {
+    spazio: 1rem
+  }
+}
