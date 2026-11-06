@@ -1,0 +1,77 @@
+<!-- 'O playground è scritto isso stesso in htmlemmurt, FratmScript e par-o-css -->
+<cristian lingua="it">
+  <capa>
+    <inciucc nomme="viewport" cuntenuto="width=device-width, initial-scale=1">
+    <titolo>par-o-css: 'o playground</titolo>
+    <inciucc nomme="description" cuntenuto="Scrive CSS in napoletano, vieste 'a paggena cu 'e classi napoletane e vide subbeto 'o risultato. Fratello di htmlemmurt e FratmScript.">
+    <inciucc nomme="og:title" cuntenuto="par-o-css: CSS, ma comme si deve">
+    <inciucc nomme="og:description" cuntenuto="Scrive culore: russo e esce color: red. Provalo int'o browser.">
+    <attacca rapporto="icona" addo="favicon.svg" tipo="image/svg+xml">
+    <attacca rapporto="stile" addo="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..600&display=swap">
+    <attacca rapporto="stile" addo="./src/stile.cess">
+  </capa>
+  <panz classe="sfunno-spuma culore-mare">
+    <cappiell classe="flessibile a-capo allinea-cose-miezo giustifica-spartuto spazio-mmiez-x-6 spazio-mmiez-y-3 spazio-x-5 spazio-y-3">
+      <cascett classe="flessibile a-capo allinea-cose-miezo spazio-mmiez-x-4 spazio-mmiez-y-2">
+        <luccolone classe="flessibile allinea-cose-miezo spazio-mmiez-3">
+          <cartulin da="favicon.svg" spiegazione="" larghezza="34" altezza="38">
+          <scatulell classe="targa">Par-o-css</scatulell>
+        </luccolone>
+        <chiacchier classe="motto culore-mare-tenue">Scrive <codice>culore: russo</codice> e esce <codice>color: red</codice>.</chiacchier>
+      </cascett>
+      <tomtom classe="comandi flessibile a-capo allinea-cose-miezo spazio-mmiez-x-4 spazio-mmiez-y-2" aria-label="Comandi">
+        <etichetta classe="flessibile allinea-cose-miezo spazio-mmiez-2 culore-mare-tenue">
+          <scatulell>Esempi</scatulell>
+          <scegli chi="esempi"><opzione valore="" stutato scigliuto>Scegli…</opzione></scegli>
+        </etichetta>
+        <citofono chi="condividi" tipo="buttone" aria-live="polite">Copia link</citofono>
+        <vattenn addo="https://github.com/bitoesposito/par-o-css">GitHub</vattenn>
+        <vattenn addo="https://www.npmjs.com/package/par-o-css">npm</vattenn>
+      </tomtom>
+    </cappiell>
+
+    <core classe="banco">
+      <piezz classe="pannello" aria-label="Sorgente">
+        <cascett classe="barra">
+          <scatulell classe="file"><cartulin da="cess.svg" spiegazione="" larghezza="18" altezza="18"> stile.cess</scatulell>
+          <scatulell classe="nota">CSS napoletano</scatulell>
+        </cascett>
+        <cascett chi="cess" classe="editor"></cascett>
+        <cascett classe="barra">
+          <scatulell classe="file"><cartulin da="emmurt.svg" spiegazione="" larghezza="18" altezza="18"> index.emmurt</scatulell>
+          <scatulell classe="nota">'a paggena, cu 'e classi</scatulell>
+        </cascett>
+        <cascett chi="paggena" classe="editor"></cascett>
+        <chiacchier chi="stato" classe="stato" ruolo="status" aria-live="polite">Carico 'e compilatori…</chiacchier>
+      </piezz>
+
+      <piezz classe="pannello" aria-label="Risultato">
+        <cascett classe="barra schede" ruolo="tablist" aria-label="Risultato">
+          <citofono classe="scheda" ruolo="tab" chi="scheda-anteprima" aria-controls="anteprima" aria-selected="true">Anteprima</citofono>
+          <citofono classe="scheda" ruolo="tab" chi="scheda-css" aria-controls="css" aria-selected="false" turno="-1">CSS</citofono>
+          <citofono classe="scheda" ruolo="tab" chi="scheda-classi" aria-controls="classi" aria-selected="false" turno="-1">Classi</citofono>
+        </cascett>
+        <cascett chi="anteprima" classe="vista" ruolo="tabpanel" aria-labelledby="scheda-anteprima"></cascett>
+        <cascett chi="css" classe="vista editor" ruolo="tabpanel" aria-labelledby="scheda-css" annascuso></cascett>
+        <cascett chi="classi" classe="vista tavule" ruolo="tabpanel" aria-labelledby="scheda-classi" turno="0" annascuso>
+          <etichetta classe="cerca">
+            <scatulell>Cerca na classe</scatulell>
+            <miett chi="cerca" tipo="cerca" esempio="flessibile, flex, passanno, hover…">
+          </etichetta>
+          <cascett chi="nomi"></cascett>
+          <chiacchier chi="nisciuna" classe="culore-mare-tenue" annascuso></chiacchier>
+        </cascett>
+      </piezz>
+    </core>
+
+    <pere classe="spazio-x-5 spazio-y-2 scrittura-grannezza-sm culore-mare-tenue">
+      <chiacchier>
+        Stu playground è scritto isso stesso in htmlemmurt, FratmScript e par-o-css:
+        <vattenn classe="sottolineato" addo="https://github.com/bitoesposito/par-o-css/tree/main/packages/playground">vide 'o codice</vattenn>.
+        Pe l'agenti AI ce sta <vattenn classe="sottolineato" addo="llms.txt">llms.txt</vattenn>.
+      </chiacchier>
+    </pere>
+
+    <fratm da="/src/main.fratm" />
+  </panz>
+</cristian>

@@ -1,0 +1,25 @@
+{
+  "name": "par-o-css-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemirror/lang-css": "^6.3.1",
+    "@codemirror/lang-html": "^6.4.12",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/lint": "^6.9.7",
+    "@codemirror/state": "^6.7.6",
+    "@lezer/highlight": "^1.2.5",
+    "codemirror": "^6.0.2",
+    "htmlemmurt": "^0.4.0",
+    "par-o-css": "file:../par-o-css"
+  },
+  "devDependencies": {
+    "fratmscript": "^0.17.1",
+    "vite": "^8.3.5"
+  }
+}

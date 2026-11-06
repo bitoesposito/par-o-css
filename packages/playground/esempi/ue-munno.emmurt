@@ -1,0 +1,17 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>Uè, munno!</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz>
+    <core>
+      <luccolone>Uè, munno!</luccolone>
+      <chiacchier>
+        Stu stile è sulo CSS napoletano, senza <codice>@chiamm "par-o-css"</codice>
+        e senza classi: 'e tag, <vattenn addo="#">nu link</vattenn> e dduje bottoni.
+      </chiacchier>
+      <citofono tipo="buttone">Trase</citofono>
+      <citofono tipo="buttone" stutato>Chiuso</citofono>
+    </core>
+  </panz>
+</cristian>
