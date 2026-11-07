@@ -274,4 +274,4 @@ cd packages/vscode-extension && npm run compiler && npm test   # estensione, dop
 
 ## Licenza
 
-MIT. Il tema di partenza e la pulizia di base vengono da Tailwind CSS (MIT): vedi [`LICENSE`](LICENSE).
+MIT: vedi [`LICENSE`](LICENSE). Il tema di partenza e la pulizia di base vengono da Tailwind CSS, sotto la sua licenza MIT: vedi [`LICENSE-tailwindcss`](LICENSE-tailwindcss).

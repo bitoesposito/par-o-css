@@ -1,5 +1,5 @@
 //! The starting theme and the base reset. The values come from Tailwind CSS v4
-//! (MIT, see LICENSE), under Neapolitan names: `--culore-russo-500` is
+//! (MIT, see LICENSE-tailwindcss), under Neapolitan names: `--culore-russo-500` is
 //! `--color-red-500`, `--spazio` is `--spacing`, `--schermo-md` is
 //! `--breakpoint-md`. A `@tema { … }` in a `.cess` changes or adds to them.
 
