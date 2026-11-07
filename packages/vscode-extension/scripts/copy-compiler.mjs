@@ -12,7 +12,9 @@ mkdirSync(join(root, 'compiler'), { recursive: true });
 for (const file of ['parocss_wasm.js', 'parocss_wasm_bg.wasm']) {
   copyFileSync(join(from, file), join(root, 'compiler', file));
 }
-copyFileSync(join(root, '..', '..', 'LICENSE'), join(root, 'LICENSE'));
+for (const file of ['LICENSE', 'LICENSE-tailwindcss']) {
+  copyFileSync(join(root, '..', '..', file), join(root, file));
+}
 
 const require = createRequire(import.meta.url);
 const wasm = require('../compiler/parocss_wasm.js');
