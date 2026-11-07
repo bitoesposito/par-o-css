@@ -19,6 +19,8 @@ function loadedApi() {
 }
 
 export const compile = (source, options) => loadedApi().compile(source, options);
+export const format = (source) => loadedApi().format(source);
+export const vocabulary = () => loadedApi().vocabulary();
 export const scan = (text) => loadedApi().scan(text);
 export const suggestion = (name) => loadedApi().suggestion(name);
 export const isClass = (name) => loadedApi().isClass(name);

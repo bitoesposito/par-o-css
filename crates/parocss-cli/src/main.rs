@@ -8,7 +8,7 @@ use std::process::ExitCode;
 use std::time::{Duration, SystemTime};
 
 use parocss_core::{
-    compile, generate, is_class, names, pieces, scan, suggestion, Error, Options, Theme,
+    compile, format, generate, is_class, names, pieces, scan, suggestion, Error, Options, Theme,
 };
 use serde_json::json;
 
@@ -20,6 +20,8 @@ parocss: CSS, ma comme si deve
       --stdout                       Stampa 'o CSS (nu file sulo, o - pe' stdin)
   parocss check <file|cartella...>   Controlla senza scrivere niente
   parocss watch <file|cartella...>   Ricompila ogni vota ca cagne quaccosa
+  parocss fmt <file|cartella...>     Mette a posto rientri e righe vacante
+      --check                        Dice sulo quali file nun so' a posto
   parocss classi [classe...]         'O CSS 'e chelli classi, o tutte 'e parole
   parocss guida                      'E istruzioni pe' n'agente (llms.txt)
 
@@ -44,6 +46,7 @@ const PAGES: &[&str] = &[
 struct Flags {
     json: bool,
     stdout: bool,
+    check: bool,
     out: Option<PathBuf>,
     pages: Option<PathBuf>,
 }
@@ -69,6 +72,7 @@ fn main() -> ExitCode {
         match arg.as_str() {
             "--json" => flags.json = true,
             "--stdout" => flags.stdout = true,
+            "--check" => flags.check = true,
             "--out" | "--pagine" => match args.next() {
                 Some(dir) if arg == "--out" => flags.out = Some(dir.into()),
                 Some(dir) => flags.pages = Some(dir.into()),
@@ -79,11 +83,12 @@ fn main() -> ExitCode {
         }
     }
     match command.as_str() {
-        "build" | "check" | "watch" if paths.is_empty() => {
+        "build" | "check" | "watch" | "fmt" if paths.is_empty() => {
             fail("Dimme quale file: parocss build stile.cess")
         }
         "build" => build(&paths, &flags, true),
         "check" => build(&paths, &flags, false),
+        "fmt" => fmt(&paths, &flags),
         "watch" => watch(&paths, &flags),
         "classi" => classes(&paths, flags.json),
         "guida" => {
@@ -232,6 +237,75 @@ fn watch(paths: &[String], flags: &Flags) -> ExitCode {
                 break;
             }
         }
+    }
+}
+
+/// Formats files in place, or with --check only lists the ones that would
+/// change. `-` formats stdin to stdout.
+fn fmt(paths: &[String], flags: &Flags) -> ExitCode {
+    if paths == ["-"] {
+        let mut source = String::new();
+        if let Err(e) = io::stdin().read_to_string(&mut source) {
+            return fail(&format!("Nun riesco a leggere stdin: {e}"));
+        }
+        return match format(&source, "stdin.cess") {
+            Ok(text) => {
+                print!("{text}");
+                ExitCode::SUCCESS
+            }
+            Err(e) => {
+                report(
+                    std::slice::from_ref(&e),
+                    flags.json,
+                    json!({}),
+                    Some(&source),
+                );
+                ExitCode::FAILURE
+            }
+        };
+    }
+    let inputs = match inputs(paths, None) {
+        Ok(inputs) => inputs,
+        Err(e) => return fail(&e),
+    };
+    let mut errors = Vec::new();
+    let mut changed = Vec::new();
+    for input in &inputs {
+        let file = input.path.to_string_lossy().replace('\\', "/");
+        let source = match fs::read_to_string(&input.path) {
+            Ok(source) => source,
+            Err(e) => return fail(&format!("Nun riesco a leggere '{file}': {e}")),
+        };
+        match format(&source, &file) {
+            Err(e) => errors.push(e),
+            Ok(text) if text != source => {
+                if !flags.check {
+                    if let Err(e) = fs::write(&input.path, &text) {
+                        return fail(&format!("Nun riesco a scrivere '{file}': {e}"));
+                    }
+                }
+                changed.push(file);
+            }
+            Ok(_) => {}
+        }
+    }
+    report(&errors, flags.json, json!({ "changed": changed }), None);
+    if !flags.json {
+        let (mark, what) = match flags.check {
+            true => ("✗", "nun è a posto"),
+            false => ("✓", "aggiustato"),
+        };
+        for file in &changed {
+            eprintln!("{mark} {file}: {what}");
+        }
+        if errors.is_empty() && changed.is_empty() {
+            eprintln!("✓ Tutto a posto: {} file.", inputs.len());
+        }
+    }
+    if errors.is_empty() && !(flags.check && !changed.is_empty()) {
+        ExitCode::SUCCESS
+    } else {
+        ExitCode::FAILURE
     }
 }
 

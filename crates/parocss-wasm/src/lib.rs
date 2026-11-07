@@ -54,6 +54,13 @@ pub fn compile(
     response.serialize(&serializer).unwrap_or(JsValue::NULL)
 }
 
+/// The formatted `.cess`, or undefined when it has a syntax error: then
+/// `compile` says why.
+#[wasm_bindgen]
+pub fn format(source: &str) -> Option<String> {
+    parocss_core::format(source, "").ok()
+}
+
 /// The words of a text that may be classes.
 #[wasm_bindgen]
 pub fn scan(text: &str) -> Vec<String> {

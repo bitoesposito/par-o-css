@@ -16,6 +16,8 @@ export function createApi(wasm) {
 
   return {
     compile,
+    format: (source) => wasm.format(String(source)) ?? null,
+    vocabulary: () => JSON.parse(wasm.vocabulary()),
     scan: (text) => wasm.scan(String(text)),
     suggestion: (name) => wasm.suggestion(String(name)) ?? null,
     isClass: (name) => wasm.isClass(String(name)),

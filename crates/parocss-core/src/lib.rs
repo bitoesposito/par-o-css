@@ -23,6 +23,7 @@
 //!   declarations of those classes there.
 
 mod classi;
+mod format;
 pub mod tema;
 
 use std::collections::BTreeSet;
@@ -32,6 +33,7 @@ use fratm_core::stile;
 use serde::Serialize;
 
 pub use classi::{examples, generate, is_class, names, scan, suggestion, Theme};
+pub use format::format;
 
 pub struct Options<'a> {
     /// Name of the file, used in errors and to resolve `@chiamm` paths.

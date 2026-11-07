@@ -34,6 +34,7 @@ jobs:
         run: |
           cargo build -p parocss-cli --locked
           ../target/debug/parocss check .
+          ../target/debug/parocss fmt --check . ../packages/playground/src ../packages/playground/esempi
 
   web:
     name: npm

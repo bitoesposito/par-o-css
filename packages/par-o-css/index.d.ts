@@ -42,8 +42,20 @@ export interface Name {
   tailwind: string;
 }
 
+export interface Vocabulary {
+  properties: [string, string][];
+  values: [string, string][];
+  pseudo: [string, string][];
+  /** Neapolitan tags and their HTML tag */
+  tags: [string, string][];
+}
+
 /** Compiles a .cess file to CSS. Never throws on invalid source: check `errors`. */
 export function compile(source: string, options?: CompileOptions): CompileResult;
+/** The .cess put in order (spaces and new lines only), or null when it has a syntax error. */
+export function format(source: string): string | null;
+/** The words of CSS in Neapolitan: each a list of [Neapolitan, CSS]. */
+export function vocabulary(): Vocabulary;
 /** The words of a text that may be classes. */
 export function scan(text: string): string[];
 /** The words that may be classes in the page files under `root` (Node only). */

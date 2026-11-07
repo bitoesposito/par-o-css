@@ -25,4 +25,6 @@ Passando il mouse su una classe vedi il suo CSS; su una classe Tailwind, quella 
 
 I colori seguono il CSS, con le parole napoletane colorate come quelle inglesi, anche dentro `<cess>` nelle pagine htmlemmurt. Ctrl+clic (Cmd+clic su macOS) sul percorso di `@chiamm "…"` apre il file.
 
+"Formatta documento" (Maiusc+Alt+F) rimette a posto un `.cess` come `parocss fmt`: due spazi per livello, una dichiarazione per riga, al massimo una riga vuota di fila. Su un file con un errore di sintassi non fa niente.
+
 L'impostazione `parocss.diagnostics` spegne gli errori mentre scrivi.

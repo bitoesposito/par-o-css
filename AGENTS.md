@@ -11,7 +11,8 @@ par-o-css è CSS in napoletano, con le classi pronte alla Tailwind. I file `.ces
 | `crates/parocss-core/src/lib.rs` | Compilatore dei `.cess`: controllo severo, `@chiamm`, `@tema`, `@applica`, errori |
 | `crates/parocss-core/src/classi.rs` | Le classi: radici, varianti, valori, il CSS che generano e i nomi Tailwind che suggeriscono |
 | `crates/parocss-core/src/tema.rs` | Il tema di partenza (colori, misure, breakpoint) e la pulizia di base |
-| `crates/parocss-cli` | Il comando `parocss` (`build`, `check`, `watch`, `classi`, `guida`) |
+| `crates/parocss-core/src/format.rs` | `parocss fmt`: rientri, una dichiarazione per riga, righe vuote |
+| `crates/parocss-cli` | Il comando `parocss` (`build`, `check`, `watch`, `fmt`, `classi`, `guida`) |
 | `crates/parocss-wasm` | Binding WebAssembly usati da npm ed estensione |
 | `packages/par-o-css` | Pacchetto npm: API Node, plugin Vite, runtime browser (`wasm/` è generato) |
 | `packages/vscode-extension` | Grammatica, completamento delle classi, diagnostica (`compiler/` è generato) |
@@ -34,6 +35,7 @@ cargo fmt --all --check
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --locked
 cargo build -p parocss-cli && ./target/debug/parocss check examples
+./target/debug/parocss fmt --check examples packages/playground/src packages/playground/esempi
 cd packages/par-o-css && npm run build && npm test           # serve wasm-pack
 cd packages/vscode-extension && npm run compiler && npm test
 cd packages/playground && npm install && npm run build      # dopo il WebAssembly

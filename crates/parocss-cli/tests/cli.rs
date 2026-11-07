@@ -87,3 +87,25 @@ fn classi_prints_the_css_and_suggests_for_tailwind() {
     assert!(err.contains("Vuoi dire 'spazio-4'?"), "{err}");
     fs::remove_dir_all(dir).unwrap();
 }
+
+#[test]
+fn fmt_puts_files_in_order_and_check_says_which() {
+    let dir = project("fmt");
+    fs::write(
+        dir.join("stile/brutto.cess"),
+        ".a{culore:russo}\n\n\n.b { spazio: 0 }",
+    )
+    .unwrap();
+    let (ok, _, err) = parocss(&dir, &["fmt", "--check", "stile"]);
+    assert!(!ok);
+    assert!(err.contains("brutto.cess: nun è a posto"), "{err}");
+    let (ok, _, err) = parocss(&dir, &["fmt", "stile"]);
+    assert!(ok, "{err}");
+    assert_eq!(
+        fs::read_to_string(dir.join("stile/brutto.cess")).unwrap(),
+        ".a {\n  culore:russo\n}\n\n.b {\n  spazio: 0\n}\n"
+    );
+    let (ok, _, _) = parocss(&dir, &["fmt", "--check", "stile"]);
+    assert!(ok);
+    fs::remove_dir_all(dir).unwrap();
+}
