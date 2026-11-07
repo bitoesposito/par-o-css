@@ -862,7 +862,7 @@ pub fn apply(class: &str, theme: &Theme, used: &mut BTreeSet<String>) -> Option<
 }
 
 /// Notes the custom properties a value uses.
-fn vars(value: &str, used: &mut BTreeSet<String>) {
+pub(crate) fn vars(value: &str, used: &mut BTreeSet<String>) {
     let mut rest = value;
     while let Some(at) = rest.find("var(--") {
         rest = &rest[at + 6..];
