@@ -4,7 +4,7 @@
 
 CSS, ma comme si deve 🤌
 
-Provalo nel [playground](https://bitoesposito.github.io/par-o-css/): a sinistra scrivi il `.cess` e una pagina htmlemmurt con le classi, a destra vedi la pagina vera, il CSS che esce e tutte le classi.
+Provalo nel [playground](https://bitoesposito.github.io/par-o-css/): scrivi `stile.cess` e una pagina htmlemmurt con le classi, e accanto vedi la pagina vera, la console e il CSS che esce. Ci sono anche una guida con esempi da eseguire e le lezioni di Impara.
 
 par-o-css è CSS in napoletano, con le classi pronte alla Tailwind. È il fratello di [htmlemmurt](https://github.com/bitoesposito/htmlemmurt) e di [FratmScript](https://github.com/kkratterf/fratmscript), e ne usa le stesse parole: `cascett` è `div`, `culore` è `color`, `:passanno` è `:hover`.
 

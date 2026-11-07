@@ -1,0 +1,8 @@
+@chiamm "par-o-css"
+
+@tema {
+  --culore-mozzarella: #fffdf7
+}
+
+/* 'O pezzo è examples/pezzi/carta.cess, comme int'a pizzeria */
+@chiamm "pezzi/carta.cess"

@@ -1,0 +1,90 @@
+// The help (the ? button): par-o-css classes with their Tailwind names and
+// the words of Neapolitan CSS with their CSS names, with a search
+
+chiamm { t, quannoCagnaLingua } da "./lingua.fratm"
+chiamm { crea, scriviTesto } da "./dom.fratm"
+
+chist è pesca = (chi) => document.getElementById(chi)
+
+// Rules: @tema and @applica are par-o-css's, like Tailwind's @theme and @apply
+chist è REGOLE = [
+    ["@chiamm \"par-o-css\"", "@import \"tailwindcss\""],
+    ["@chiamm \"pezzi/carta.cess\"", "@import"],
+    ["@quanno", "@media"],
+    ["@tema", "@theme"],
+    ["@applica", "@apply"],
+    ["!importante", "!important"],
+]
+
+facc tavula(titolo, colonne, righe) {
+    chist è piezz = crea("section", "margine-sotto-6")
+    chist è capo = crea("h3", "testo margine-sotto-2 scrittura-peso-600")
+    scriviTesto(capo, titolo)
+    piezz.append(capo)
+    chist è tavola = crea("table", "larghezza-chino")
+    chist è riga = tavola.createTHead().insertRow()
+    pe ogni (chist è colonna dint colonne) {
+        chist è th = crea("th", "allinea-testo-manca spazio-x-2 spazio-y-1.5 bordo-sotto-1 scrittura-grannezza-xs scrittura-peso-500 culore-scritta-smorta", colonna)
+        th.scope = "col"
+        riga.append(th)
+    }
+    chist è cuorpo = tavola.createTBody()
+    pe ogni (chist è [nap, altro] dint righe) {
+        chist è r = cuorpo.insertRow()
+        r.insertCell().append(crea("code", "culore-scritta", nap))
+        r.insertCell().append(crea("code", "culore-scritta-smorta", altro))
+        pe ogni (chist è td dint r.cells) {
+            td.className = "spazio-x-2 spazio-y-1 bordo-sotto-1 scrittura-mono larghezza-1/2"
+        }
+    }
+    piezz.append(tavola)
+    piglie piezz
+}
+
+facc filtra() {
+    chist è scritto = pesca("cerca").value.trim()
+    chist è cosa = scritto.toLowerCase()
+    pe ogni (chist è piezz dint pesca("parole").querySelectorAll("section")) {
+        pe ogni (chist è r dint piezz.querySelectorAll("tbody tr")) {
+            r.hidden = cosa !== "" && !r.textContent.toLowerCase().includes(cosa)
+        }
+        piezz.hidden = !piezz.querySelector("tbody tr:not([hidden])")
+    }
+    chist è nisciuna = pesca("nisciuna")
+    nisciuna.hidden = Boolean(pesca("parole").querySelector("section:not([hidden])"))
+    nisciuna.textContent = t("help.none", { query: scritto })
+}
+
+/** Sets up the help with par-o-css's names() and the CSS vocabulary. */
+mann for facc preparaAiuto(nomi, v) {
+    // A root takes a value after "-", a variant goes before a class with ":"
+    chist è righe = (che, doppo) => nomi.filter((n) => n.che === che).map((n) => [n.nomme + doppo, n.tailwind + doppo])
+    facc scrivi() {
+        pesca("parole").replaceChildren(
+            tavula(t("help.aliases"), ["par-o-css", "Tailwind"], righe("classe", "")),
+            tavula(t("help.roots"), ["par-o-css", "Tailwind"], righe("radice", "-")),
+            tavula(t("help.variants"), ["par-o-css", "Tailwind"], righe("variante", ":")),
+            tavula(t("help.rules"), ["par-o-css", "CSS / Tailwind"], REGOLE),
+            tavula(t("help.properties"), ["par-o-css", "CSS"], v.properties),
+            tavula(t("help.values"), ["par-o-css", "CSS"], v.values),
+            tavula(t("help.pseudo"), ["par-o-css", "CSS"], v.pseudo.map(([nap, c]) => [`:${nap}`, `:${c}`])),
+            tavula(t("help.tags"), ["par-o-css", "CSS"], v.tags),
+        )
+        scriviTesto(document.querySelector("[data-t='help.hint']"), t("help.hint"))
+        filtra()
+    }
+    scrivi()
+    quannoCagnaLingua(scrivi)
+    pesca("cerca").addEventListener("input", filtra)
+    pesca("aiuto-apri").addEventListener("click", () => {
+        pesca("aiuto").showModal()
+        pesca("cerca").focus()
+    })
+    pesca("aiuto-chiude").addEventListener("click", () => pesca("aiuto").close())
+    // A click outside the window closes it
+    pesca("aiuto").addEventListener("click", (evento) => {
+        si (evento.target === pesca("aiuto")) {
+            pesca("aiuto").close()
+        }
+    })
+}

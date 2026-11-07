@@ -16,9 +16,10 @@ par-o-css è CSS in napoletano, con le classi pronte alla Tailwind. I file `.ces
 | `crates/parocss-wasm` | Binding WebAssembly usati da npm ed estensione |
 | `packages/par-o-css` | Pacchetto npm: API Node, plugin Vite, runtime browser (`wasm/` è generato) |
 | `packages/vscode-extension` | Grammatica, completamento delle classi, diagnostica (`compiler/` è generato) |
-| `packages/playground` | Playground web su GitHub Pages, scritto in htmlemmurt e par-o-css |
+| `packages/playground` | Playground web su GitHub Pages, scritto in htmlemmurt, FratmScript e par-o-css; la guida sta in `guida/`, le lezioni di Impara in `scola/` |
 | `packages/playground/public/llms.txt` | Istruzioni per gli agenti AI: il sito le serve come `llms.txt`, `parocss guida` le stampa |
 | `examples/` | `.cess` d'esempio con snapshot golden |
+| `e2e/` | Il playground provato in Chromium con Playwright |
 
 ## Lingua
 
@@ -35,10 +36,11 @@ cargo fmt --all --check
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --locked
 cargo build -p parocss-cli && ./target/debug/parocss check examples
-./target/debug/parocss fmt --check examples packages/playground/src packages/playground/esempi
+./target/debug/parocss fmt --check examples packages/playground/src packages/playground/esempi packages/playground/guida packages/playground/scola
 cd packages/par-o-css && npm run build && npm test           # serve wasm-pack
 cd packages/vscode-extension && npm run compiler && npm test
-cd packages/playground && npm install && npm run build      # dopo il WebAssembly
+cd packages/playground && npm install && npm run build && npm test   # dopo il WebAssembly
+cd e2e && npm ci && npm test        # dopo il playground; CHROMIUM_PATH sceglie un altro Chromium
 ```
 
 Dopo una modifica al compilatore, `npm run build` in `packages/par-o-css` rigenera il WebAssembly: plugin Vite, runtime e playground usano quello.

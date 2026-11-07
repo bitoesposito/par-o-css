@@ -1,376 +1,313 @@
-/* The playground's own stylesheet, written in par-o-css: the theme, the
-   reset and the classes index.emmurt uses, then the parts classes do not
-   cover. Rules here are outside @layer, so they win over the classes. */
+/* The playground's stylesheet, in par-o-css: the look of FratmScript's
+   playground (coss/shadcn tokens on neutral greys). Pages use classes for
+   the layout; the parts they share (buttons, menus, badges) are in the
+   componenti layer, so a class on the element still wins over them. */
+@layer pulizia, componenti, classi;
 @chiamm "par-o-css"
 
 @tema {
-  --culore-spuma: #f5f8fa
+  --culore-paggena: #ffffff
+  --culore-scritta: #262626
   --culore-carta: #ffffff
-  --culore-mare: #0f2b40
-  --culore-mare-tenue: #4d6578
-  /* The blue of the shield: 5.1:1 on paper, 4.8:1 on the page */
-  --culore-accento: #1572b6
-  --culore-tufo: #dfe6ec
-  /* Borders of fields: 3:1 against paper and page */
-  --culore-filo: #7f92a3
-  /* Crimson, away from the blue accent */
-  --culore-sbaglio: #b0103a
-  --culore-riga-attiva: #f0f5f9
-  --culore-selezione: #d3e6f6
-
-  /* Highlighting: tags, properties, values, classes */
-  --culore-tag: #1a5f8f
-  --culore-proprieta: #8a5a00
-  --culore-valore: #1d7a4c
-  --culore-classe: #7a3e9d
-  --culore-commento: #5c6f7f
-  --culore-punteggiatura: #56697a
-
-  --scrittura-sans: "Instrument Sans", system-ui, sans-serif
-  --scrittura-mono: "IBM Plex Mono", ui-monospace, monospace
-  --scrittura-targa: "Bodoni Moda", "Didot", serif
+  --culore-smorto: rgb(0 0 0 / 4%)
+  --culore-scritta-smorta: color-mix(in srgb, #737373 90%, #000000)
+  --culore-filo: rgb(0 0 0 / 8%)
+  --culore-casella: rgb(0 0 0 / 10%)
+  --culore-primario: #262626
+  --culore-primario-scritta: #fafafa
+  --culore-anello: #a3a3a3
+  --culore-sbaglio: #ef4444
+  --culore-sbaglio-scritta: #b91c1c
+  --culore-buono: #10b981
+  --culore-buono-scritta: #047857
+  --culore-attesa: #f59e0b
+  --culore-attesa-scritta: #b45309
+  --culore-nfo: #3b82f6
+  --scrittura-mono: "Fira Code", "SF Mono", Monaco, Inconsolata, ui-monospace, monospace
 }
 
+/* Code colours, as in FratmScript's editor */
 :radice {
-  color-scheme: light
+  color-scheme: light;
+  --cm-tag: #dc2626;
+  --cm-attributo: #b45309;
+  --cm-valore: #047857;
+  --cm-parola: #7c3aed;
+  --cm-commento: #6b7280;
+  --cm-punteggiatura: #6b7280;
+  --cm-nomme: #374151;
+  --cm-numero: #b45309;
+  --cm-funzione: #2563eb;
+  --cm-operatore: #0e7490;
+  --cm-cursore: #ef4444;
+  --cm-selezione: rgb(239 68 68 / 20%);
 }
 
-@quanno (prefers-color-scheme: dark) {
-  :radice {
-    --culore-spuma: #0c1a24
-    --culore-carta: #0f2130
-    --culore-mare: #e3edf4
-    --culore-mare-tenue: #9fb3c3
-    /* The light blue of the shield */
-    --culore-accento: #33a9dc
-    --culore-tufo: #1f3647
-    --culore-filo: #557089
-    --culore-sbaglio: #ff8fa3
-    --culore-riga-attiva: #13293b
-    --culore-selezione: #173a55
+/* The theme menu writes data-tema; "system" follows the device (see index.emmurt) */
+:radice[data-tema="scuro"] {
+  color-scheme: dark;
+  --culore-paggena: color-mix(in srgb, #0a0a0a 95%, #ffffff);
+  --culore-scritta: #f5f5f5;
+  --culore-carta: color-mix(in srgb, color-mix(in srgb, #0a0a0a 95%, #ffffff) 98%, #ffffff);
+  --culore-smorto: rgb(255 255 255 / 4%);
+  --culore-scritta-smorta: color-mix(in srgb, #737373 75%, #ffffff);
+  --culore-filo: rgb(255 255 255 / 6%);
+  --culore-casella: rgb(255 255 255 / 8%);
+  --culore-primario: #f5f5f5;
+  --culore-primario-scritta: #262626;
+  --culore-anello: #737373;
+  --culore-sbaglio: color-mix(in srgb, #ef4444 90%, #ffffff);
+  --culore-sbaglio-scritta: #f87171;
+  --culore-buono-scritta: #34d399;
+  --culore-attesa-scritta: #fbbf24;
+  --cm-tag: #f87171;
+  --cm-attributo: #fbbf24;
+  --cm-valore: #34d399;
+  --cm-parola: #a78bfa;
+  --cm-commento: #9ca3af;
+  --cm-punteggiatura: #9ca3af;
+  --cm-nomme: #e5e7eb;
+  --cm-numero: #fbbf24;
+  --cm-funzione: #60a5fa;
+  --cm-operatore: #22d3ee;
+}
 
-    --culore-tag: #6cc0f0
-    --culore-proprieta: #e6b45c
-    --culore-valore: #7fd3a4
-    --culore-classe: #d2a8ff
-    --culore-commento: #879cad
-    --culore-punteggiatura: #8aa0b2
+@layer pulizia {
+  * {
+    bordo-culore: var(--culore-filo);
+  }
 
-    color-scheme: dark
+  panz {
+    scrittura: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  :fuoco-visibile {
+    contorno: 2px continuo var(--culore-anello);
+    outline-offset: 1px;
+  }
+
+  ::-webkit-scrollbar {
+    larghezza: 8px;
+    altezza: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    sfunno: var(--culore-casella);
+    bordo-tunno: 9999px;
   }
 }
 
-cristian,
-panz {
-  altezza: 100%
-}
+@layer componenti {
+  /* Buttons: coss sizes (h-8, px-3), rounded-lg, a 1px border */
+  .buttone {
+    @applica relativo flessibile-in-linea allinea-cose-miezo giustifica-miezo spazio-mmiez-2 altezza-8 spazio-x-3 bordo bordo-tunno-lg scrittura-grannezza-sm scrittura-peso-500 cursore-manella selezione-nisciuno transizione
+    bordo-culore: trasparente;
+    white-space: nun-va-a-capo;
+    text-decoration-line: nisciuno;
+  }
 
-panz {
-  mostra: flessibile
-  direzione: colonna
-  scrittura-grannezza: 15px
-  altezza-riga: 1.5
-}
+  .buttone:stutato {
+    opacità: 0.64;
+    puntatore: nisciuno;
+  }
 
-vattenn {
-  culore: var(--culore-accento)
-}
+  /* Formatta on index.emmurt: it still answers, with a message */
+  .buttone[aria-disabled="true"] {
+    opacità: 0.64;
+  }
 
-vattenn:passanno {
-  decorazione-testo: sottolineato
-}
+  .buttone disegno {
+    larghezza: 1rem;
+    altezza: 1rem;
+    opacità: 0.8;
+    flex-shrink: 0;
+  }
 
-:fuoco-visibile {
-  contorno: 2px continuo var(--culore-accento)
-  outline-offset: 2px
-}
+  .buttone-primario {
+    @applica sfunno-primario culore-primario-scritta bordo-primario ombra-xs
+    @applica passanno:sfunno-primario/90
+  }
 
-/* Testata: the shield, the marble plaque of the alleys, the motto */
+  .buttone-contorno {
+    @applica sfunno-paggena culore-scritta bordo-casella ombra-xs
+    @applica passanno:sfunno-smorto
+  }
 
-.targa {
-  mostra: blocco-in-linea
-  spazio: 0.35rem 1.4rem 0.5rem
-  scrittura: var(--scrittura-targa)
-  scrittura-grannezza: 1.4rem
-  scrittura-peso: 600
-  altezza-riga: 1.15
-  spazio-lettere: 0.08em
-  /* The small optical size has sturdier hairlines */
-  font-optical-sizing: nisciuno
-  font-variation-settings: "opsz" 11
-  trasforma-testo: maiuscolo
-  culore: #2b2925
-  sfunno:
-    radial-gradient(ellipse at 20% 30%, rgb(255 255 255 / 0.6), trasparente 60%),
-    linear-gradient(115deg, #eceae4 0%, #e2dfd8 45%, #eceae4 70%, #dedad2 100%)
-  bordo: 1px continuo #b9b3a7
-  ombra:
-    inset 0 0 0 4px #eceae4,
-    inset 0 0 0 5px #8f897d,
-    0 1px 2px rgb(15 43 64 / 0.18)
-  ombra-testo: 0 1px 0 rgb(255 255 255 / 0.75)
-}
+  .buttone-fantasma {
+    @applica culore-scritta
+    @applica passanno:sfunno-smorto
+  }
 
-.motto codice {
-  scrittura-grannezza: 0.9em
-  culore: var(--culore-tag)
-}
+  .buttone-fantasma[aria-pressed="true"] {
+    @applica sfunno-smorto
+  }
 
-scegli,
-miett {
-  spazio: 0.35rem 0.5rem
-  sfunno: var(--culore-carta)
-  bordo: 1px continuo var(--culore-filo)
-  bordo-tunno: 6px
-}
+  .buttone-icona {
+    @applica larghezza-8 spazio-x-0
+  }
 
-::esempio {
-  culore: var(--culore-mare-tenue)
-}
+  .buttone-piccolo {
+    @applica altezza-7 spazio-x-2.5 spazio-mmiez-1.5 scrittura-grannezza-xs
+  }
 
-#condividi {
-  /* Sharing comes second to writing: an outline, so the plaque leads */
-  @applica spazio-x-3.5 spazio-y-1.5 bordo-tunno-md cursore-manella transizione
-  culore: var(--culore-accento)
-  bordo: 1px continuo var(--culore-accento)
-}
+  /* Native select with FratmScript's chevron */
+  .scegli {
+    @applica altezza-8 bordo bordo-casella bordo-tunno-lg sfunno-smorto culore-scritta scrittura-grannezza-sm spazio-manca-3 spazio-destra-8 ombra-xs cursore-manella
+    appearance: nisciuno;
+    sfunno-immagine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: nun-ripete;
+    background-position: destra 0.5rem miezo;
+  }
 
-/* Filled: a tint of the accent would take its text under 4.5:1 */
-#condividi:passanno {
-  culore: var(--culore-carta)
-  sfunno: var(--culore-accento)
-}
+  .scegli opzione {
+    sfunno-culore: var(--culore-carta);
+    culore: var(--culore-scritta);
+  }
 
-/* Wide enough for "Copialo d'a barra", so the bar does not jump when the
-   label changes. On touch screens the row is too short for it */
-@quanno (hover: hover) {
-  #condividi {
-    larghezza-minima: 10.5em
+  .distintivo {
+    @applica flessibile-in-linea allinea-cose-miezo bordo bordo-casella bordo-tunno spazio-x-1 scrittura-mono scrittura-grannezza-xs culore-scritta
+  }
+
+  /* A section of the output: a dot, a small uppercase title, its actions */
+  .titoletto {
+    @applica flessibile allinea-cose-miezo spazio-mmiez-2 scrittura-grannezza-xs scrittura-peso-500 culore-scritta-smorta maiuscolo
+    spazio-lettere: 0.05em;
+  }
+
+  .pallino {
+    @applica larghezza-2 altezza-2 bordo-tunno-chino
+    flex-shrink: 0;
+  }
+
+  .pulsa {
+    animazione: pulsa 2s facile infinito;
+  }
+
+  /* Tabs: the phone panels and the output sections */
+  .scheda {
+    @applica flessibile cresce giustifica-miezo allinea-cose-miezo spazio-mmiez-1.5 spazio-y-2.5 scrittura-grannezza-sm scrittura-peso-500 culore-scritta-smorta cursore-manella transizione
+    bordo-sotto: 2px continuo trasparente;
+  }
+
+  .scheda[aria-selected="true"] {
+    @applica culore-scritta
+    border-bottom-color: var(--culore-primario);
+  }
+
+  /* The two files of the project, over the editor */
+  .scheda-file {
+    @applica relativo flessibile-in-linea allinea-cose-miezo spazio-mmiez-1.5 spazio-x-4 spazio-y-2.5 scrittura-grannezza-sm scrittura-peso-500 culore-scritta-smorta cursore-manella transizione
+    @applica passanno:culore-scritta
+    bordo-sotto: 2px continuo trasparente;
+    white-space: nun-va-a-capo;
+  }
+
+  .scheda-file[aria-selected="true"] {
+    @applica culore-scritta
+    border-bottom-color: var(--culore-primario);
+  }
+
+  /* A file with an error gets a red dot, also when it is not the open one */
+  .scheda-file[data-sbaglio]::doppo {
+    @applica larghezza-1.5 altezza-1.5 bordo-tunno-chino sfunno-sbaglio
+    contenuto: "";
+  }
+
+  .scheda-piccola {
+    @applica spazio-x-1.5 spazio-y-0.5 bordo-tunno scrittura-grannezza-xs scrittura-peso-500 culore-scritta-smorta maiuscolo cursore-manella
+    spazio-lettere: 0.05em;
+  }
+
+  .scheda-piccola[aria-selected="true"] {
+    @applica sfunno-smorto culore-scritta
+  }
+
+  .contatore {
+    @applica spazio-x-1.5 bordo-tunno-chino sfunno-smorto culore-scritta-smorta scrittura-grannezza-xs
+    larghezza-minima: 1.25rem;
+    altezza-riga: 1.25rem;
+  }
+
+  .contatore[data-sbagli] {
+    @applica sfunno-sbaglio culore-janco
+  }
+
+  .taglia {
+    trabocca: nascosto;
+    text-overflow: ellipsis;
+    white-space: nun-va-a-capo;
+  }
+
+  /* Text with `code` in it: lessons, guide, help */
+  .testo codice {
+    @applica sfunno-smorto spazio-x-1 bordo-tunno scrittura-mono culore-scritta
+    scrittura-grannezza: 0.85em;
+    spazio-ncoppa: 0.125rem;
+    spazio-sotto: 0.125rem;
+  }
+
+  /* The console: one line per message */
+  .voce-console {
+    @applica flessibile allinea-cose-inizio spazio-mmiez-2 spazio-x-3 spazio-y-1.5 bordo-sotto-1 scrittura-mono scrittura-grannezza-sm
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .voce-console:urdemo-figlio {
+    bordo-sotto-larghezza: 0;
+  }
+
+  .voce-console[data-tipo="warn"] {
+    @applica culore-attesa-scritta sfunno-attesa/5
+  }
+
+  .voce-console[data-tipo="error"] {
+    @applica culore-sbaglio-scritta sfunno-sbaglio/5
+  }
+
+  /* The exercise of a lesson: green once the page matches the solution */
+  #lezione-compito {
+    @applica bordo-primario/30 sfunno-primario/5
+  }
+
+  #lezione-compito[data-fatto] {
+    @applica bordo-buono/40 sfunno-buono/10
+  }
+
+  .avviso {
+    @applica posizione-fisso destra-4 sotto-12 livello-50 bordo bordo-tunno-lg sfunno-carta culore-scritta ombra-lg spazio-x-4 spazio-y-3 scrittura-grannezza-sm larghezza-massima-xs
   }
 }
 
-/* Banco: the sources on the left, the result on the right */
-
-.banco {
-  flessibile: 1
-  altezza-minima: 0
-  mostra: griglia
-  /* minmax(0, …): long editor lines must not widen the columns */
-  colonne: minmax(0, 1fr) minmax(0, 1fr)
-  spazio-mmiez: 1px
-  sfunno: var(--culore-tufo)
-  bordo-ncoppa: 1px continuo var(--culore-tufo)
-  bordo-sotto: 1px continuo var(--culore-tufo)
+@keyframes pulsa {
+  50% {
+    opacità: 0.5;
+  }
 }
 
-.pannello {
-  larghezza-minima: 0
-  altezza-minima: 0
-  mostra: flessibile
-  direzione: colonna
-  sfunno: var(--culore-carta)
+/* On phones the open section fills the output panel (over its height class) */
+#uscita [data-sola] {
+  altezza: automatico;
+  flessibile: 1 1 0;
+  bordo-sotto-larghezza: 0;
 }
 
-.barra {
-  mostra: flessibile
-  allinea-cose: miezo
-  spazio-mmiez: 0.25rem 0.75rem
-  altezza-minima: 2.4rem
-  spazio: 0 0.75rem
-  culore: var(--culore-mare-tenue)
-  scrittura-grannezza: 0.85rem
-  bordo-sotto: 1px continuo var(--culore-tufo)
+/* The page under test and the help dialog */
+fenestella {
+  @applica larghezza-chino altezza-chino bordo-0 sfunno-janco
 }
 
-/* The second file starts under the first one */
-.editor + .barra {
-  bordo-ncoppa: 1px continuo var(--culore-tufo)
-}
-
-.file {
-  mostra: flessibile-in-linea
-  allinea-cose: miezo
-  spazio-mmiez: 0.4rem
-  scrittura: var(--scrittura-mono)
-  culore: var(--culore-mare)
-}
-
-.nota {
-  margine-manca: automatico
-  trabocca: nascosto
-  white-space: nun-va-a-capo
-  text-overflow: ellipsis
-}
-
-.editor {
-  flessibile: 1
-  altezza-minima: 0
-  trabocca: nascosto
-}
-
-.stato {
-  spazio: 0.5rem 0.9rem
-  scrittura: var(--scrittura-mono)
-  scrittura-grannezza: 0.82rem
-  culore: var(--culore-mare-tenue)
-  bordo-ncoppa: 1px continuo var(--culore-tufo)
-}
-
-.stato.sbagliato {
-  culore: var(--culore-sbaglio)
-  sfunno: color-mix(in srgb, var(--culore-sbaglio) 8%, var(--culore-carta))
-}
-
-/* Schede */
-
-.schede {
-  spazio-mmiez: 0
-  spazio: 0
-}
-
-.scheda {
-  spazio: 0 0.9rem
-  altezza-minima: 2.4rem
-  bordo-sotto: 2px continuo trasparente
-  culore: var(--culore-mare-tenue)
-  cursore: manella
-}
-
-.scheda[aria-selected="true"] {
-  culore: var(--culore-mare)
-  border-bottom-color: var(--culore-accento)
-}
-
-.vista {
-  flessibile: 1
-  altezza-minima: 0
-}
-
-#anteprima {
-  posizione: relativo
-}
-
-#anteprima fenestella {
-  larghezza: 100%
-  altezza: 100%
-  sfunno: janco
-}
-
-/* After a compile error the preview and the CSS are the last good build */
-.vista[data-vecchia] > * {
-  opacità: 0.4
-  filtro: grayscale(1)
-}
-
-#anteprima[data-vecchia]::primma {
-  contenuto: "Chesta è 'a paggena d'apprimma. Aggiusta l'errore e se ricarica."
-  posizione: assoluto
-  inset: 0.75rem 0.75rem automatico
-  livello: 1
-  spazio: 0.5rem 0.75rem
-  scrittura-grannezza: 0.85rem
-  culore: var(--culore-sbaglio)
-  sfunno: var(--culore-carta)
-  bordo: 1px continuo culore-corrente
-  bordo-tunno: 6px
-}
-
-/* Classi: the table of every alias, root and variant */
-
-.tavule {
-  trabocca: automatico
-  spazio: 0.75rem 1rem 1.5rem
-}
-
-.cerca {
-  mostra: griglia
-  spazio-mmiez: 0.3rem
-  larghezza-massima: 24rem
-  margine-sotto: 0.5rem
-  culore: var(--culore-mare-tenue)
-  scrittura-grannezza: 0.85rem
-}
-
-.tavule luccolo {
-  margine: 1.25rem 0 0.4rem
-  scrittura-peso: 600
-}
-
-.tavule tavulat {
-  larghezza: 100%
-  scrittura-grannezza: 0.85rem
-}
-
-.tavule capocasella,
-.tavule casella {
-  spazio: 0.3rem 0.5rem
-  bordo-sotto: 1px continuo var(--culore-tufo)
-  allinea-testo: manca
-}
-
-.tavule capocasella {
-  scrittura-peso: 500
-  culore: var(--culore-mare-tenue)
-}
-
-.tavule casella {
-  scrittura: var(--scrittura-mono)
-  culore: var(--culore-mare-tenue)
-}
-
-.tavule casella:primmo-figlio {
-  culore: var(--culore-classe)
+dialogo::backdrop {
+  sfunno: rgb(0 0 0 / 40%);
 }
 
 @quanno (prefers-reduced-motion: reduce) {
-  .cm-cursorLayer {
-    animazione: nisciuno !importante
-  }
-}
-
-/* Touch: 44px targets, and 16px fields so iOS does not zoom in on focus.
-   The links in the footer are in a sentence: padding would break its lines.
-   (hover: none), since (pointer: coarse) cannot be written in a .cess yet */
-@quanno (hover: nisciuno) {
-  .comandi vattenn {
-    mostra: blocco-in-linea
-    spazio-ncoppa: 0.75rem
-    spazio-sotto: 0.75rem
-  }
-
-  .comandi scegli,
-  #condividi,
-  .scheda,
-  .cerca miett {
-    altezza-minima: 44px
-    scrittura-grannezza: 16px
-  }
-}
-
-/* Narrow screens: one column, and the page scrolls */
-@quanno (larghezza-massima: 54rem) {
-  panz {
-    altezza: automatico
-  }
-
-  .banco {
-    colonne: minmax(0, 1fr)
-  }
-
-  /* Short enough that both files show, and the tabs and the top of the
-     preview on the next screen */
-  .editor {
-    altezza: 32vh
-    flessibile: nisciuno
-  }
-
-  #anteprima {
-    altezza: 70vh
-    flessibile: nisciuno
-  }
-
-  .tavule,
-  #css {
-    altezza-massima: 70vh
+  .pulsa,
+  .scheda-file,
+  .transizione,
+  .buttone,
+  .scheda {
+    animazione: nisciuno;
+    transizione: nisciuno;
   }
 }

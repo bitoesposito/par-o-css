@@ -1,0 +1,5 @@
+@chiamm "par-o-css"
+
+@tema {
+  --culore-pummarola-500: #e63b2e
+}

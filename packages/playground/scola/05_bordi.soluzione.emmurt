@@ -1,0 +1,12 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>Margherita</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="spazio-8 sfunno-grigio-100">
+    <cascett classe="larghezza-massima-xs spazio-6 sfunno-janco bordo-tunno-xl ombra-md">
+      <luccolo classe="grassetto">Margherita</luccolo>
+      <chiacchier classe="culore-grigio-600">Pummarola, mozzarella e vasenicola.</chiacchier>
+    </cascett>
+  </panz>
+</cristian>

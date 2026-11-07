@@ -1,0 +1,459 @@
+// The interface language: the browser's (Italian, Neapolitan, otherwise
+// English), or the one picked in the header or with ?lang=. Only the
+// playground's text changes: compiler errors and code stay in Neapolitan.
+
+chist è CHIAVE = "parocss:lingua"
+mann for chist è LINGUE = ["it", "en", "nap"]
+
+chist è it = {
+    "lang.name": "Italiano",
+    "lang.label": "Lingua",
+    "theme.label": "Tema",
+    "theme.system": "Sistema",
+    "theme.light": "Chiaro",
+    "theme.dark": "Scuro",
+
+    "header.tour": "Impara",
+    "header.tourLabel": "Impara par-o-css",
+    "header.tourOpen": "Impara par-o-css passo passo",
+    "header.tourExit": "Esci dal tour",
+    "header.guide": "Guida",
+    "header.guideLabel": "Guida a par-o-css",
+    "header.guideOpen": "Guida a par-o-css, con esempi da eseguire",
+    "header.guideExit": "Torna al playground",
+    "header.playground": "Playground",
+    "header.run": "Esegui",
+    "header.runTip": "Esegui il codice ({shortcut})",
+    "header.share": "Condividi",
+    "header.github": "Vedi su GitHub",
+    "header.githubTip": "Lascia una stella 🤌🏻",
+    "footer.madeBy": "Fatto con amore da",
+
+    "share.copied": "Link copiato!",
+    "share.copiedDesc": "Invia questo link per condividere i tuoi due file.",
+    "share.failed": "Copia non riuscita: copia il link dalla barra degli indirizzi.",
+
+    "loading": "Caricamento dei compilatori…",
+    "editor.files": "File del progetto",
+    "editor.edited": "(modificato)",
+    "editor.examples": "Esempi:",
+    "editor.chooseExample": "-- Scegli un esempio --",
+    "editor.custom": "Codice tuo",
+    "editor.autoRun": "Esecuzione automatica",
+    "editor.labelCess": "stile.cess, CSS napoletano",
+    "editor.labelEmmurt": "index.emmurt, la pagina in htmlemmurt",
+    "editor.format": "Formatta il file",
+    "editor.formatTip": "Formatta il file aperto (Shift+Alt+F)",
+    "editor.formatNoEmmurt": "htmlemmurt {version} non sa ancora formattare le pagine: Formatta funziona su stile.cess",
+    "editor.versions": "par-o-css {parocss} · htmlemmurt {emmurt}",
+
+    "help.open": "Classi e parole: tutti i nomi",
+    "help.title": "Classi e parole",
+    "help.close": "Chiudi",
+    "help.search": "Cerca: flessibile, flex, culore, color, passanno…",
+    "help.hint": "Accanto alle classi c'è il nome Tailwind, accanto alle parole il nome CSS. I nomi CSS che non hanno ancora una parola napoletana passano come sono.",
+    "help.none": "Nessun nome trovato per \"{query}\".",
+    "help.aliases": "Classi",
+    "help.roots": "Radici: radice-valore, come `spazio-4`",
+    "help.variants": "Varianti: variante:classe, come `passanno:sottolineato`",
+    "help.rules": "Regole",
+    "help.properties": "Proprietà",
+    "help.values": "Valori",
+    "help.pseudo": "Pseudo-classi",
+    "help.tags": "Tag nei selettori",
+
+    "tabs.label": "Pannelli del playground",
+    "tabs.code": "Codice",
+    "tabs.preview": "Anteprima",
+    "tabs.console": "Console",
+    "tabs.errors": "{n} errori",
+    "tabs.messages": "{n} messaggi",
+
+    "output.title": "Risultato",
+    "output.preview": "Anteprima",
+    "output.console": "Console",
+    "output.css": "CSS generato",
+    "output.clear": "Pulisci",
+    "output.empty": "Nessun output in console",
+    "output.copyCss": "Copia CSS",
+    "output.copied": "Copiato",
+    "output.stale": "Il codice è cambiato dopo questo risultato",
+    "output.lineColumn": "Riga {line}, colonna {column}",
+
+    "error.compile": "Errore di compilazione",
+    "error.load": "Compilatori non disponibili",
+    "error.loadMessage": "Non è stato possibile scaricare i compilatori di par-o-css e htmlemmurt. Controlla la connessione e ricarica la pagina.",
+
+    "status.loading": "Caricamento…",
+    "status.ready": "Compilatori pronti",
+    "status.loadFailed": "I compilatori non si sono caricati",
+    "status.compileError": "Errore di compilazione",
+    "status.done": "Fatto",
+    "status.staleAuto": "Codice cambiato, aggiorno…",
+    "status.staleManual": "Codice cambiato: il risultato non è aggiornato, premi Esegui",
+    "status.compiledIn": "Compilato in {ms}ms",
+
+    "guide.title": "Guida a par-o-css",
+    "guide.sections": "Sezioni della guida",
+    "guide.section": "Sezione",
+    "guide.intro": "Gli esempi hanno due file, come il playground: si modificano e si eseguono qui. Premi Esegui o {shortcut}.",
+    "guide.run": "Esegui",
+    "guide.runLabel": "Esegui l'esempio",
+    "guide.reset": "Ripristina",
+    "guide.resetTip": "Torna al codice originale",
+    "guide.showCss": "CSS",
+    "guide.showCssTip": "Mostra il CSS generato",
+    "guide.open": "Apri nell'editor",
+    "guide.openTip": "Continua con questi due file nel playground",
+    "guide.previous": "Indietro",
+    "guide.next": "Avanti",
+
+    "lesson.label": "Lezione",
+    "lesson.index": "Indice delle lezioni",
+    "lesson.exit": "Esci dal tour",
+    "lesson.done": "Bravo! 🤌",
+    "lesson.exercise": "Esercizio",
+    "lesson.expected": "È fatto quando la tua pagina ha gli stessi stili della soluzione: con una classe o con una regola, va bene tutto.",
+    "lesson.reset": "Ricomincia",
+    "lesson.resetTip": "Torna al codice iniziale",
+    "lesson.solution": "Soluzione",
+    "lesson.solutionTip": "Mostra la soluzione",
+    "lesson.previous": "Lezione precedente",
+    "lesson.next": "Avanti",
+    "lesson.finish": "Finito",
+
+    "ex.primmo": "Uè, munno!",
+    "ex.ueMunno": "Solo CSS napoletano",
+    "ex.pizzeria": "La pizzeria, con un pezzo",
+    "ex.sbagliato": "Un errore, apposta",
+}
+
+chist è en = {
+    "lang.name": "English",
+    "lang.label": "Language",
+    "theme.label": "Theme",
+    "theme.system": "System",
+    "theme.light": "Light",
+    "theme.dark": "Dark",
+
+    "header.tour": "Learn",
+    "header.tourLabel": "Learn par-o-css",
+    "header.tourOpen": "Learn par-o-css step by step",
+    "header.tourExit": "Leave the tour",
+    "header.guide": "Guide",
+    "header.guideLabel": "par-o-css guide",
+    "header.guideOpen": "par-o-css guide, with examples you can run",
+    "header.guideExit": "Back to the playground",
+    "header.playground": "Playground",
+    "header.run": "Run",
+    "header.runTip": "Run code ({shortcut})",
+    "header.share": "Share",
+    "header.github": "View on GitHub",
+    "header.githubTip": "Star this repo 🤌🏻",
+    "footer.madeBy": "Made with love by",
+
+    "share.copied": "Link copied!",
+    "share.copiedDesc": "Send this link to share your two files.",
+    "share.failed": "Copy failed: copy the link from the address bar.",
+
+    "loading": "Loading the compilers…",
+    "editor.files": "Project files",
+    "editor.edited": "(edited)",
+    "editor.examples": "Examples:",
+    "editor.chooseExample": "-- Choose an example --",
+    "editor.custom": "Custom code",
+    "editor.autoRun": "Auto-run",
+    "editor.labelCess": "stile.cess, Neapolitan CSS",
+    "editor.labelEmmurt": "index.emmurt, the htmlemmurt page",
+    "editor.format": "Format file",
+    "editor.formatTip": "Format the open file (Shift+Alt+F)",
+    "editor.formatNoEmmurt": "htmlemmurt {version} cannot format pages yet: Format works on stile.cess",
+    "editor.versions": "par-o-css {parocss} · htmlemmurt {emmurt}",
+
+    "help.open": "Classes and words: every name",
+    "help.title": "Classes and words",
+    "help.close": "Close",
+    "help.search": "Search: flessibile, flex, culore, color, passanno…",
+    "help.hint": "Classes show their Tailwind name, words their CSS name. CSS names that have no Neapolitan word yet pass as they are.",
+    "help.none": "No name found for \"{query}\".",
+    "help.aliases": "Classes",
+    "help.roots": "Roots: root-value, like `spazio-4`",
+    "help.variants": "Variants: variant:class, like `passanno:sottolineato`",
+    "help.rules": "Rules",
+    "help.properties": "Properties",
+    "help.values": "Values",
+    "help.pseudo": "Pseudo-classes",
+    "help.tags": "Tags in selectors",
+
+    "tabs.label": "Playground panels",
+    "tabs.code": "Code",
+    "tabs.preview": "Preview",
+    "tabs.console": "Console",
+    "tabs.errors": "{n} errors",
+    "tabs.messages": "{n} messages",
+
+    "output.title": "Output",
+    "output.preview": "Preview",
+    "output.console": "Console",
+    "output.css": "Generated CSS",
+    "output.clear": "Clear",
+    "output.empty": "No console output",
+    "output.copyCss": "Copy CSS",
+    "output.copied": "Copied",
+    "output.stale": "The code changed since this output was produced",
+    "output.lineColumn": "Line {line}, column {column}",
+
+    "error.compile": "Compilation error",
+    "error.load": "Compilers not available",
+    "error.loadMessage": "The par-o-css and htmlemmurt compilers could not be downloaded. Check your connection and reload the page.",
+
+    "status.loading": "Loading…",
+    "status.ready": "Compilers ready",
+    "status.loadFailed": "Compilers failed to load",
+    "status.compileError": "Compilation error",
+    "status.done": "Done",
+    "status.staleAuto": "Code changed, updating…",
+    "status.staleManual": "Code changed: output is out of date, press Run",
+    "status.compiledIn": "Compiled in {ms}ms",
+
+    "guide.title": "par-o-css guide",
+    "guide.sections": "Guide sections",
+    "guide.section": "Section",
+    "guide.intro": "The examples have two files, like the playground: edit and run them right here. Press Run or {shortcut}.",
+    "guide.run": "Run",
+    "guide.runLabel": "Run the example",
+    "guide.reset": "Reset",
+    "guide.resetTip": "Back to the original code",
+    "guide.showCss": "CSS",
+    "guide.showCssTip": "Show the generated CSS",
+    "guide.open": "Open in editor",
+    "guide.openTip": "Keep going with these two files in the playground",
+    "guide.previous": "Back",
+    "guide.next": "Next",
+
+    "lesson.label": "Lesson",
+    "lesson.index": "Lesson index",
+    "lesson.exit": "Leave the tour",
+    "lesson.done": "Well done! 🤌",
+    "lesson.exercise": "Exercise",
+    "lesson.expected": "It is done when your page has the same styles as the solution's: with a class or with a rule, anything goes.",
+    "lesson.reset": "Start over",
+    "lesson.resetTip": "Back to the starting code",
+    "lesson.solution": "Solution",
+    "lesson.solutionTip": "Show the solution",
+    "lesson.previous": "Previous lesson",
+    "lesson.next": "Next",
+    "lesson.finish": "Finish",
+
+    "ex.primmo": "Uè, munno!",
+    "ex.ueMunno": "Only Neapolitan CSS",
+    "ex.pizzeria": "The pizzeria, with a piece",
+    "ex.sbagliato": "An error, on purpose",
+}
+
+chist è nap = {
+    "lang.name": "Napulitano",
+    "lang.label": "Lengua",
+    "theme.label": "Tema",
+    "theme.system": "Sistema",
+    "theme.light": "Chiaro",
+    "theme.dark": "Scuro",
+
+    "header.tour": "Scola",
+    "header.tourLabel": "'A scola 'e par-o-css",
+    "header.tourOpen": "'A scola 'e par-o-css: impara passo passo",
+    "header.tourExit": "Esci d'a scola",
+    "header.guide": "Guida",
+    "header.guideLabel": "Guida 'e par-o-css",
+    "header.guideOpen": "Guida 'e par-o-css, cu l'esempi ca puoi fà girà",
+    "header.guideExit": "Torna a 'o playground",
+    "header.playground": "Playground",
+    "header.run": "Lancia",
+    "header.runTip": "Lancia 'o codice ({shortcut})",
+    "header.share": "Condividi",
+    "header.github": "Vire ncopp'a GitHub",
+    "header.githubTip": "Miette na stella 🤌🏻",
+    "footer.madeBy": "Fatto cu ammore da",
+
+    "share.copied": "Link copiato!",
+    "share.copiedDesc": "Manna stu link a chi vuò pe fà vedé 'e dduje file tuoie.",
+    "share.failed": "Nun se pò copià: piglia 'o link d'a barra 'e l'indirizze.",
+
+    "loading": "Sto caricanno 'e compilatori…",
+    "editor.files": "'E file d'o progetto",
+    "editor.edited": "(cagnato)",
+    "editor.examples": "Esempi:",
+    "editor.chooseExample": "-- Sciglie n'esempio --",
+    "editor.custom": "Codice tuoio",
+    "editor.autoRun": "Parte sulo",
+    "editor.labelCess": "stile.cess, CSS napoletano",
+    "editor.labelEmmurt": "index.emmurt, 'a paggena in htmlemmurt",
+    "editor.format": "Arrecetta 'o file",
+    "editor.formatTip": "Arrecetta 'o file apierto (Shift+Alt+F)",
+    "editor.formatNoEmmurt": "htmlemmurt {version} nun sape ancora arrecettà 'e paggene: Arrecetta funziona ncopp'a stile.cess",
+    "editor.versions": "par-o-css {parocss} · htmlemmurt {emmurt}",
+
+    "help.open": "Classi e parole: tutt'e nomme",
+    "help.title": "Classi e parole",
+    "help.close": "Chiure",
+    "help.search": "Cerca: flessibile, flex, culore, color, passanno…",
+    "help.hint": "Vicino a 'e classi ce sta 'o nomme Tailwind, vicino a 'e parole 'o nomme CSS. 'E nomme CSS ca nun teneno ancora na parola napoletana passano comme so'.",
+    "help.none": "Nun trovo \"{query}\" int'e nomme.",
+    "help.aliases": "Classi",
+    "help.roots": "Radici: radice-valore, comme `spazio-4`",
+    "help.variants": "Varianti: variante:classe, comme `passanno:sottolineato`",
+    "help.rules": "Regole",
+    "help.properties": "Proprietà",
+    "help.values": "Valori",
+    "help.pseudo": "Pseudo-classi",
+    "help.tags": "Tag dint'ê selettori",
+
+    "tabs.label": "Pannielle d'o playground",
+    "tabs.code": "Codice",
+    "tabs.preview": "Anteprima",
+    "tabs.console": "Console",
+    "tabs.errors": "{n} errori",
+    "tabs.messages": "{n} messaggi",
+
+    "output.title": "Risultato",
+    "output.preview": "Anteprima",
+    "output.console": "Console",
+    "output.css": "CSS ca esce",
+    "output.clear": "Pulizza",
+    "output.empty": "'A console è vacante",
+    "output.copyCss": "Copia 'o CSS",
+    "output.copied": "Copiato",
+    "output.stale": "'O codice è cagnato doppo stu risultato",
+    "output.lineColumn": "Riga {line}, colonna {column}",
+
+    "error.compile": "Errore 'e compilazione",
+    "error.load": "'E compilatori nun ce stanno",
+    "error.loadMessage": "Nun se ponno scarrecà 'e compilatori 'e par-o-css e htmlemmurt. Controlla 'a connessione e ricarica 'a paggena.",
+
+    "status.loading": "Sto caricanno…",
+    "status.ready": "'E compilatori so' pronti",
+    "status.loadFailed": "'E compilatori nun se so' caricati",
+    "status.compileError": "Errore 'e compilazione",
+    "status.done": "Fatto",
+    "status.staleAuto": "'O codice è cagnato, sto aggiurnanno…",
+    "status.staleManual": "'O codice è cagnato: 'o risultato è viecchio, pigia Lancia",
+    "status.compiledIn": "Compilato in {ms}ms",
+
+    "guide.title": "Guida 'e par-o-css",
+    "guide.sections": "Sezioni d'a guida",
+    "guide.section": "Sezione",
+    "guide.intro": "L'esempi teneno dduje file, comme 'o playground: se cagnano e se fanno girà ccà. Pigia Lancia o {shortcut}.",
+    "guide.run": "Lancia",
+    "guide.runLabel": "Fa' girà l'esempio",
+    "guide.reset": "Ripristina",
+    "guide.resetTip": "Torna a 'o codice 'e primma",
+    "guide.showCss": "CSS",
+    "guide.showCssTip": "Fa vedé 'o CSS ca esce",
+    "guide.open": "Apri int'a l'editor",
+    "guide.openTip": "Continua cu sti dduje file int'o playground",
+    "guide.previous": "Arreto",
+    "guide.next": "Appriesso",
+
+    "lesson.label": "Lezione",
+    "lesson.index": "Indice d'e lezioni",
+    "lesson.exit": "Esci d'a scola",
+    "lesson.done": "Bravo! 🤌",
+    "lesson.exercise": "Esercizio",
+    "lesson.expected": "È fatto quanno 'a paggena toja tene 'e stesse stile 'e chella d'a soluzione: cu na classe o cu na regola, va bbuono tutto.",
+    "lesson.reset": "Ricomincia",
+    "lesson.resetTip": "Torna a 'o codice 'e partenza",
+    "lesson.solution": "Soluzione",
+    "lesson.solutionTip": "Fa vedé 'a soluzione",
+    "lesson.previous": "Lezione 'e primma",
+    "lesson.next": "Appriesso",
+    "lesson.finish": "Fernuto",
+
+    "ex.primmo": "Uè, munno!",
+    "ex.ueMunno": "Sulo CSS napoletano",
+    "ex.pizzeria": "'A pizzeria, cu nu pezzo",
+    "ex.sbagliato": "Nu sbaglio, apposta",
+}
+
+chist è TESTI = { it, en, nap }
+
+facc dalBrowser() {
+    chist è dalLink = nu bell URLSearchParams(location.search).get("lang")
+    si (LINGUE.includes(dalLink)) {
+        piglie dalLink
+    }
+    pruvamm {
+        chist è salvata = localStorage.getItem(CHIAVE)
+        si (LINGUE.includes(salvata)) {
+            piglie salvata
+        }
+    } e si schiatta (e) {
+        // Without localStorage, the browser's
+    }
+    pe ogni (chist è l dint navigator.languages ?? [navigator.language]) {
+        chist è base = String(l).toLowerCase().split("-")[0]
+        si (base === "nap" || base === "it") {
+            piglie base
+        }
+    }
+    piglie "en"
+}
+
+tien lingua = dalBrowser()
+chist è ascoltatori = []
+
+mann for facc lenguaAttuale() {
+    piglie lingua
+}
+
+/** The text of a key, with {parameters} filled in. */
+mann for facc t(chiave, parametri = {}) {
+    chist è testo = TESTI[lingua][chiave] ?? TESTI.it[chiave] ?? chiave
+    piglie testo.replace(/\{(\w+)\}/g, (tutto, nomme) => String(parametri[nomme] ?? tutto))
+}
+
+/** Writes the texts of elements with data-t, data-t-aria, data-t-title and data-t-esempio. */
+mann for facc traduci(radice = document) {
+    pe ogni (chist è el dint radice.querySelectorAll("[data-t]")) {
+        el.textContent = t(el.dataset.t)
+    }
+    pe ogni (chist è el dint radice.querySelectorAll("[data-t-aria]")) {
+        el.setAttribute("aria-label", t(el.dataset.tAria))
+    }
+    pe ogni (chist è el dint radice.querySelectorAll("[data-t-title]")) {
+        el.title = t(el.dataset.tTitle, { shortcut: SCORCIATOIA })
+    }
+    pe ogni (chist è el dint radice.querySelectorAll("[data-t-esempio]")) {
+        el.placeholder = t(el.dataset.tEsempio)
+    }
+}
+
+mann for chist è SCORCIATOIA = /Mac|iPhone|iPad/.test(navigator.platform) ? "⌘↵" : "Ctrl+↵"
+
+mann for facc cagnaLingua(nova) {
+    si (!LINGUE.includes(nova) || nova === lingua) {
+        piglie
+    }
+    lingua = nova
+    pruvamm {
+        localStorage.setItem(CHIAVE, nova)
+    } e si schiatta (e) {
+        // It lasts for this visit
+    }
+    document.documentElement.lang = nova
+    traduci()
+    pe ogni (chist è f dint ascoltatori) {
+        f(nova)
+    }
+}
+
+/** Calls f every time the language changes. */
+mann for facc quannoCagnaLingua(f) {
+    ascoltatori.push(f)
+}
+
+/** Language names for the menu, each written in its own language. */
+mann for facc nommeLingua(l) {
+    piglie TESTI[l]["lang.name"]
+}
+
+document.documentElement.lang = lingua

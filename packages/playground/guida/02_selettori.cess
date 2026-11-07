@@ -1,0 +1,26 @@
+.carta {
+  spazio: 1rem
+  bordo: 1px continuo #ddd
+  bordo-tunno: 12px
+
+  luccolo {
+    culore: #b91c1c
+    margine: 0 0 0.5rem
+  }
+}
+
+citofono {
+  spazio: 8px 16px
+  bordo: 0
+  bordo-tunno: 8px
+  sfunno-culore: #eee
+  cursore: manella
+}
+
+citofono:passanno {
+  sfunno-culore: giallo
+}
+
+vattenn::doppo {
+  contenuto: " →"
+}

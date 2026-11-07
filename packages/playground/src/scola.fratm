@@ -1,0 +1,90 @@
+// The lessons of Impara. Each lesson has two starting files (scola/NN_name.cess
+// and .emmurt), a solution (NN_name.soluzione.cess and/or .soluzione.emmurt: a
+// missing one is the same as the start) and its texts in scola.json, with the
+// file that opens first. It is done when the page has the same styles as the
+// solution's (see confronta.fratm). golden.rs checks that starts and
+// solutions compile and make different CSS.
+
+chiamm dati da "../scola/scola.json"
+chiamm { t, lenguaAttuale } da "./lingua.fratm"
+chiamm { crea, scriviTesto } da "./dom.fratm"
+chiamm { icona } da "./icone.fratm"
+
+chist è FILE = import.meta.glob(["../scola/*.cess", "../scola/*.emmurt"], { query: "?raw", import: "default", eager: overo })
+
+mann for chist è LEZIONI = dati.lessons.map((l) => {
+    chist è file = (nomme) => FILE[`../scola/${nomme}`]
+    chist è partenza = { cess: file(`${l.id}.cess`), paggena: file(`${l.id}.emmurt`) }
+    chist è soluzione = { cess: file(`${l.id}.soluzione.cess`) ?? partenza.cess, paggena: file(`${l.id}.soluzione.emmurt`) ?? partenza.paggena }
+    si (partenza.cess === boh || partenza.paggena === boh || (soluzione.cess === partenza.cess && soluzione.paggena === partenza.paggena)) {
+        iett nu bell Error(`'A lezione ${l.id} nun tene 'e file sujie`)
+    }
+    piglie { ...l, file: l.file ?? "stile.cess", partenza, soluzione }
+})
+
+chist è pesca = (chi) => document.getElementById(chi)
+
+/**
+ * The lesson panel over the editor. `vai(i)` opens another lesson, `esci()`
+ * leaves the tour, `metti({ cess, paggena })` puts files in the editor.
+ */
+mann for facc creaScola({ vai, esci, metti }) {
+    tien attuale = 0
+    tien fatte = nu bell Set()
+
+    facc scrivi() {
+        chist è lezione = LEZIONI[attuale]
+        chist è lingua = lenguaAttuale()
+        chist è scegli = pesca("lezione-scegli")
+        scegli.replaceChildren(...LEZIONI.map((l, i) => nu bell Option(`${fatte.has(l.id) ? "✓ " : ""}${i + 1}. ${l.title[lingua]}`, String(i))))
+        scegli.value = String(attuale)
+        pesca("lezione-numero").textContent = `${attuale + 1}/${LEZIONI.length}`
+        pesca("lezione-titolo").textContent = lezione.title[lingua]
+        pesca("lezione-testo").replaceChildren(...lezione.body[lingua].map((p) => {
+            chist è el = crea("p")
+            scriviTesto(el, p)
+            piglie el
+        }))
+        chist è fatta = fatte.has(lezione.id)
+        chist è compito = pesca("lezione-compito")
+        compito.toggleAttribute("data-fatto", fatta)
+        chist è stato = pesca("lezione-stato")
+        si (fatta) {
+            stato.innerHTML = `<span class="flessibile-in-linea allinea-cose-miezo spazio-mmiez-1.5 culore-buono-scritta">${icona("fatto")} ${t("lesson.done")}</span>`
+        } sinnò {
+            stato.textContent = t("lesson.exercise")
+        }
+        scriviTesto(pesca("lezione-esercizio"), lezione.task[lingua] + (fatta ? "" : ` ${t("lesson.expected")}`))
+        pesca("lezione-arreto").disabled = attuale === 0
+        chist è appriesso = pesca("lezione-appriesso")
+        chist è urdema = attuale === LEZIONI.length - 1
+        appriesso.className = `buttone buttone-piccolo ${fatta || urdema ? "buttone-primario" : "buttone-contorno"}`
+        appriesso.innerHTML = urdema ? t("lesson.finish") : `${t("lesson.next")} ${icona("destra")}`
+    }
+
+    pesca("lezione-scegli").addEventListener("change", (evento) => vai(Number(evento.target.value)))
+    pesca("lezione-esci").addEventListener("click", () => esci())
+    pesca("lezione-arreto").addEventListener("click", () => vai(attuale - 1))
+    pesca("lezione-appriesso").addEventListener("click", () => {
+        si (attuale === LEZIONI.length - 1) {
+            esci()
+        } sinnò {
+            vai(attuale + 1)
+        }
+    })
+    pesca("lezione-ricomincia").addEventListener("click", () => metti(LEZIONI[attuale].partenza))
+    pesca("lezione-soluzione").addEventListener("click", () => metti(LEZIONI[attuale].soluzione))
+
+    piglie {
+        mostra: (i, fatteMo) => {
+            attuale = i
+            fatte = fatteMo
+            pesca("lezione").hidden = sfòls
+            scrivi()
+        },
+        nasconde: () => {
+            pesca("lezione").hidden = overo
+        },
+        scrivi,
+    }
+}
