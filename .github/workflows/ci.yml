@@ -55,7 +55,8 @@ jobs:
         run: npm run build && npm test && npm pack --dry-run
       - name: VS Code extension
         working-directory: packages/vscode-extension
-        run: npm run compiler && npm test && npx --yes @vscode/vsce package --no-dependencies
+        # The grammar in the repository must be the one of the current vocabulary
+        run: npm run compiler && git diff --exit-code syntaxes && npm test && npx --yes @vscode/vsce package --no-dependencies
       - uses: actions/upload-artifact@v7
         with:
           name: par-o-css-vscode
