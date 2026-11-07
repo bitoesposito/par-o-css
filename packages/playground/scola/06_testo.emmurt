@@ -1,0 +1,10 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>'A pizzeria</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="spazio-8">
+    <luccolone classe="scrittura-grannezza-3xl grassetto">'A pizzeria</luccolone>
+    <chiacchier classe="margine-ncoppa-2 culore-grigio-600">Aperti 'a sera, tranne 'o lunedì.</chiacchier>
+  </panz>
+</cristian>

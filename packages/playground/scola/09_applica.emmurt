@@ -1,0 +1,10 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>Ordina</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="flessibile spazio-mmiez-2 spazio-8">
+    <citofono tipo="buttone" classe="ordina">Margherita</citofono>
+    <citofono tipo="buttone" classe="ordina">Marinara</citofono>
+  </panz>
+</cristian>

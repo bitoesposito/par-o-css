@@ -1,0 +1,37 @@
+// Links to share: both files, as compressed JSON, in #codice=
+
+mann for mo vir facc comprimi(testo) {
+    chist è flusso = nu bell Blob([testo]).stream().pipeThrough(nu bell CompressionStream("deflate-raw"))
+    chist è byte = nu bell Uint8Array(aspett nu bell Response(flusso).arrayBuffer())
+    tien binario = ""
+    pe ogni (chist è b dint byte) {
+        binario += String.fromCharCode(b)
+    }
+    piglie btoa(binario).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "")
+}
+
+mann for mo vir facc decomprimi(base64) {
+    chist è binario = atob(base64.replaceAll("-", "+").replaceAll("_", "/"))
+    chist è byte = Uint8Array.from(binario, (c) => c.charCodeAt(0))
+    chist è flusso = nu bell Blob([byte]).stream().pipeThrough(nu bell DecompressionStream("deflate-raw"))
+    piglie aspett nu bell Response(flusso).text()
+}
+
+/** The playground's link with these two files: { cess, paggena }. */
+mann for mo vir facc linkPe(file) {
+    piglie `${location.origin}${location.pathname}#codice=${aspett comprimi(JSON.stringify(file))}`
+}
+
+/** The two files in the link, or null when it has none or is broken. */
+mann for mo vir facc codiceDalLink() {
+    chist è trovato = location.hash.match(/^#codice=(.+)$/)
+    si (!trovato) {
+        piglie nisciun
+    }
+    pruvamm {
+        chist è { cess, paggena } = JSON.parse(aspett decomprimi(trovato[1]))
+        piglie typeof cess === "string" && typeof paggena === "string" ? { cess, paggena } : nisciun
+    } e si schiatta (e) {
+        piglie nisciun
+    }
+}

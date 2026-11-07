@@ -1,0 +1,10 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>Uè, munno!</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="spazio-8">
+    <luccolone classe="scrittura-grannezza-4xl grassetto">Uè, munno!</luccolone>
+    <chiacchier classe="margine-ncoppa-2">Chesta è 'a primma lezione.</chiacchier>
+  </panz>
+</cristian>

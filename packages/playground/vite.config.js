@@ -6,7 +6,7 @@ export default {
   // Relative URLs, so the build works under github.io/par-o-css/
   base: './',
   plugins: [htmlemmurt(), fratmscript(), parocss()],
-  // The examples in esempi/ are pages too: only index is the app
+  // The examples, guide and lessons are pages too: only index is the app
   // CodeMirror with the HTML and CSS languages is most of the bundle
   build: { rollupOptions: { input: 'index.html' }, chunkSizeWarningLimit: 700 },
   // The compilers find their .wasm next to their module: do not pre-bundle them

@@ -1,0 +1,5 @@
+<cascett classe="griglia colonne-[1fr_2fr] spazio-mmiez-3 spazio-4">
+  <scatulell classe="spazio-3 sfunno-[#bada55] bordo-tunno-lg">1fr</scatulell>
+  <scatulell classe="spazio-3 sfunno-[#ffd6a5] bordo-tunno-lg">2fr</scatulell>
+  <scatulell classe="spazio-3 sfunno-[#caffbf] bordo-tunno-lg allinea-testo-miezo [grid-column:span_2]">[grid-column:span_2]</scatulell>
+</cascett>

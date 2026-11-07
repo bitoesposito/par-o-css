@@ -1,0 +1,4 @@
+<cascett classe="griglia sm:colonne-2 spazio-mmiez-3 spazio-4 notte:sfunno-grigio-900">
+  <citofono tipo="buttone" classe="spazio-x-4 spazio-y-2 bordo-tunno-lg sfunno-blu-500 passanno:sfunno-blu-700 culore-janco">Passa ccà ncoppa</citofono>
+  <citofono tipo="buttone" classe="spazio-x-4 spazio-y-2 bordo-tunno-lg sfunno-blu-500 stutato:opacità-50 culore-janco" stutato>Stutato</citofono>
+</cascett>

@@ -85,6 +85,79 @@ fn golden() {
     assert!(failures.is_empty(), "\n{}", failures.join("\n\n"));
 }
 
+/// The playground's guide and lessons: every `.cess` compiles with the
+/// classes of the `.emmurt` page it goes with (the `*.sbagliato.cess` ones
+/// must fail) and is formatted, and every lesson's solution makes different
+/// CSS from its start. A lesson's solution file that is missing is the same
+/// as its start. `@chiamm` reads `examples/`, as in the playground.
+#[test]
+fn playground_snippets_compile() {
+    let examples = repo().join("examples");
+    let read = |path: &str| fs::read_to_string(examples.join(path)).ok();
+    let css = |cess: &str, page: &str| {
+        let mut classes = BTreeSet::new();
+        scan(page, &mut classes);
+        let options = Options {
+            filename: "stile.cess",
+            read: &read,
+            classes: &classes,
+        };
+        compile(cess, &options).map(|out| out.css)
+    };
+    for dir in ["guida", "scola"] {
+        let dir = repo().join("packages/playground").join(dir);
+        let text = |name: &str| fs::read_to_string(dir.join(name)).ok();
+        let mut names: Vec<String> = fs::read_dir(&dir)
+            .unwrap()
+            .filter_map(|e| e.ok()?.file_name().into_string().ok())
+            .filter(|n| n.ends_with(".cess"))
+            .collect();
+        names.sort();
+        assert!(names.len() >= 9, "{}", dir.display());
+        for name in &names {
+            let source = text(name).unwrap();
+            let stem = name.trim_end_matches(".cess");
+            let page = text(&format!("{stem}.emmurt"))
+                .or_else(|| text(&format!("{}.emmurt", stem.trim_end_matches(".soluzione"))))
+                .unwrap_or_else(|| panic!("{name} has no .emmurt page"));
+            let result = css(&source, &page);
+            assert_eq!(
+                result.is_err(),
+                name.ends_with(".sbagliato.cess"),
+                "{name}: {:?}",
+                result.err()
+            );
+            assert_eq!(
+                format(&source, name).unwrap(),
+                source,
+                "{name} is not formatted"
+            );
+        }
+        if !dir.ends_with("scola") {
+            continue;
+        }
+        for name in names.iter().filter(|n| !n.contains(".soluzione.")) {
+            let id = name.trim_end_matches(".cess");
+            let (cess, page) = (text(name).unwrap(), text(&format!("{id}.emmurt")).unwrap());
+            let solution_cess = text(&format!("{id}.soluzione.cess"));
+            let solution_page = text(&format!("{id}.soluzione.emmurt"));
+            assert!(
+                solution_cess.is_some() || solution_page.is_some(),
+                "{id} has no solution"
+            );
+            let solution = css(
+                solution_cess.as_deref().unwrap_or(&cess),
+                solution_page.as_deref().unwrap_or(&page),
+            );
+            assert_ne!(
+                css(&cess, &page).unwrap(),
+                solution.unwrap(),
+                "{id}: the solution makes the same CSS as the start"
+            );
+        }
+    }
+}
+
 /// Formatting a formatted file changes nothing, for every example and case
 /// that has no syntax error.
 #[test]

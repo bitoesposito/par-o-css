@@ -1,15 +1,17 @@
-// The playground: a .cess and an htmlemmurt page on the left; on the right the
-// page dressed in their CSS, the CSS itself and every class of par-o-css
+// The playground: stile.cess and index.emmurt on the left; the page, its
+// console and the CSS on the right. The look and functions of FratmScript's
+// playground, written in htmlemmurt, FratmScript and par-o-css.
 
-chiamm { EditorView, basicSetup } da "codemirror"
-chiamm { EditorState } da "@codemirror/state"
-chiamm { css } da "@codemirror/lang-css"
-chiamm { htmlLanguage, autoCloseTags } da "@codemirror/lang-html"
-chiamm { setDiagnostics, lintGutter } da "@codemirror/lint"
-chiamm { HighlightStyle, StreamLanguage, syntaxHighlighting, syntaxTree } da "@codemirror/language"
-chiamm { tags } da "@lezer/highlight"
-chiamm { init comme initPaggena, compile comme compilaPaggena, vocabulary } da "htmlemmurt/web"
-chiamm { init comme initCess, compile comme compilaCess, scan, names } da "par-o-css/web"
+chiamm { t, traduci, cagnaLingua, quannoCagnaLingua, lenguaAttuale, nommeLingua, LINGUE } da "./lingua.fratm"
+chiamm { mettiIcone, icona } da "./icone.fratm"
+chiamm { crea, leggiSalvato, salva } da "./dom.fratm"
+chiamm { creaEditor, creaVista, metti, segnala, vaiA, imparaParole } da "./editor.fratm"
+chiamm { carica, compila, arrecetta, arrecettaPaggena, creaAnteprima } da "./paggena.fratm"
+chiamm { fotografa, differenza } da "./confronta.fratm"
+chiamm { linkPe, codiceDalLink } da "./condividi.fratm"
+chiamm { preparaAiuto } da "./aiuto.fratm"
+chiamm { LEZIONI, creaScola } da "./scola.fratm"
+chiamm { SEZIONI, creaGuida } da "./guida.fratm"
 chiamm primmoCess da "../esempi/primmo.cess?raw"
 chiamm primmaPaggena da "../esempi/primmo.emmurt?raw"
 chiamm sbagliato da "../esempi/sbagliato.cess?raw"
@@ -17,503 +19,654 @@ chiamm ueMunnoPaggena da "../esempi/ue-munno.emmurt?raw"
 chiamm ueMunno da "../../../examples/01_ue_munno.cess?raw"
 chiamm pizzeria da "../../../examples/02_pizzeria.cess?raw"
 chiamm pizzeriaPaggena da "../../../examples/02_pizzeria.emmurt?raw"
-chiamm carta da "../../../examples/pezzi/carta.cess?raw"
 
 chist è ESEMPI = [
-    { nomme: "Uè, munno!", cess: primmoCess, paggena: primmaPaggena },
-    { nomme: "Sulo CSS napoletano", cess: ueMunno, paggena: ueMunnoPaggena },
+    { id: "primmo", cess: primmoCess, paggena: primmaPaggena },
+    { id: "ueMunno", cess: ueMunno, paggena: ueMunnoPaggena },
     // In the repository the page links the built 02_pizzeria.css
-    { nomme: "'A pizzeria, cu nu pezzo", cess: pizzeria, paggena: pizzeriaPaggena.replace("02_pizzeria.css", "stile.cess") },
-    { nomme: "Nu sbaglio, apposta", cess: sbagliato, paggena: primmaPaggena },
+    { id: "pizzeria", cess: pizzeria, paggena: pizzeriaPaggena.replace("02_pizzeria.css", "stile.cess") },
+    { id: "sbagliato", cess: sbagliato, paggena: primmaPaggena },
 ]
-// The files a .cess can paste in with @chiamm
-chist è PEZZI = nu bell Map([["pezzi/carta.cess", carta]])
+
 chist è SALVATO = "parocss:codice"
+chist è AUTOMATICO = "parocss:automatico"
+chist è TEMA = "parocss:tema"
+chist è CODICE_LEZIONE = "parocss:scola:"
+chist è FATTE = "parocss:scola:fatte"
+chist è ATTESA_MS = 700
+
+// The two files of the project and their key in the code
+chist è CHIAVE = { "stile.cess": "cess", "index.emmurt": "paggena" }
 
 chist è pesca = (chi) => document.getElementById(chi)
+chist è tutti = (selettore) => [...document.querySelectorAll(selettore)]
 
-// ---------- Editor colours, from the CSS custom properties (light and dark)
+// ---------- State
 
-chist è colori = HighlightStyle.define([
-    { tag: [tags.tagName, tags.keyword, tags.modifier, tags.constant(tags.className)], color: "var(--culore-tag)" },
-    { tag: [tags.attributeName, tags.propertyName], color: "var(--culore-proprieta)" },
-    { tag: [tags.attributeValue, tags.string, tags.atom, tags.number, tags.unit, tags.color], color: "var(--culore-valore)" },
-    { tag: [tags.className, tags.variableName, tags.labelName], color: "var(--culore-classe)" },
-    { tag: tags.comment, color: "var(--culore-commento)", fontStyle: "italic" },
-    { tag: [tags.angleBracket, tags.punctuation, tags.operator], color: "var(--culore-punteggiatura)" },
-])
-
-chist è tema = EditorView.theme({
-    "&": { height: "100%", fontSize: "14px", backgroundColor: "var(--culore-carta)", color: "var(--culore-mare)" },
-    // .editor clips CodeMirror's outline: the focus shows inside
-    "&.cm-focused": { outline: "2px solid var(--culore-accento)", outlineOffset: "-2px" },
-    ".cm-scroller": { fontFamily: "var(--scrittura-mono)", lineHeight: "1.6" },
-    ".cm-gutters": { backgroundColor: "var(--culore-carta)", color: "var(--culore-commento)", border: "none" },
-    ".cm-activeLine, .cm-activeLineGutter": { backgroundColor: "var(--culore-riga-attiva)" },
-    "&.cm-focused .cm-cursor": { borderLeftColor: "var(--culore-accento)" },
-    "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, ::selection": { backgroundColor: "var(--culore-selezione)" },
-})
-
-// ---------- The .cess language
-// lang-css reads "culore: russo" with no ";" as a selector, while a .cess ends a
-// declaration at the end of the line: this tokenizer knows it, and @applica
-
-chist è PAROLA = /^-*[\p{L}\p{N}_-]+/u
-chist è NUMMERO = /^[+-]?(\d+\.?\d*|\.\d+)(%|[a-z]+)?/i
-
-facc tokenCess(stream, s) {
-    chist è c = stream.peek()
-    si (s.regola === "@applica" && stream.match(/^[^\s;}]+/)) {
-        piglie "className"
-    }
-    si (stream.match(/^"(?:[^"\\]|\\.)*"?/) || stream.match(/^'(?:[^'\\]|\\.)*'?/) || stream.match(/^url\([^)]*\)?/i)) {
-        piglie "string"
-    }
-    si (stream.match(/^@[\w-]+/)) {
-        s.regola = stream.current()
-        piglie "keyword"
-    }
-    si (stream.match(/^![\w-]+/)) {
-        piglie "keyword"
-    }
-    si (c === "{" || c === "}") {
-        stream.next()
-        s.fonn = Math.max(0, s.fonn + (c === "{" ? 1 : -1))
-        s.valore = sfòls
-        s.regola = ""
-        piglie "brace"
-    }
-    si (c === ";") {
-        stream.next()
-        s.valore = sfòls
-        s.regola = ""
-        piglie "punctuation"
-    }
-    si (c === ":") {
-        si (s.prop) {
-            stream.next()
-            s.prop = sfòls
-            s.valore = overo
-            piglie "punctuation"
-        }
-        stream.match(/^::?[\p{L}\p{N}_-]*/u)
-        piglie "className.constant"
-    }
-    si (s.valore && stream.match(/^#[\da-f]{3,8}\b/i)) {
-        piglie "number"
-    }
-    si (stream.match(NUMMERO)) {
-        piglie "number"
-    }
-    si (stream.match(/^[.#][\p{L}\p{N}_-]+/u)) {
-        piglie "className"
-    }
-    si (stream.match(PAROLA)) {
-        chist è nomme = stream.current()
-        chist è dopo = stream.string.slice(stream.pos)
-        // @quanno (larghezza-massima: 600px): the feature is a property
-        si (s.regola) {
-            s.prop = /^\s*:/.test(dopo)
-            piglie s.prop ? "propertyName" : s.valore ? "atom" : "keyword"
-        }
-        // In a block, "word:" with no "{" after it is a declaration, not a selector
-        si (!s.valore && s.fonn > 0 && /^\s*:(?!:)[^{]*$/.test(dopo)) {
-            s.prop = overo
-            piglie nomme.startsWith("--") ? "variableName" : "propertyName"
-        }
-        si (s.valore) {
-            piglie nomme.startsWith("--") ? "variableName" : "atom"
-        }
-        piglie "tagName"
-    }
-    stream.next()
-    piglie "punctuation"
-}
-
-chist è cessLanguage = StreamLanguage.define({
-    name: "cess",
-    startState: () => ({ fonn: 0, valore: sfòls, prop: sfòls, regola: "", commento: sfòls, virgola: sfòls }),
-    token(stream, s) {
-        si (stream.sol()) {
-            // A new line ends the declaration, unless the last one ended with a comma
-            s.valore = s.valore && s.virgola
-            s.prop = sfòls
-            s.regola = ""
-        }
-        si (s.commento || stream.match("/*")) {
-            s.commento = !stream.skipTo("*/")
-            si (s.commento) {
-                stream.skipToEnd()
-            } sinnò {
-                stream.pos += 2
-            }
-            piglie "comment"
-        }
-        si (stream.eatSpace()) {
-            piglie nisciun
-        }
-        chist è stile = tokenCess(stream, s)
-        s.virgola = stream.current() === ","
-        piglie stile
-    },
-    indent: (s, dopo, cx) => Math.max(0, s.fonn - (/^\s*\}/.test(dopo) ? 1 : 0)) * cx.unit,
-    languageData: { commentTokens: { block: { open: "/*", close: "*/" } }, indentOnInput: /^\s*\}$/ },
-})
-
-// ---------- Completion: only the words of htmlemmurt and the classes of par-o-css, never English
-
-tien parole = nisciun
-tien classi = []
-
-// The classes, after @applica in the .cess
-facc completaCess(ctx) {
-    chist è riga = ctx.state.doc.lineAt(ctx.pos)
-    si (!/^\s*@applica\s/.test(riga.text.slice(0, ctx.pos - riga.from))) {
-        piglie nisciun
-    }
-    piglie { from: ctx.matchBefore(/\S*/).from, options: classi, validFor: /^\S*$/ }
-}
-
-// As @codemirror/lang-html does: element, attribute or value depending on where the cursor is
-facc completaPaggena(ctx) {
-    si (!parole) {
-        piglie nisciun
-    }
-    chist è nodo = syntaxTree(ctx.state).resolveInner(ctx.pos, -1)
-    chist è testo = (n) => ctx.state.sliceDoc(n.from, n.to).toLowerCase()
-    chist è nomme = /^[\p{L}\p{N}-]*$/u
-    si (["StartTag", "IncompleteTag", "StartCloseTag", "IncompleteCloseTag", "TagName"].includes(nodo.name)) {
-        piglie { from: nodo.name === "TagName" ? nodo.from : ctx.pos, options: parole.elementi, validFor: nomme }
-    }
-    tien tag = nodo
-    mentre che (tag && tag.name !== "OpenTag" && tag.name !== "SelfClosingTag") {
-        tag = tag.parent
-    }
-    chist è nommeTag = tag?.getChild("TagName")
-    si (!nommeTag) {
-        piglie nisciun
-    }
-    chist è elemento = parole.html[testo(nommeTag)] ?? testo(nommeTag)
-    chist è vale = (a) => !a.only || a.only.includes(elemento)
-    si (["OpenTag", "SelfClosingTag", "AttributeName"].includes(nodo.name)) {
-        chist è visti = nu bell Set()
-        chist è opzioni = []
-        pe ogni (chist è a dint parole.attributi) {
-            si (vale(a) && !visti.has(a.nap)) {
-                visti.add(a.nap)
-                opzioni.push({ label: a.nap, detail: a.html, type: "property" })
-            }
-        }
-        piglie { from: nodo.name === "AttributeName" ? nodo.from : ctx.pos, options: [...opzioni, ...parole.eventi, ...parole.comeSo], validFor: nomme }
-    }
-    si (nodo.name === "AttributeValue" || nodo.name === "UnquotedAttributeValue") {
-        chist è attributo = nodo.parent.getChild("AttributeName")
-        si (attributo && testo(attributo) === "classe") {
-            piglie { from: ctx.matchBefore(/[^\s"']*/).from, options: classi, validFor: /^[^\s"']*$/ }
-        }
-        chist è a = attributo && parole.attributi.find((x) => x.nap === testo(attributo) && vale(x))
-        si (!a?.values) {
-            piglie nisciun
-        }
-        chist è virgulette = /^["']/.test(testo(nodo)) ? 1 : 0
-        chist è opzioni = a.values.map(([label, detail]) => ({ label, detail, type: "enum" }))
-        piglie { from: nodo.from + virgulette, options: opzioni, validFor: /^[^"'\s]*$/ }
-    }
-    piglie nisciun
-}
-
-// ---------- Compiling
-
-// The error under the code, on the wrong word
-facc segnala(editor, e, parola) {
-    chist è doc = editor.state.doc
-    tien diagnosi = []
-    si (e && e.line <= doc.lines) {
-        chist è riga = doc.line(e.line)
-        chist è inizio = Math.min(riga.from + e.column - 1, riga.to)
-        chist è trovata = riga.text.slice(e.column - 1).match(parola)
-        chist è fine = Math.min(inizio + (trovata ? trovata[0].length : 1), riga.to)
-        chist è testoErrore = e.suggestion ? `${e.message}\n${e.suggestion}` : e.message
-        diagnosi = [{ from: inizio, to: Math.max(fine, inizio), severity: "error", message: testoErrore }]
-    }
-    editor.dispatch(setDiagnostics(editor.state, diagnosi))
-}
-
-// Writes the status only when it changes, so a screen reader does not repeat it at every key
-facc dici(classe, testo) {
-    chist è stato = pesca("stato")
-    stato.className = classe
-    si (stato.textContent !== testo) {
-        stato.textContent = testo
-    }
-}
-
-// The CSS goes where the page links stile.cess, or at the end of its <head>
-facc conStile(paggena, foglio) {
-    // "</style" in a CSS string would close the tag early
-    chist è stile = `<style>${foglio.replaceAll("</style", "<\\/style")}</style>`
-    chist è link = /<link\b[^>]*\bhref=["']?(?:\.\/)?stile\.cess["']?[^>]*>/i
-    si (link.test(paggena)) {
-        piglie paggena.replace(link, () => stile)
-    }
-    chist è dove = paggena.search(/<\/head>|<body\b/i)
-    piglie dove === -1 ? stile + paggena : paggena.slice(0, dove) + stile + paggena.slice(dove)
-}
-
-// The preview is a frame with no access to the playground: scripts only
-chist è anteprima = document.createElement("iframe")
-anteprima.title = "Anteprima"
-anteprima.setAttribute("sandbox", "allow-scripts allow-modals allow-forms")
-pesca("anteprima").append(anteprima)
-
-chist è uscita = nu bell EditorView({
-    parent: pesca("css"),
-    state: EditorState.create({
-        doc: "",
-        extensions: [
-            basicSetup,
-            css(),
-            syntaxHighlighting(colori),
-            tema,
-            EditorView.lineWrapping,
-            EditorState.readOnly.of(overo),
-            EditorView.contentAttributes.of({ "aria-label": "CSS compilato" }),
-        ],
-    }),
-})
-
-facc compila() {
-    chist è cess = editorCess.state.doc.toString()
-    chist è paggena = editorPaggena.state.doc.toString()
-    chist è p = compilaPaggena(paggena, { filename: "index.emmurt", inline: overo })
-    chist è c = compilaCess(cess, { filename: "stile.cess", classes: scan(paggena), read: (via) => PEZZI.get(via) ?? nisciun })
-    chist è erroreCess = c.errors[0]
-    segnala(editorPaggena, p.errors[0], /^[^\s"'<>=\/]+/)
-    // An error in pezzi/carta.cess is not in the editor: the status line says where it is
-    segnala(editorCess, erroreCess?.file === "stile.cess" ? erroreCess : nisciun, /^[^\s:;{}(),"']+(?::[^\s:;{}(),"']+)*/)
-    chist è e = p.errors[0] ?? erroreCess
-    // With an error the preview and the CSS stay the last good ones, and look old
-    pe ogni (chist è vista dint [pesca("anteprima"), pesca("css")]) {
-        vista.toggleAttribute("data-vecchia", Boolean(e))
-    }
-    si (e) {
-        dici("stato sbagliato", `✗ ${e.file}, riga ${e.line}, colonna ${e.column}: ${e.message}${e.suggestion ? " " + e.suggestion : ""}`)
-        piglie
-    }
-    dici("stato", "✓ Tutto a posto")
-    anteprima.srcdoc = conStile(p.html, c.css)
-    uscita.dispatch({ changes: { from: 0, to: uscita.state.doc.length, insert: c.css } })
-}
-
-// ---------- The editors
-
+tien file = { cess: "", paggena: "" }
+tien aperto = "stile.cess"
+tien ultimoLanciato = nisciun
+tien pronto = sfòls
+tien versioni = nisciun
+tien automatico = leggiSalvato(AUTOMATICO) !== "false"
+tien esempio = ""
+tien lezione = nisciun
+tien sezione = nisciun
+tien scheda = "codice"
 tien attesa = nisciun
+tien mettenno = sfòls
+tien soluzioni = nu bell Map()
+tien fatte = nu bell Set()
+pruvamm {
+    fatte = nu bell Set(JSON.parse(leggiSalvato(FATTE) ?? "[]"))
+} e si schiatta (e) {
+    // A broken save: start again
+}
 
-chist è quannoCagna = EditorView.updateListener.of((u) => {
-    si (!u.docChanged) {
-        piglie
-    }
-    // The code no longer is the one in the link: the local copy wins
-    si (location.hash) {
-        history.replaceState(nisciun, "", location.pathname)
-    }
-    clearTimeout(attesa)
-    attesa = setTimeout(() => {
-        compila()
-        pruvamm {
-            localStorage.setItem(SALVATO, JSON.stringify(codice()))
-        } e si schiatta (e) {
-            // With no localStorage (private browsing) only the saving is lost
-        }
-    }, 200)
-})
+facc uguale(a, b) {
+    piglie a.cess === b.cess && a.paggena === b.paggena
+}
 
-facc editor(chi, linguaggio, etichetta) {
-    piglie nu bell EditorView({
-        parent: pesca(chi),
-        state: EditorState.create({
-            doc: "",
-            extensions: [
-                basicSetup,
-                linguaggio,
-                syntaxHighlighting(colori),
-                tema,
-                EditorView.lineWrapping,
-                EditorView.contentAttributes.of({ "aria-label": etichetta }),
-                lintGutter(),
-                quannoCagna,
-            ],
-        }),
+// The saved files, or null when missing or broken
+facc leggiFile(chiave) {
+    pruvamm {
+        chist è { cess, paggena } = JSON.parse(leggiSalvato(chiave))
+        piglie typeof cess === "string" && typeof paggena === "string" ? { cess, paggena } : nisciun
+    } e si schiatta (e) {
+        piglie nisciun
+    }
+}
+
+facc salvaFile() {
+    salva(lezione === nisciun ? SALVATO : CODICE_LEZIONE + LEZIONI[lezione].id, JSON.stringify(file))
+}
+
+// ---------- Header: language and theme
+
+pe ogni (chist è scegli dint tutti(".scegli-lingua")) {
+    scegli.append(...LINGUE.map((l) => nu bell Option(nommeLingua(l), l)))
+    scegli.value = lenguaAttuale()
+    scegli.addEventListener("change", (evento) => cagnaLingua(evento.target.value))
+}
+
+chist è scuroD_oSistema = matchMedia("(prefers-color-scheme: dark)")
+
+facc applicaTema() {
+    chist è scelta = leggiSalvato(TEMA) ?? "sistema"
+    chist è scuro = scelta === "scuro" || (scelta === "sistema" && scuroD_oSistema.matches)
+    document.documentElement.dataset.tema = scuro ? "scuro" : "chiaro"
+    pe ogni (chist è scegli dint tutti(".scegli-tema")) {
+        scegli.value = scelta
+    }
+}
+
+facc scriviTemi() {
+    pe ogni (chist è scegli dint tutti(".scegli-tema")) {
+        scegli.replaceChildren(
+            nu bell Option(t("theme.system"), "sistema"),
+            nu bell Option(t("theme.light"), "chiaro"),
+            nu bell Option(t("theme.dark"), "scuro"),
+        )
+    }
+    applicaTema()
+}
+
+pe ogni (chist è scegli dint tutti(".scegli-tema")) {
+    scegli.addEventListener("change", (evento) => {
+        salva(TEMA, evento.target.value)
+        applicaTema()
     })
 }
+scuroD_oSistema.addEventListener("change", applicaTema)
 
-chist è editorCess = editor("cess", [cessLanguage, cessLanguage.data.of({ autocomplete: completaCess })], "stile.cess, CSS napoletano")
-chist è editorPaggena = editor("paggena", [htmlLanguage, htmlLanguage.data.of({ autocomplete: completaPaggena }), autoCloseTags], "index.emmurt, 'a paggena in htmlemmurt")
+// ---------- Notices, like FratmScript's toasts
 
-facc codice() {
-    piglie { cess: editorCess.state.doc.toString(), paggena: editorPaggena.state.doc.toString() }
-}
+tien avvisoTimer = nisciun
 
-facc metti({ cess, paggena }) {
-    editorCess.dispatch({ changes: { from: 0, to: editorCess.state.doc.length, insert: String(cess ?? "") } })
-    editorPaggena.dispatch({ changes: { from: 0, to: editorPaggena.state.doc.length, insert: String(paggena ?? "") } })
-}
-
-// ---------- Link to share: both files, compressed, in #codice=
-
-mo vir facc comprimi(testo) {
-    chist è flusso = nu bell Blob([testo]).stream().pipeThrough(nu bell CompressionStream("deflate-raw"))
-    chist è byte = nu bell Uint8Array(aspett nu bell Response(flusso).arrayBuffer())
-    tien binario = ""
-    pe ogni (chist è b dint byte) {
-        binario += String.fromCharCode(b)
+facc avvisa(titolo, descrizione) {
+    chist è avviso = pesca("avviso")
+    avviso.replaceChildren(crea("strong", "blocco scrittura-peso-500", titolo))
+    si (descrizione) {
+        avviso.append(crea("span", "blocco margine-ncoppa-0.5 culore-scritta-smorta", descrizione))
     }
-    piglie btoa(binario).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "")
+    avviso.hidden = sfòls
+    clearTimeout(avvisoTimer)
+    avvisoTimer = setTimeout(() => {
+        avviso.hidden = overo
+    }, 4000)
 }
 
-mo vir facc decomprimi(base64) {
-    chist è binario = atob(base64.replaceAll("-", "+").replaceAll("_", "/"))
-    chist è byte = Uint8Array.from(binario, (c) => c.charCodeAt(0))
-    chist è flusso = nu bell Blob([byte]).stream().pipeThrough(nu bell DecompressionStream("deflate-raw"))
-    piglie aspett nu bell Response(flusso).text()
-}
+// ---------- Status bar
 
-pesca("condividi").addEventListener("click", mo vir () => {
-    chist è link = `${location.origin}${location.pathname}#codice=${aspett comprimi(JSON.stringify(codice()))}`
-    history.replaceState(nisciun, "", link)
-    chist è bottone = pesca("condividi")
-    pruvamm {
-        aspett navigator.clipboard.writeText(link)
-        bottone.textContent = "Link copiato"
-    } e si schiatta (e) {
-        bottone.textContent = "Copialo d'a barra"
+facc stato(tipo, testo, tiempo = "") {
+    chist è pallino = pesca("stato-pallino")
+    chist è culore = { pronto: "sfunno-buono", sbaglio: "sfunno-sbaglio", attesa: "sfunno-attesa", carica: "sfunno-attesa pulsa" }[tipo]
+    pallino.className = `pallino ${culore}`
+    // For the end-to-end tests, whatever the language
+    pesca("barra-stato").dataset.stato = tipo
+    chist è scritta = pesca("stato-testo")
+    // Only when it changes, so a screen reader does not repeat it at every key
+    si (scritta.textContent !== testo) {
+        scritta.textContent = testo
     }
-    setTimeout(() => {
-        bottone.textContent = "Copia link"
-    }, 2000)
-})
-
-// ---------- Examples
-
-pe ogni (chist è [i, esempio] dint ESEMPI.entries()) {
-    pesca("esempi").append(nu bell Option(esempio.nomme, String(i)))
-}
-pesca("esempi").addEventListener("change", (evento) => {
-    metti(ESEMPI[Number(evento.target.value)])
-    // Back to "Scegli…": the editors are no longer the example once touched, and it can be picked again
-    evento.target.value = ""
-})
-
-// ---------- Tabs: Anteprima, CSS, Classi
-
-chist è schede = [...document.querySelectorAll("[role=tab]")]
-
-facc apri(scheda) {
-    pe ogni (chist è s dint schede) {
-        chist è attiva = s === scheda
-        s.setAttribute("aria-selected", String(attiva))
-        s.tabIndex = attiva ? 0 : -1
-        pesca(s.getAttribute("aria-controls")).hidden = !attiva
-    }
-    si (scheda.id === "scheda-css") {
-        uscita.requestMeasure()
-    }
+    pesca("tiempo").textContent = tiempo
+    pesca("tiempo").hidden = !tiempo
+    pesca("tiempo-filo").hidden = !tiempo
 }
 
-pe ogni (chist è [i, scheda] dint schede.entries()) {
-    scheda.addEventListener("click", () => apri(scheda))
-    scheda.addEventListener("keydown", (evento) => {
-        chist è dove = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: schede.length - 1 }[evento.key]
-        si (dove !== undefined) {
+tien ultimoStato = () => stato("carica", t("status.loading"))
+
+// ---------- Output: preview, errors, console, CSS
+
+chist è anteprima = creaAnteprima(pesca("anteprima"), (tipo, testo) => scriviConsole(tipo, testo))
+chist è vistaCss = creaVista({ parent: pesca("css"), etichetta: t("output.css") })
+
+facc contaConsole() {
+    chist è voci = pesca("console").children.length
+    chist è sbagli = pesca("sbagli").children.length + tutti("#console [data-tipo=error]").length
+    pesca("console").hidden = voci === 0
+    pesca("console-vacante").hidden = voci > 0
+    chist è contatore = document.querySelector("[data-contatore]")
+    chist è quante = sbagli > 0 ? sbagli : voci
+    contatore.hidden = quante === 0
+    contatore.toggleAttribute("data-sbagli", sbagli > 0)
+    contatore.textContent = quante > 99 ? "99+" : String(quante)
+    contatore.setAttribute("aria-label", t(sbagli > 0 ? "tabs.errors" : "tabs.messages", { n: quante }))
+}
+
+facc scriviConsole(tipo, testo) {
+    chist è voce = crea("li", "voce-console")
+    voce.dataset.tipo = tipo
+    chist è segno = crea("span", "flessibile margine-ncoppa-0.5 [flex-shrink:0] culore-scritta-smorta")
+    segno.innerHTML = icona(tipo === "error" ? "sbaglio" : tipo === "warn" ? "attenzione" : "destra")
+    voce.append(segno, crea("span", "cresce", testo))
+    pesca("console").append(voce)
+    contaConsole()
+}
+
+facc cartaSbaglio(e) {
+    chist è carta = crea("div", "spazio-3 bordo bordo-sbaglio/20 bordo-tunno-lg sfunno-sbaglio/5 scrittura-grannezza-sm")
+    chist è capo = crea("div", "flessibile a-capo allinea-cose-miezo giustifica-spartuto spazio-mmiez-2")
+    capo.append(crea("strong", "scrittura-peso-500 culore-sbaglio-scritta", t("error.compile")))
+    chist è dove = `${e.file} · ${t("output.lineColumn", { line: e.line, column: e.column })}`
+    si (CHIAVE[e.file]) {
+        // The error is in a file of the project: the button goes there
+        chist è vai = crea("button", "buttone buttone-fantasma buttone-piccolo culore-sbaglio-scritta", dove)
+        vai.type = "button"
+        vai.addEventListener("click", () => {
+            mostraScheda("codice")
+            apriFile(e.file)
+            requestAnimationFrame(() => vaiA(editori[e.file], e.line, e.column))
+        })
+        capo.append(vai)
+    } sinnò {
+        // In a piece, like pezzi/carta.cess: not in the editor
+        capo.append(crea("span", "scrittura-mono scrittura-grannezza-xs culore-sbaglio-scritta", dove))
+    }
+    carta.append(capo, crea("p", "margine-ncoppa-1 scrittura-mono [white-space:pre-wrap]", e.suggestion ? `${e.message}\n${e.suggestion}` : e.message))
+    piglie carta
+}
+
+facc vecchio(si_) {
+    pe ogni (chist è vista dint [pesca("anteprima"), pesca("css")]) {
+        vista.classList.toggle("opacità-60", si_)
+    }
+}
+
+/** Compiles and shows. `daBottone`: asked by the user (Esegui, Ctrl+Enter). */
+facc lancia(daBottone = sfòls) {
+    si (!pronto) {
+        piglie
+    }
+    clearTimeout(attesa)
+    chist è r = compila(file)
+    ultimoLanciato = { ...file }
+    pe ogni (chist è [nomme, editor] dint Object.entries(editori)) {
+        chist è e = r.sbagli.find((x) => x.file === nomme)
+        segnala(editor, e)
+        document.querySelector(`[data-file-scheda="${nomme}"]`).toggleAttribute("data-sbaglio", Boolean(e))
+    }
+    pesca("sbagli").replaceChildren(...r.sbagli.map(cartaSbaglio))
+    si (r.html === nisciun) {
+        // The preview and the CSS stay the last good ones, and look old
+        vecchio(overo)
+        ultimoStato = () => stato("sbaglio", t("status.compileError"))
+    } sinnò {
+        vecchio(sfòls)
+        pesca("console").replaceChildren()
+        anteprima.mostra(r.html)
+        metti(vistaCss, r.css)
+        chist è tiempo = r.ms.toFixed(1)
+        ultimoStato = () => stato("pronto", t("status.done"), t("status.compiledIn", { ms: tiempo }))
+        controllaLezione(r.html)
+    }
+    ultimoStato()
+    contaConsole()
+    // On phones the output has its own tab: Esegui opens it
+    si (daBottone && scheda === "codice" && telefono.matches) {
+        mostraScheda(r.html === nisciun ? "console" : "anteprima")
+    }
+}
+
+// ---------- The editor: a tab per file
+
+facc scriviEsempi() {
+    chist è scegli = pesca("esempi")
+    scegli.replaceChildren(nu bell Option(t("editor.chooseExample"), ""))
+    si (esempio === "proprio") {
+        chist è proprio = nu bell Option(t("editor.custom"), "proprio")
+        proprio.disabled = overo
+        scegli.append(proprio)
+    }
+    scegli.append(...ESEMPI.map((x) => nu bell Option(t(`ex.${x.id}`), x.id)))
+    scegli.value = esempio
+    pesca("cagnato").hidden = esempio !== "proprio"
+}
+
+facc quannoCagna(nomme, testo) {
+    file[CHIAVE[nomme]] = testo
+    // mettiFile changes both files: its caller does the rest
+    si (mettenno) {
+        piglie
+    }
+    // An edited example becomes your own code
+    chist è x = ESEMPI.find((x) => x.id === esempio)
+    si (x && !uguale(x, file)) {
+        esempio = "proprio"
+        scriviEsempi()
+    }
+    // The code is no longer the link's: the saved copy wins
+    si (location.hash.startsWith("#codice=")) {
+        history.replaceState(nisciun, "", location.pathname + location.search)
+    }
+    salvaFile()
+    si (!pronto) {
+        piglie
+    }
+    clearTimeout(attesa)
+    vecchio(!ultimoLanciato || !uguale(file, ultimoLanciato))
+    si (automatico) {
+        ultimoStato = () => stato("attesa", t("status.staleAuto"))
+        attesa = setTimeout(lancia, ATTESA_MS)
+    } sinnò {
+        ultimoStato = () => stato("attesa", t("status.staleManual"))
+    }
+    ultimoStato()
+}
+
+/** Puts both files in the editor and saves them; does not run them. */
+facc mettiFile(nuovi) {
+    mettenno = overo
+    metti(editori["stile.cess"], nuovi.cess)
+    metti(editori["index.emmurt"], nuovi.paggena)
+    mettenno = sfòls
+    salvaFile()
+}
+
+facc puoArrecettà() {
+    piglie aperto === "stile.cess" || arrecettaPaggena !== nisciun
+}
+
+facc scriviFormatta() {
+    chist è b = pesca("formatta")
+    chist è si_ = puoArrecettà()
+    b.setAttribute("aria-disabled", String(!si_))
+    b.title = si_ ? t("editor.formatTip") : t("editor.formatNoEmmurt", { version: versioni?.emmurt ?? "" })
+}
+
+facc arrecettaFile() {
+    si (!pronto) {
+        piglie
+    }
+    si (!puoArrecettà()) {
+        avvisa(t("editor.format"), t("editor.formatNoEmmurt", { version: versioni.emmurt }))
+        piglie
+    }
+    chist è testo = file[CHIAVE[aperto]]
+    chist è arrecettato = arrecetta(aperto, testo)
+    si (arrecettato === nisciun) {
+        // A syntax error: the text stays as it is, the errors say why
+        lancia()
+    } sinnò si (arrecettato !== testo) {
+        metti(editori[aperto], arrecettato)
+    }
+}
+
+chist è editori = {
+    "stile.cess": creaEditor({
+        parent: pesca("editor-cess"),
+        linguaggio: "cess",
+        etichetta: t("editor.labelCess"),
+        quannoCagna: (testo) => quannoCagna("stile.cess", testo),
+        lancia: () => lancia(overo),
+        arrecetta: arrecettaFile,
+    }),
+    "index.emmurt": creaEditor({
+        parent: pesca("editor-paggena"),
+        linguaggio: "emmurt",
+        etichetta: t("editor.labelEmmurt"),
+        quannoCagna: (testo) => quannoCagna("index.emmurt", testo),
+        lancia: () => lancia(overo),
+        arrecetta: arrecettaFile,
+    }),
+}
+
+chist è schedeFile = tutti("[data-file-scheda]")
+
+facc apriFile(nomme) {
+    aperto = nomme
+    pe ogni (chist è s dint schedeFile) {
+        chist è si_ = s.dataset.fileScheda === nomme
+        s.setAttribute("aria-selected", String(si_))
+        s.tabIndex = si_ ? 0 : -1
+        pesca(s.getAttribute("aria-controls")).hidden = !si_
+    }
+    editori[nomme].requestMeasure()
+    scriviFormatta()
+}
+
+pe ogni (chist è [i, s] dint schedeFile.entries()) {
+    s.addEventListener("click", () => apriFile(s.dataset.fileScheda))
+    s.addEventListener("keydown", (evento) => {
+        si (evento.key === "ArrowRight" || evento.key === "ArrowLeft") {
             evento.preventDefault()
-            chist è prossima = schede[(dove + schede.length) % schede.length]
-            apri(prossima)
+            chist è prossima = schedeFile[(i + 1) % schedeFile.length]
+            apriFile(prossima.dataset.fileScheda)
             prossima.focus()
         }
     })
 }
 
-// ---------- Classi
+// ---------- Tabs on phones
 
-facc tavula(titolo, righe) {
-    chist è piezz = document.createElement("section")
-    chist è h = document.createElement("h2")
-    h.textContent = titolo
-    piezz.append(h)
-    chist è t = document.createElement("table")
-    chist è capo = t.createTHead().insertRow()
-    pe ogni (chist è colonna dint ["par-o-css", "Tailwind"]) {
-        chist è th = document.createElement("th")
-        th.scope = "col"
-        th.textContent = colonna
-        capo.append(th)
+chist è telefono = matchMedia("(max-width: 767px)")
+
+facc mostraScheda(nova) {
+    scheda = nova
+    pe ogni (chist è s dint tutti("[data-scheda]")) {
+        s.setAttribute("aria-selected", String(s.dataset.scheda === nova))
     }
-    chist è cuorpo = t.createTBody()
-    pe ogni (chist è riga dint righe) {
-        chist è r = cuorpo.insertRow()
-        pe ogni (chist è cella dint riga) {
-            r.insertCell().textContent = cella
-        }
+    chist è piccolo = telefono.matches
+    pesca("pannello-codice").hidden = piccolo && nova !== "codice"
+    pesca("pannello-uscita").hidden = piccolo && nova === "codice"
+    pe ogni (chist è piezz dint tutti("[data-sezione]")) {
+        piezz.hidden = piccolo && nova !== "codice" && piezz.dataset.sezione !== nova
+        piezz.toggleAttribute("data-sola", piccolo && piezz.dataset.sezione === nova)
     }
-    piezz.append(t)
-    piglie piezz
+    vistaCss.requestMeasure()
+    editori[aperto].requestMeasure()
 }
+
+pe ogni (chist è s dint tutti("[data-scheda]")) {
+    s.addEventListener("click", () => mostraScheda(s.dataset.scheda))
+}
+telefono.addEventListener("change", () => mostraScheda(scheda))
+
+// ---------- Lessons
+
+chist è scola = creaScola({
+    vai: (i) => apriLezione(i),
+    esci: () => esciDaScola(),
+    metti: (nuovi) => {
+        mettiFile(nuovi)
+        lancia()
+    },
+})
+
+// The comparison is asynchronous: it counts only if the lesson and the code are still the same
+mo vir facc controllaLezione(html) {
+    si (lezione === nisciun) {
+        piglie
+    }
+    chist è l = LEZIONI[lezione]
+    si (fatte.has(l.id)) {
+        piglie
+    }
+    si (!soluzioni.has(l.id)) {
+        soluzioni.set(l.id, fotografa(compila(l.soluzione).html ?? ""))
+    }
+    chist è lanciato = ultimoLanciato
+    chist è [mio, giusto] = aspett Promise.all([fotografa(html), soluzioni.get(l.id)])
+    si (lezione === nisciun || LEZIONI[lezione].id !== l.id || ultimoLanciato !== lanciato) {
+        piglie
+    }
+    si (differenza(mio, giusto) === nisciun) {
+        fatte.add(l.id)
+        salva(FATTE, JSON.stringify([...fatte]))
+        scola.mostra(lezione, fatte)
+    }
+}
+
+facc apriLezione(i) {
+    chist è indice = Math.min(Math.max(i, 0), LEZIONI.length - 1)
+    si (sezione !== nisciun) {
+        esciDaGuida()
+    }
+    lezione = indice
+    esempio = ""
+    pesca("impara").setAttribute("aria-pressed", "true")
+    pesca("impara").title = t("header.tourExit")
+    pesca("esempi-barra").hidden = overo
+    scola.mostra(indice, fatte)
+    chist è l = LEZIONI[indice]
+    mettiFile(leggiFile(CODICE_LEZIONE + l.id) ?? l.partenza)
+    apriFile(l.file)
+    scriviEsempi()
+    mostraScheda("codice")
+    history.replaceState(nisciun, "", `#scola=${indice + 1}`)
+    lancia()
+}
+
+facc esciDaScola() {
+    lezione = nisciun
+    scola.nasconde()
+    pesca("impara").setAttribute("aria-pressed", "false")
+    pesca("impara").title = t("header.tourOpen")
+    pesca("esempi-barra").hidden = sfòls
+    mettiFile(leggiFile(SALVATO) ?? ESEMPI[0])
+    esempio = esempioD_e(file)
+    scriviEsempi()
+    history.replaceState(nisciun, "", location.pathname + location.search)
+    lancia()
+}
+
+pesca("impara").addEventListener("click", () => {
+    si (lezione !== nisciun) {
+        esciDaScola()
+        piglie
+    }
+    // Start again from the first lesson not done yet
+    chist è prossima = LEZIONI.findIndex((l) => !fatte.has(l.id))
+    apriLezione(prossima === -1 ? 0 : prossima)
+})
+
+// ---------- Guide
+
+chist è guida = creaGuida({
+    vai: (i) => apriGuida(i),
+    apri: (nuovi) => {
+        esciDaGuida()
+        esempio = "proprio"
+        mettiFile(nuovi)
+        apriFile(nuovi.file)
+        scriviEsempi()
+        mostraScheda("codice")
+        lancia()
+    },
+})
+
+facc mostraGuida(si_) {
+    pesca("banco").hidden = si_
+    pesca("schede").hidden = si_
+    pesca("barra-stato").hidden = si_
+    pesca("azioni").hidden = si_
+    chist è link = pesca("guida")
+    link.href = si_ ? location.pathname + location.search : "#guida"
+    link.querySelector("[data-t]").dataset.t = si_ ? "header.playground" : "header.guide"
+    link.dataset.tAria = si_ ? "header.guideExit" : "header.guideLabel"
+    link.dataset.tTitle = si_ ? "header.guideExit" : "header.guideOpen"
+    link.querySelector("svg").outerHTML = icona(si_ ? "terminale" : "libro")
+    traduci(link.parentElement)
+}
+
+facc apriGuida(i) {
+    si (lezione !== nisciun) {
+        esciDaScola()
+    }
+    sezione = Math.min(Math.max(i, 0), SEZIONI.length - 1)
+    mostraGuida(overo)
+    guida.mostra(sezione)
+    history.replaceState(nisciun, "", `#guida=${SEZIONI[sezione].id}`)
+}
+
+facc esciDaGuida() {
+    sezione = nisciun
+    guida.nasconde()
+    mostraGuida(sfòls)
+    history.replaceState(nisciun, "", location.pathname + location.search)
+    mostraScheda(scheda)
+}
+
+pesca("guida").addEventListener("click", (evento) => {
+    // Ctrl-click or a middle click opens the guide in a new tab, as a link
+    si (evento.button !== 0 || evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey) {
+        piglie
+    }
+    evento.preventDefault()
+    si (sezione !== nisciun) {
+        esciDaGuida()
+    } sinnò {
+        apriGuida(0)
+    }
+})
+
+// ---------- Buttons and menus
+
+pesca("esegui").addEventListener("click", () => lancia(overo))
+pesca("formatta").addEventListener("click", arrecettaFile)
+pesca("pulizza").addEventListener("click", () => {
+    pesca("console").replaceChildren()
+    contaConsole()
+})
+
+chist è automaticoSpunta = pesca("automatico")
+automaticoSpunta.checked = automatico
+automaticoSpunta.addEventListener("change", () => {
+    automatico = automaticoSpunta.checked
+    salva(AUTOMATICO, String(automatico))
+    si (automatico && (!ultimoLanciato || !uguale(file, ultimoLanciato))) {
+        lancia()
+    }
+})
+
+// Code that is still an example keeps its name
+facc esempioD_e(x) {
+    si (uguale(x, ESEMPI[0])) {
+        piglie ""
+    }
+    piglie ESEMPI.find((e) => uguale(e, x))?.id ?? "proprio"
+}
+
+pesca("esempi").addEventListener("change", (evento) => {
+    chist è scigliuto = ESEMPI.find((x) => x.id === evento.target.value)
+    si (!scigliuto) {
+        piglie
+    }
+    esempio = scigliuto.id
+    mettiFile(scigliuto)
+    scriviEsempi()
+    lancia()
+})
+
+pesca("condividi").addEventListener("click", mo vir () => {
+    chist è link = aspett linkPe(file)
+    history.replaceState(nisciun, "", link)
+    pruvamm {
+        aspett navigator.clipboard.writeText(link)
+        avvisa(t("share.copied"), t("share.copiedDesc"))
+    } e si schiatta (e) {
+        avvisa(t("share.failed"), link)
+    }
+})
+
+pesca("copia-css").addEventListener("click", mo vir () => {
+    chist è scritta = pesca("copia-css").querySelector("[data-t]")
+    pruvamm {
+        aspett navigator.clipboard.writeText(vistaCss.state.doc.toString())
+        scritta.textContent = t("output.copied")
+    } e si schiatta (e) {
+        scritta.textContent = t("share.failed")
+    }
+    setTimeout(() => {
+        scritta.textContent = t("output.copyCss")
+    }, 2000)
+})
+
+facc scriviVersioni() {
+    si (versioni) {
+        pesca("versione").title = t("editor.versions", versioni)
+    }
+}
+
+quannoCagnaLingua(() => {
+    scriviTemi()
+    scriviEsempi()
+    scriviFormatta()
+    scriviVersioni()
+    ultimoStato()
+    contaConsole()
+    si (lezione !== nisciun) {
+        scola.scrivi()
+    }
+    si (sezione !== nisciun) {
+        mostraGuida(overo)
+        guida.scrivi()
+    }
+})
 
 // ---------- Start
 
+mettiIcone()
+traduci()
+scriviTemi()
+scriviEsempi()
+apriFile(aperto)
+mostraScheda("codice")
+contaConsole()
+ultimoStato()
+
+chist è dalHash = nu bell URLSearchParams(location.hash.slice(1))
+chist è dalLink = aspett codiceDalLink()
+mettiFile(dalLink ?? leggiFile(SALVATO) ?? ESEMPI[0])
+esempio = dalLink ? "proprio" : esempioD_e(file)
+scriviEsempi()
+
 pruvamm {
-    aspett Promise.all([initPaggena(), initCess()])
+    chist è caricato = aspett carica()
+    versioni = caricato.versioni
+    pesca("versione").textContent = versioni.parocss
+    scriviVersioni()
+    imparaParole(caricato.paggena, caricato.cess, caricato.nomi)
+    preparaAiuto(caricato.nomi, caricato.cess)
+    pronto = overo
+    pe ogni (chist è b dint [pesca("esegui"), pesca("formatta")]) {
+        b.disabled = sfòls
+    }
+    scriviFormatta()
+    pesca("carica").hidden = overo
+    ultimoStato = () => stato("pronto", t("status.ready"))
+    si (dalHash.has("scola")) {
+        apriLezione(Number.parseInt(dalHash.get("scola"), 10) - 1 || 0)
+    } sinnò si (dalHash.has("guida")) {
+        apriGuida(Math.max(SEZIONI.findIndex((s) => s.id === dalHash.get("guida")), 0))
+        lancia()
+    } sinnò {
+        lancia()
+    }
 } e si schiatta (e) {
-    dici("stato sbagliato", `✗ Nun riesco a carricà 'e compilatori: ${e.message}`)
+    pesca("carica").replaceChildren(crea("strong", "blocco scrittura-peso-600 culore-sbaglio-scritta", t("error.load")), crea("span", "blocco margine-ncoppa-1 larghezza-massima-md allinea-testo-miezo", t("error.loadMessage")))
+    pesca("carica").classList.add("direzione-colonna")
+    ultimoStato = () => stato("sbaglio", t("status.loadFailed"))
+    ultimoStato()
     iett e
 }
-
-chist è v = vocabulary()
-parole = {
-    elementi: [
-        ...v.tags.map(([nap, h]) => ({ label: nap, detail: `<${h}>`, type: "type" })),
-        { label: "chiamm", detail: "ncolla n'atu file", type: "type" },
-        ...v.untranslated.tags.map((label) => ({ label, detail: "HTML", type: "type" })),
-    ],
-    html: Object.fromEntries(v.tags),
-    attributi: v.attributes,
-    eventi: v.events.map(([nap, h]) => ({ label: nap, detail: `${h} (FratmScript)`, type: "event" })),
-    // HTML names with no word yet: the compiler lets them pass as they are
-    comeSo: [...v.untranslated.attributes, ...v.untranslated.events].map((label) => ({ label, detail: "HTML", type: "property" })),
-}
-
-// A root takes a value after "-", a variant goes before a class with ":"
-chist è nomi = names()
-chist è scritto = (n, nomme) => n.che === "radice" ? `${nomme}-` : n.che === "variante" ? `${nomme}:` : nomme
-classi = nomi.map((n) => ({ label: scritto(n, n.nomme), detail: scritto(n, n.tailwind), type: n.che === "classe" ? "class" : n.che === "radice" ? "property" : "keyword" }))
-chist è righe = (che) => nomi.filter((n) => n.che === che).map((n) => [scritto(n, n.nomme), scritto(n, n.tailwind)])
-pesca("nomi").append(
-    tavula("Classi sane", righe("classe")),
-    tavula("Radici: radice-valore, comme spazio-4", righe("radice")),
-    tavula("Varianti: variante:classe, comme passanno:sottolineato", righe("variante")),
-)
-pesca("cerca").addEventListener("input", (evento) => {
-    chist è cosa = evento.target.value.trim().toLowerCase()
-    pe ogni (chist è piezz dint document.querySelectorAll("#nomi section")) {
-        pe ogni (chist è r dint piezz.querySelectorAll("tbody tr")) {
-            r.hidden = cosa !== "" && !r.textContent.toLowerCase().includes(cosa)
-        }
-        piezz.hidden = !piezz.querySelector("tbody tr:not([hidden])")
-    }
-    chist è nisciuna = pesca("nisciuna")
-    nisciuna.hidden = Boolean(document.querySelector("#nomi section:not([hidden])"))
-    nisciuna.textContent = `Nun trovo "${evento.target.value.trim()}" int'e classi.`
-})
-
-tien iniziale = ESEMPI[0]
-pruvamm {
-    chist è nelLink = location.hash.match(/^#codice=(.+)$/)
-    si (nelLink) {
-        iniziale = JSON.parse(aspett decomprimi(nelLink[1]))
-    } sinnò {
-        iniziale = JSON.parse(localStorage.getItem(SALVATO)) ?? iniziale
-    }
-} e si schiatta (e) {
-    // A broken link or no localStorage: start from the example
-}
-metti(iniziale)

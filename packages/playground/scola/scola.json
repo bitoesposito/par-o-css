@@ -1,0 +1,250 @@
+{
+  "lessons": [
+    {
+      "id": "01_russo",
+      "file": "stile.cess",
+      "title": { "it": "Il primo stile", "en": "Your first style", "nap": "'O primmo stile" },
+      "body": {
+        "it": [
+          "Benvenuto nel tour! Qui impari par-o-css: CSS scritto come si deve, in napoletano, con le classi pronte alla Tailwind.",
+          "Il progetto ha due file, nelle schede sopra l'editor: `stile.cess` è il foglio di stile, `index.emmurt` è la pagina in htmlemmurt. La pagina col suo CSS compare a destra, nell'anteprima (sul telefono, nella scheda Anteprima).",
+          "Nel `.cess` le parole del CSS sono napoletane: `culore` è `color`, `russo` è `red`, `luccolone` è `h1`. Una riga nuova chiude la dichiarazione: il `;` si può lasciare.",
+          "Se scrivi un nome inglese, il compilatore te lo dice in napoletano e ti suggerisce quello giusto. Prova a scrivere `color` invece di `culore`."
+        ],
+        "en": [
+          "Welcome to the tour! Here you learn par-o-css: CSS written the way it should be, in Neapolitan, with Tailwind-style classes ready to use.",
+          "The project has two files, in the tabs over the editor: `stile.cess` is the stylesheet, `index.emmurt` is the page in htmlemmurt. The page with its CSS appears on the right, in the preview (on a phone, in the Anteprima tab).",
+          "In the `.cess` the words of CSS are Neapolitan: `culore` is `color`, `russo` is `red`, `luccolone` is `h1`. A new line ends the declaration: the `;` is optional.",
+          "If you write an English name, the compiler tells you in Neapolitan and suggests the right one. Try writing `color` instead of `culore`."
+        ],
+        "nap": [
+          "Benvenuto a scola! Ccà mpare par-o-css: CSS scritto comme si deve, in napoletano, cu 'e classi pronte comme a Tailwind.",
+          "'O progetto tene dduje file, int'e schede 'ncoppa a l'editor: `stile.cess` è 'o foglio 'e stile, `index.emmurt` è 'a paggena in htmlemmurt. 'A paggena c'o CSS suoio esce a destra, int'a l'anteprima (ncopp'o telefono, int'a scheda Anteprima).",
+          "Int'o `.cess` 'e parole d'o CSS so' napoletane: `culore` è `color`, `russo` è `red`, `luccolone` è `h1`. Na riga nova chiude 'a dichiarazione: 'o `;` se pò lassà.",
+          "Si scrive nu nomme inglese, 'o compilatore t'o dice in napoletano e te suggerisce chillo giusto. Prova a scrivere `color` invece 'e `culore`."
+        ]
+      },
+      "task": {
+        "it": "Fai il titolo rosso: nel `.cess` scrivi una regola per `luccolone` con `culore: russo`.",
+        "en": "Make the heading red: in the `.cess` write a rule for `luccolone` with `culore: russo`.",
+        "nap": "Fa' 'o titolo russo: int'o `.cess` scrive na regola pe `luccolone` cu `culore: russo`."
+      }
+    },
+    {
+      "id": "02_classi",
+      "file": "index.emmurt",
+      "title": { "it": "Le classi", "en": "Classes", "nap": "'E classi" },
+      "body": {
+        "it": [
+          "Con `@chiamm \"par-o-css\"` in cima al `.cess`, la pagina si veste con le classi, come con Tailwind: il compilatore scrive una regola per ogni classe che trova nella pagina, e niente altro.",
+          "I colori hanno la sfumatura, da `50` a `950`: `sfunno-blu-500` è lo sfondo blu, `culore-janco` il testo bianco.",
+          "Dentro `classe=\"…\"` l'editor ti propone le classi, col nome Tailwind accanto. Il bottone ? sotto l'editor le elenca tutte."
+        ],
+        "en": [
+          "With `@chiamm \"par-o-css\"` at the top of the `.cess`, the page is styled with classes, as with Tailwind: the compiler writes one rule for each class it finds in the page, and nothing else.",
+          "Colours have a shade, from `50` to `950`: `sfunno-blu-500` is the blue background, `culore-janco` the white text.",
+          "Inside `classe=\"…\"` the editor suggests classes, with their Tailwind name. The ? button under the editor lists them all."
+        ],
+        "nap": [
+          "Cu `@chiamm \"par-o-css\"` 'ncoppa a 'o `.cess`, 'a paggena se veste cu 'e classi, comme cu Tailwind: 'o compilatore scrive na regola pe ogni classe ca trova int'a paggena, e niente cchiù.",
+          "'E culure teneno 'a sfumatura, d'o `50` a 'o `950`: `sfunno-blu-500` è 'o sfunno blu, `culore-janco` 'o testo janco.",
+          "Dint'a `classe=\"…\"` l'editor te propone 'e classi, cu 'o nomme Tailwind vicino. 'O bottone ? sotto a l'editor 'e fa vedé tutte."
+        ]
+      },
+      "task": {
+        "it": "Fai il bottone blu col testo bianco: aggiungi `sfunno-blu-500` e `culore-janco` alle sue classi.",
+        "en": "Make the button blue with white text: add `sfunno-blu-500` and `culore-janco` to its classes.",
+        "nap": "Fa' 'o bottone blu c'o testo janco: miette `sfunno-blu-500` e `culore-janco` int'e classi soje."
+      }
+    },
+    {
+      "id": "03_spazi",
+      "file": "index.emmurt",
+      "title": { "it": "Spazi", "en": "Spacing", "nap": "Spazi" },
+      "body": {
+        "it": [
+          "`spazio` è `padding`, lo spazio dentro la scatola; `margine` è `margin`, quello fuori; `spazio-mmiez` è `gap`, quello tra le cose di un `flessibile` o di una `griglia`.",
+          "I numeri sono multipli di 0.25rem: `spazio-6` è 1.5rem, `spazio-mmiez-2` è 0.5rem. Con `-x` e `-y` dai lo spazio solo ai lati o solo sopra e sotto.",
+          "Puoi farlo anche nel `.cess`, con una classe tua e `spazio: 1.5rem`: conta lo stile che esce, non come lo scrivi."
+        ],
+        "en": [
+          "`spazio` is `padding`, the space inside the box; `margine` is `margin`, the space outside; `spazio-mmiez` is `gap`, the space between the items of a `flessibile` or a `griglia`.",
+          "Numbers are multiples of 0.25rem: `spazio-6` is 1.5rem, `spazio-mmiez-2` is 0.5rem. With `-x` and `-y` you space only the sides, or only top and bottom.",
+          "You can do it in the `.cess` too, with your own class and `spazio: 1.5rem`: what counts is the style that comes out, not how you write it."
+        ],
+        "nap": [
+          "`spazio` è `padding`, 'o spazio dint'a scatola; `margine` è `margin`, chillo 'a fore; `spazio-mmiez` è `gap`, chillo mmiez'ê cose 'e nu `flessibile` o 'e na `griglia`.",
+          "'E nummere so' multipli 'e 0.25rem: `spazio-6` è 1.5rem, `spazio-mmiez-2` è 0.5rem. Cu `-x` e `-y` daje 'o spazio sulo a 'e late o sulo 'ncoppa e sotto.",
+          "'O può fà pure int'o `.cess`, cu na classe toja e `spazio: 1.5rem`: conta 'o stile ca esce, nun comme 'o scrive."
+        ]
+      },
+      "task": {
+        "it": "Stacca il contenuto dal bordo della carta con `spazio-6` sulla `<cascett>`, e separa le pizze con `spazio-mmiez-2` sulla `<list>`.",
+        "en": "Move the content away from the card's edge with `spazio-6` on the `<cascett>`, and space the pizzas with `spazio-mmiez-2` on the `<list>`.",
+        "nap": "Stacca 'o cuntenuto d'o bordo d'a carta cu `spazio-6` ncopp'a `<cascett>`, e spartisce 'e pizze cu `spazio-mmiez-2` ncopp'a `<list>`."
+      }
+    },
+    {
+      "id": "04_flessibile",
+      "file": "index.emmurt",
+      "title": { "it": "flessibile", "en": "flessibile", "nap": "flessibile" },
+      "body": {
+        "it": [
+          "`flessibile` è `display: flex`: le cose dentro vanno in riga. `giustifica-…` è `justify-content` e le distribuisce sulla riga, `allinea-cose-…` è `align-items` e le allinea in altezza.",
+          "I valori sono napoletani: `spartuto` è `space-between`, `miezo` è `center`, `inizio` e `fine` sono `start` ed `end`. Quindi `giustifica-spartuto` mette la prima cosa a sinistra e l'ultima a destra.",
+          "Nel `.cess` è `mostra: flessibile`, `giustifica: spartuto`, `allinea-cose: miezo`."
+        ],
+        "en": [
+          "`flessibile` is `display: flex`: the items inside go in a row. `giustifica-…` is `justify-content` and spreads them along the row, `allinea-cose-…` is `align-items` and aligns them vertically.",
+          "Values are Neapolitan: `spartuto` is `space-between`, `miezo` is `center`, `inizio` and `fine` are `start` and `end`. So `giustifica-spartuto` puts the first item on the left and the last on the right.",
+          "In the `.cess` it is `mostra: flessibile`, `giustifica: spartuto`, `allinea-cose: miezo`."
+        ],
+        "nap": [
+          "`flessibile` è `display: flex`: 'e cose llà dinto vanno in riga. `giustifica-…` è `justify-content` e 'e spartisce ncopp'a riga, `allinea-cose-…` è `align-items` e 'e mette in fila in altezza.",
+          "'E valori so' napoletane: `spartuto` è `space-between`, `miezo` è `center`, `inizio` e `fine` so' `start` e `end`. Accussì `giustifica-spartuto` mette 'a primma cosa a manca e l'urdema a destra.",
+          "Int'o `.cess` è `mostra: flessibile`, `giustifica: spartuto`, `allinea-cose: miezo`."
+        ]
+      },
+      "task": {
+        "it": "Metti il titolo a sinistra e il bottone a destra, sulla stessa riga e centrati in altezza: `flessibile`, `giustifica-spartuto` e `allinea-cose-miezo` sul `<cappiell>`.",
+        "en": "Put the heading on the left and the button on the right, on the same row and vertically centred: `flessibile`, `giustifica-spartuto` and `allinea-cose-miezo` on the `<cappiell>`.",
+        "nap": "Miette 'o titolo a manca e 'o bottone a destra, ncopp'a stessa riga e mmiezo in altezza: `flessibile`, `giustifica-spartuto` e `allinea-cose-miezo` ncopp'o `<cappiell>`."
+      }
+    },
+    {
+      "id": "05_bordi",
+      "file": "index.emmurt",
+      "title": { "it": "Bordi e ombre", "en": "Borders and shadows", "nap": "Bordi e ombre" },
+      "body": {
+        "it": [
+          "`bordo-tunno` è `border-radius`: con le misure di Tailwind, `bordo-tunno-lg`, `bordo-tunno-xl`, fino a `bordo-tunno-chino` che fa un cerchio o una pillola.",
+          "`ombra` è `box-shadow`: `ombra-sm`, `ombra-md`, `ombra-lg`. `bordo` da solo fa un bordo di 1px, `bordo-grigio-300` gli dà il colore.",
+          "Nel `.cess` lo stesso arrotondamento è `bordo-tunno: 0.75rem`; per l'ombra la classe fa prima, perché `ombra-md` sono due ombre una sopra l'altra."
+        ],
+        "en": [
+          "`bordo-tunno` is `border-radius`: with Tailwind's sizes, `bordo-tunno-lg`, `bordo-tunno-xl`, up to `bordo-tunno-chino`, which makes a circle or a pill.",
+          "`ombra` is `box-shadow`: `ombra-sm`, `ombra-md`, `ombra-lg`. `bordo` alone makes a 1px border, `bordo-grigio-300` gives it a colour.",
+          "In the `.cess` the same rounding is `bordo-tunno: 0.75rem`; for the shadow the class is quicker, since `ombra-md` is two shadows on top of each other."
+        ],
+        "nap": [
+          "`bordo-tunno` è `border-radius`: cu 'e misure 'e Tailwind, `bordo-tunno-lg`, `bordo-tunno-xl`, fino a `bordo-tunno-chino` ca fa nu cerchio o na pinnola.",
+          "`ombra` è `box-shadow`: `ombra-sm`, `ombra-md`, `ombra-lg`. `bordo` sulo fa nu bordo 'e 1px, `bordo-grigio-300` ce dà 'o culore.",
+          "Int'o `.cess` 'o stesso tunno è `bordo-tunno: 0.75rem`; pe l'ombra fa primma 'a classe, pecché `ombra-md` so' doje ombre una ncopp'a n'ata."
+        ]
+      },
+      "task": {
+        "it": "Arrotonda la carta con `bordo-tunno-xl` e dalle un'ombra con `ombra-md`.",
+        "en": "Round the card with `bordo-tunno-xl` and give it a shadow with `ombra-md`.",
+        "nap": "Fa' 'a carta tonna cu `bordo-tunno-xl` e dalle n'ombra cu `ombra-md`."
+      }
+    },
+    {
+      "id": "06_testo",
+      "file": "stile.cess",
+      "title": { "it": "Il testo", "en": "Text", "nap": "'O testo" },
+      "body": {
+        "it": [
+          "Le proprietà del testo: `allinea-testo` è `text-align`, `trasforma-testo` è `text-transform`, `scrittura-stile` è `font-style`, `scrittura-peso` è `font-weight`.",
+          "E i loro valori: `miezo` è `center`, `maiuscolo` è `uppercase`, `corsivo` è `italic`, `grassetto` è `bold`.",
+          "Stavolta scrivi nel `.cess`; con le classi andrebbe bene lo stesso: `allinea-testo-miezo`, `maiuscolo`, `corsivo`."
+        ],
+        "en": [
+          "Text properties: `allinea-testo` is `text-align`, `trasforma-testo` is `text-transform`, `scrittura-stile` is `font-style`, `scrittura-peso` is `font-weight`.",
+          "And their values: `miezo` is `center`, `maiuscolo` is `uppercase`, `corsivo` is `italic`, `grassetto` is `bold`.",
+          "This time write in the `.cess`; classes would do just as well: `allinea-testo-miezo`, `maiuscolo`, `corsivo`."
+        ],
+        "nap": [
+          "'E proprietà d'o testo: `allinea-testo` è `text-align`, `trasforma-testo` è `text-transform`, `scrittura-stile` è `font-style`, `scrittura-peso` è `font-weight`.",
+          "E 'e valori lloro: `miezo` è `center`, `maiuscolo` è `uppercase`, `corsivo` è `italic`, `grassetto` è `bold`.",
+          "Sta vota scrive int'o `.cess`; cu 'e classi jarria bbuono 'o stesso: `allinea-testo-miezo`, `maiuscolo`, `corsivo`."
+        ]
+      },
+      "task": {
+        "it": "Centra il titolo e il paragrafo, fai il titolo maiuscolo e il paragrafo corsivo.",
+        "en": "Centre the heading and the paragraph, make the heading uppercase and the paragraph italic.",
+        "nap": "Miette mmiezo 'o titolo e 'o paragrafo, fa' 'o titolo maiuscolo e 'o paragrafo corsivo."
+      }
+    },
+    {
+      "id": "07_schermo",
+      "file": "index.emmurt",
+      "title": { "it": "Lo schermo grande", "en": "Large screens", "nap": "'O schermo gruosso" },
+      "body": {
+        "it": [
+          "Una variante va davanti alla classe, con i due punti. `sm:`, `md:` e `lg:` valgono da 40rem, 48rem e 64rem in su: la pagina si scrive per il telefono, poi si cambia quello che serve sullo schermo grande.",
+          "`colonne-3` è `grid-template-columns: repeat(3, minmax(0, 1fr))`: tre colonne uguali in una `griglia`.",
+          "Ci sono anche le varianti degli stati, come `passanno:` per `:hover`: le provi nell'anteprima, ma il controllo della lezione guarda la pagina ferma."
+        ],
+        "en": [
+          "A variant goes before the class, with a colon. `sm:`, `md:` and `lg:` apply from 40rem, 48rem and 64rem up: write the page for phones, then change what you need on large screens.",
+          "`colonne-3` is `grid-template-columns: repeat(3, minmax(0, 1fr))`: three equal columns in a `griglia`.",
+          "There are state variants too, like `passanno:` for `:hover`: try them in the preview, but the lesson check looks at the page at rest."
+        ],
+        "nap": [
+          "Na variante va annanze a 'a classe, cu 'e dduje punte. `sm:`, `md:` e `lg:` valeno 'a 40rem, 48rem e 64rem 'ncoppa: 'a paggena se scrive p'o telefono, po' se cagna chello ca serve ncopp'o schermo gruosso.",
+          "`colonne-3` è `grid-template-columns: repeat(3, minmax(0, 1fr))`: tre colonne eguale int'a na `griglia`.",
+          "Ce stanno pure 'e varianti d'e stati, comme `passanno:` pe `:hover`: 'e pruove int'a l'anteprima, ma 'o controllo d'a lezione guarda 'a paggena ferma."
+        ]
+      },
+      "task": {
+        "it": "Dallo schermo `sm:` in su metti le tre pizze in tre colonne: aggiungi `sm:colonne-3` alla `<list>`.",
+        "en": "From `sm:` screens up, put the three pizzas in three columns: add `sm:colonne-3` to the `<list>`.",
+        "nap": "D'o schermo `sm:` 'ncoppa miette 'e tre pizze in tre colonne: miette `sm:colonne-3` ncopp'a `<list>`."
+      }
+    },
+    {
+      "id": "08_tema",
+      "file": "stile.cess",
+      "title": { "it": "Il tema", "en": "The theme", "nap": "'O tema" },
+      "body": {
+        "it": [
+          "`@tema { … }` cambia il tema o lo allarga, come `@theme` di Tailwind. Le chiavi sono in napoletano: `--culore-…` per i colori, `--schermo-…` per i breakpoint, `--scrittura-…` per i font.",
+          "Un colore nuovo diventa subito una classe: con `--culore-pummarola-500` ci sono `culore-pummarola-500`, `sfunno-pummarola-500` e `bordo-pummarola-500`.",
+          "Finché il tema non ha il colore, `sfunno-pummarola-500` non è una classe e non fa niente."
+        ],
+        "en": [
+          "`@tema { … }` changes or extends the theme, like Tailwind's `@theme`. Keys are in Neapolitan: `--culore-…` for colours, `--schermo-…` for breakpoints, `--scrittura-…` for fonts.",
+          "A new colour becomes a class right away: with `--culore-pummarola-500` you get `culore-pummarola-500`, `sfunno-pummarola-500` and `bordo-pummarola-500`.",
+          "Until the theme has the colour, `sfunno-pummarola-500` is not a class and does nothing."
+        ],
+        "nap": [
+          "`@tema { … }` cagna 'o tema o ll'allarga, comme `@theme` 'e Tailwind. 'E chiave so' in napoletano: `--culore-…` p'e culure, `--schermo-…` p'e breakpoint, `--scrittura-…` p'e font.",
+          "Nu culore nuovo addiventa subbeto na classe: cu `--culore-pummarola-500` ce stanno `culore-pummarola-500`, `sfunno-pummarola-500` e `bordo-pummarola-500`.",
+          "Fino a quanno 'o tema nun tene 'o culore, `sfunno-pummarola-500` nun è na classe e nun fa niente."
+        ]
+      },
+      "task": {
+        "it": "Il bottone usa già `sfunno-pummarola-500`: nel `.cess` aggiungi un `@tema` con `--culore-pummarola-500: #e63b2e`.",
+        "en": "The button already uses `sfunno-pummarola-500`: in the `.cess` add a `@tema` with `--culore-pummarola-500: #e63b2e`.",
+        "nap": "'O bottone usa già `sfunno-pummarola-500`: int'o `.cess` miette nu `@tema` cu `--culore-pummarola-500: #e63b2e`."
+      }
+    },
+    {
+      "id": "09_applica",
+      "file": "stile.cess",
+      "title": { "it": "@applica", "en": "@applica", "nap": "@applica" },
+      "body": {
+        "it": [
+          "Quando le stesse classi tornano su tanti elementi, `@applica` le scrive una volta sola dentro una regola, come `@apply` di Tailwind.",
+          "Nella pagina i due bottoni hanno solo la classe `ordina`: vestendo `.ordina` nel `.cess`, si vestono tutti e due.",
+          "Con le varianti, `@applica passanno:sfunno-russo-600` diventa una regola annidata per `:hover`. Hai finito il tour: adesso prova la Guida, o scrivi la tua pagina!"
+        ],
+        "en": [
+          "When the same classes come back on many elements, `@applica` writes them once inside a rule, like Tailwind's `@apply`.",
+          "In the page both buttons only have the `ordina` class: styling `.ordina` in the `.cess` styles both.",
+          "With variants, `@applica passanno:sfunno-russo-600` becomes a nested rule for `:hover`. You finished the tour: now try the Guide, or write your own page!"
+        ],
+        "nap": [
+          "Quanno 'e stesse classi tornano ncopp'a tanta elementi, `@applica` 'e scrive na vota sola dint'a na regola, comme `@apply` 'e Tailwind.",
+          "Int'a paggena 'e dduje bottoni teneno sulo 'a classe `ordina`: vestenno `.ordina` int'o `.cess`, se vesteno tutt'e dduje.",
+          "Cu 'e varianti, `@applica passanno:sfunno-russo-600` addiventa na regola annidata pe `:hover`. Hê fernuto 'a scola: mo prova 'a Guida, o scrive 'a paggena toja!"
+        ]
+      },
+      "task": {
+        "it": "Dentro `.ordina` scrivi `@applica spazio-x-4 spazio-y-2 bordo-tunno-lg sfunno-russo-500 culore-janco`.",
+        "en": "Inside `.ordina` write `@applica spazio-x-4 spazio-y-2 bordo-tunno-lg sfunno-russo-500 culore-janco`.",
+        "nap": "Dint'a `.ordina` scrive `@applica spazio-x-4 spazio-y-2 bordo-tunno-lg sfunno-russo-500 culore-janco`."
+      }
+    }
+  ]
+}

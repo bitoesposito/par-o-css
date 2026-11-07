@@ -1,0 +1,16 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>'O menù</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="spazio-8 sfunno-grigio-100">
+    <cascett classe="larghezza-massima-sm sfunno-janco bordo-tunno-xl">
+      <luccolo classe="grassetto scrittura-grannezza-xl">'O menù</luccolo>
+      <list classe="flessibile direzione-colonna">
+        <voce>Margherita</voce>
+        <voce>Marinara</voce>
+        <voce>Diavola</voce>
+      </list>
+    </cascett>
+  </panz>
+</cristian>

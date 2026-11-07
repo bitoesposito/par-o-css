@@ -1,0 +1,256 @@
+{
+  "sections": [
+    {
+      "id": "parole",
+      "title": { "it": "CSS in napoletano", "en": "CSS in Neapolitan", "nap": "'O CSS in napoletano" },
+      "body": {
+        "it": [
+          "Un file `.cess` è CSS con le parole di FratmScript. Le proprietà: `culore` è `color`, `sfunno-culore` è `background-color`, `spazio` è `padding`, `bordo-tunno` è `border-radius`. E i valori: `russo` è `red`, `janco` è `white`, `miezo` è `center`, `automatico` è `auto`.",
+          "Come in FratmScript, una riga nuova chiude la dichiarazione: il `;` si può lasciare. Numeri, unità, colori `#…`, `var()` e `calc()` restano come sono.",
+          "Ogni esempio ha due file, come il playground: `stile.cess` e la pagina, `index.emmurt`, scritta in htmlemmurt (`<luccolone>` è `<h1>`, `<chiacchier>` è `<p>`). Il CSS va dove la pagina attacca `stile.cess`, oppure in cima: gli altri esempi della guida sono pezzi di pagina."
+        ],
+        "en": [
+          "A `.cess` file is CSS with FratmScript's words. Properties: `culore` is `color`, `sfunno-culore` is `background-color`, `spazio` is `padding`, `bordo-tunno` is `border-radius`. And values: `russo` is `red`, `janco` is `white`, `miezo` is `center`, `automatico` is `auto`.",
+          "As in FratmScript, a new line ends the declaration: the `;` is optional. Numbers, units, `#…` colours, `var()` and `calc()` stay as they are.",
+          "Every example has two files, like the playground: `stile.cess` and the page, `index.emmurt`, written in htmlemmurt (`<luccolone>` is `<h1>`, `<chiacchier>` is `<p>`). The CSS goes where the page links `stile.cess`, or at the top: the other examples in this guide are page fragments."
+        ],
+        "nap": [
+          "Nu file `.cess` è CSS cu 'e parole 'e FratmScript. 'E proprietà: `culore` è `color`, `sfunno-culore` è `background-color`, `spazio` è `padding`, `bordo-tunno` è `border-radius`. E 'e valori: `russo` è `red`, `janco` è `white`, `miezo` è `center`, `automatico` è `auto`.",
+          "Comme in FratmScript, na riga nova chiude 'a dichiarazione: 'o `;` se pò lassà. Nummere, unità, culure `#…`, `var()` e `calc()` restano comme so'.",
+          "Ogni esempio tene dduje file, comme 'o playground: `stile.cess` e 'a paggena, `index.emmurt`, scritta in htmlemmurt (`<luccolone>` è `<h1>`, `<chiacchier>` è `<p>`). 'O CSS va addò 'a paggena attacca `stile.cess`, o 'ncoppa: l'ati esempi 'e sta guida so' piezze 'e paggena."
+        ]
+      },
+      "snippets": ["01_parole.cess"]
+    },
+    {
+      "id": "selettori",
+      "title": { "it": "Selettori", "en": "Selectors", "nap": "'E selettori" },
+      "body": {
+        "it": [
+          "Nei selettori i tag si scrivono come in htmlemmurt: `cascett` è `div`, `citofono` è `button`, `vattenn` è `a`, `luccolo` è `h2`. Classi (`.carta`), id (`#menu`) e attributi (`[tipo]`) restano come sono.",
+          "Anche le pseudo-classi hanno la loro parola: `:passanno` è `:hover`, `:premuto` è `:active`, `:fuoco-visibile` è `:focus-visible`, `:primmo-figlio` è `:first-child`. `::primma` e `::doppo` sono `::before` e `::after`.",
+          "Le regole si annidano come nel CSS di oggi: dentro `.carta { … }` va `luccolo { … }`, o `&:passanno { … }`. Passa sopra il bottone per vedere `:passanno`."
+        ],
+        "en": [
+          "In selectors, tags are written as in htmlemmurt: `cascett` is `div`, `citofono` is `button`, `vattenn` is `a`, `luccolo` is `h2`. Classes (`.carta`), ids (`#menu`) and attributes (`[tipo]`) stay as they are.",
+          "Pseudo-classes have their own word too: `:passanno` is `:hover`, `:premuto` is `:active`, `:fuoco-visibile` is `:focus-visible`, `:primmo-figlio` is `:first-child`. `::primma` and `::doppo` are `::before` and `::after`.",
+          "Rules nest as in today's CSS: inside `.carta { … }` goes `luccolo { … }`, or `&:passanno { … }`. Hover the button to see `:passanno`."
+        ],
+        "nap": [
+          "Dint'ê selettori 'e tag se scriveno comme in htmlemmurt: `cascett` è `div`, `citofono` è `button`, `vattenn` è `a`, `luccolo` è `h2`. Classi (`.carta`), id (`#menu`) e attributi (`[tipo]`) restano comme so'.",
+          "Pure 'e pseudo-classi teneno 'a parola lloro: `:passanno` è `:hover`, `:premuto` è `:active`, `:fuoco-visibile` è `:focus-visible`, `:primmo-figlio` è `:first-child`. `::primma` e `::doppo` so' `::before` e `::after`.",
+          "'E regole se mettono una dint'a n'ata, comme int'o CSS 'e mo: dint'a `.carta { … }` va `luccolo { … }`, o `&:passanno { … }`. Passa ncopp'o bottone pe vedé `:passanno`."
+        ]
+      },
+      "snippets": ["02_selettori.cess"]
+    },
+    {
+      "id": "quanno",
+      "title": { "it": "@quanno", "en": "@quanno", "nap": "@quanno" },
+      "body": {
+        "it": [
+          "`@quanno` è `@media`: le regole dentro valgono solo quando lo schermo risponde. Le caratteristiche hanno la loro parola: `larghezza-minima` è `min-width`, `larghezza-massima` è `max-width`.",
+          "`schermo` è `screen` ed `e` è `and`: `@quanno schermo e (larghezza-massima: 600px)`. Le caratteristiche senza parola napoletana, come `prefers-color-scheme` o `hover`, passano come sono.",
+          "Qui le voci del menù vanno in riga quando l'anteprima è larga almeno 30rem: sul telefono stanno una sotto l'altra."
+        ],
+        "en": [
+          "`@quanno` is `@media`: the rules inside apply only when the screen matches. Features have their own word: `larghezza-minima` is `min-width`, `larghezza-massima` is `max-width`.",
+          "`schermo` is `screen` and `e` is `and`: `@quanno schermo e (larghezza-massima: 600px)`. Features with no Neapolitan word, like `prefers-color-scheme` or `hover`, pass as they are.",
+          "Here the menu items go in a row when the preview is at least 30rem wide: on a phone they stack."
+        ],
+        "nap": [
+          "`@quanno` è `@media`: 'e regole llà dinto valeno sulo quanno 'o schermo risponne. 'E caratteristiche teneno 'a parola lloro: `larghezza-minima` è `min-width`, `larghezza-massima` è `max-width`.",
+          "`schermo` è `screen` e `e` è `and`: `@quanno schermo e (larghezza-massima: 600px)`. 'E caratteristiche senza parola napoletana, comme `prefers-color-scheme` o `hover`, passano comme so'.",
+          "Ccà 'e voce d'o menù vanno in riga quanno l'anteprima è larga almeno 30rem: ncopp'o telefono stanno una sotto a n'ata."
+        ]
+      },
+      "snippets": ["03_quanno.cess"]
+    },
+    {
+      "id": "severo",
+      "title": { "it": "Il compilatore è severo", "en": "The compiler is strict", "nap": "'O compilatore è severo" },
+      "body": {
+        "it": [
+          "Dove c'è la parola napoletana, il compilatore accetta solo quella: `color` è un errore, e l'errore ti dice cosa scrivere, `culore`. Vale per proprietà, valori, tag, pseudo-classi, `@media` e `!important`.",
+          "I nomi CSS che non hanno ancora una parola napoletana passano come sono: `grid-column`, `:nth-child`, `rotate(45deg)`, le tue classi.",
+          "Con le classi è lo stesso: una classe Tailwind dentro `@applica`, come `p-4`, è un errore che suggerisce `spazio-4`. Correggi gli esempi e premi Esegui: l'errore sta anche sotto la parola sbagliata."
+        ],
+        "en": [
+          "Where a Neapolitan word exists, the compiler accepts only that word: `color` is an error, and the error tells you what to write, `culore`. That goes for properties, values, tags, pseudo-classes, `@media` and `!important`.",
+          "CSS names that have no Neapolitan word yet pass as they are: `grid-column`, `:nth-child`, `rotate(45deg)`, your own classes.",
+          "Classes work the same way: a Tailwind class inside `@applica`, like `p-4`, is an error that suggests `spazio-4`. Fix the examples and press Run: the error is also under the wrong word."
+        ],
+        "nap": [
+          "Addò ce sta 'a parola napoletana, 'o compilatore vo' sulo chella: `color` è n'errore, e l'errore te dice che hê 'a scrivere, `culore`. Vale pe proprietà, valori, tag, pseudo-classi, `@media` e `!important`.",
+          "'E nomme CSS ca nun teneno ancora na parola napoletana passano comme so': `grid-column`, `:nth-child`, `rotate(45deg)`, 'e classi toje.",
+          "Cu 'e classi è 'a stessa cosa: na classe Tailwind dint'a `@applica`, comme `p-4`, è n'errore ca te dice `spazio-4`. Aggiusta l'esempi e pigia Lancia: l'errore sta pure sotto 'a parola sbagliata."
+        ]
+      },
+      "snippets": ["04_severo.sbagliato.cess", "04_tailwind.sbagliato.cess"]
+    },
+    {
+      "id": "classi",
+      "title": { "it": "Le classi", "en": "Classes", "nap": "'E classi" },
+      "body": {
+        "it": [
+          "`@chiamm \"par-o-css\"` in cima al `.cess` mette il tema, una pulizia di base e una regola per ogni classe che la pagina usa davvero, e niente altro. Le classi si scrivono in `classe`, come con Tailwind.",
+          "Una classe è `proprietà-valore` con le parole del CSS napoletano: `giustifica-spartuto` è `justify-content: space-between`, `allinea-cose-miezo` è `align-items: center`, `cursore-manella` è `cursor: pointer`.",
+          "Le più usate hanno un nome corto: `flessibile` è `flex`, `griglia` è `grid`, `annascuso` è `hidden`, `grassetto` è `font-bold`. Il bottone ? sotto l'editor le elenca tutte, col nome Tailwind accanto."
+        ],
+        "en": [
+          "`@chiamm \"par-o-css\"` at the top of the `.cess` adds the theme, a base reset and one rule for each class the page really uses, and nothing else. Classes go in `classe`, as with Tailwind.",
+          "A class is `property-value` with the words of Neapolitan CSS: `giustifica-spartuto` is `justify-content: space-between`, `allinea-cose-miezo` is `align-items: center`, `cursore-manella` is `cursor: pointer`.",
+          "The most common ones have a short name: `flessibile` is `flex`, `griglia` is `grid`, `annascuso` is `hidden`, `grassetto` is `font-bold`. The ? button under the editor lists them all, with their Tailwind name."
+        ],
+        "nap": [
+          "`@chiamm \"par-o-css\"` 'ncoppa a 'o `.cess` mette 'o tema, na pulizia 'e base e na regola pe ogni classe ca 'a paggena usa overamente, e niente cchiù. 'E classi se scriveno int'a `classe`, comme cu Tailwind.",
+          "Na classe è `proprietà-valore` cu 'e parole d'o CSS napoletano: `giustifica-spartuto` è `justify-content: space-between`, `allinea-cose-miezo` è `align-items: center`, `cursore-manella` è `cursor: pointer`.",
+          "Chelle ca s'usano 'e cchiù teneno nu nomme curto: `flessibile` è `flex`, `griglia` è `grid`, `annascuso` è `hidden`, `grassetto` è `font-bold`. 'O bottone ? sotto a l'editor 'e fa vedé tutte, cu 'o nomme Tailwind vicino."
+        ]
+      },
+      "snippets": ["05_classi.emmurt"]
+    },
+    {
+      "id": "spazi",
+      "title": { "it": "Spazi e misure", "en": "Spacing and sizes", "nap": "Spazi e misure" },
+      "body": {
+        "it": [
+          "I numeri di spaziatura sono multipli di 0.25rem, come in Tailwind: `spazio-4` è `padding: 1rem`, `margine-x-2` è `margin-inline: 0.5rem`, `spazio-mmiez-4` è `gap: 1rem`. `-x` e `-y` sono i due lati, `spazio-0.5` è 0.125rem e `spazio-px` è 1px.",
+          "I lati: `ncoppa` (top), `sotto` (bottom), `manca` (left) e `destra` (right): `margine-ncoppa-4`, `spazio-sotto-2`. Con un `-` davanti un margine va al negativo: `-margine-ncoppa-2`.",
+          "Le larghezze usano anche le misure di Tailwind: `larghezza-massima-md` è `max-width: 28rem`, `larghezza-1/2` è `50%`, `larghezza-chino` è `100%`. `margine-x-automatico` mette la scatola in mezzo."
+        ],
+        "en": [
+          "Spacing numbers are multiples of 0.25rem, as in Tailwind: `spazio-4` is `padding: 1rem`, `margine-x-2` is `margin-inline: 0.5rem`, `spazio-mmiez-4` is `gap: 1rem`. `-x` and `-y` are the two sides, `spazio-0.5` is 0.125rem and `spazio-px` is 1px.",
+          "Sides: `ncoppa` (top), `sotto` (bottom), `manca` (left) and `destra` (right): `margine-ncoppa-4`, `spazio-sotto-2`. A leading `-` makes a margin negative: `-margine-ncoppa-2`.",
+          "Widths also take Tailwind's sizes: `larghezza-massima-md` is `max-width: 28rem`, `larghezza-1/2` is `50%`, `larghezza-chino` is `100%`. `margine-x-automatico` centres the box."
+        ],
+        "nap": [
+          "'E nummere d'a spaziatura so' multipli 'e 0.25rem, comme in Tailwind: `spazio-4` è `padding: 1rem`, `margine-x-2` è `margin-inline: 0.5rem`, `spazio-mmiez-4` è `gap: 1rem`. `-x` e `-y` so' 'e dduje late, `spazio-0.5` è 0.125rem e `spazio-px` è 1px.",
+          "'E late: `ncoppa` (top), `sotto` (bottom), `manca` (left) e `destra` (right): `margine-ncoppa-4`, `spazio-sotto-2`. Cu nu `-` annanze nu margine va sotto zero: `-margine-ncoppa-2`.",
+          "'E larghezze usano pure 'e misure 'e Tailwind: `larghezza-massima-md` è `max-width: 28rem`, `larghezza-1/2` è `50%`, `larghezza-chino` è `100%`. `margine-x-automatico` mette 'a scatola mmiezo."
+        ]
+      },
+      "snippets": ["06_spazi.emmurt"]
+    },
+    {
+      "id": "culure",
+      "title": { "it": "Colori e opacità", "en": "Colours and opacity", "nap": "Culure e opacità" },
+      "body": {
+        "it": [
+          "I colori sono quelli del CSS napoletano che hanno una tavolozza in Tailwind, dal `50` al `950`: `russo` (red), `arancione` (orange), `giallo` (yellow), `verde` (green), `azzurro` (sky), `blu` (blue), `viola` (purple), `rosa` (pink), `grigio` (gray). La sfumatura ci vuole: `culore-russo-500`, non `culore-russo`.",
+          "La radice dice dove va il colore: `culore-` è il testo, `sfunno-` lo sfondo, `bordo-` il bordo. `janco`, `niro`, `trasparente` e `culore-corrente` non hanno sfumatura.",
+          "L'opacità di un colore va dopo la `/`: `sfunno-janco/20` è bianco al 20%. `opacità-60` rende trasparente tutto l'elemento."
+        ],
+        "en": [
+          "Colours are the Neapolitan CSS colours that have a palette in Tailwind, from `50` to `950`: `russo` (red), `arancione` (orange), `giallo` (yellow), `verde` (green), `azzurro` (sky), `blu` (blue), `viola` (purple), `rosa` (pink), `grigio` (gray). The shade is required: `culore-russo-500`, not `culore-russo`.",
+          "The root says where the colour goes: `culore-` is the text, `sfunno-` the background, `bordo-` the border. `janco`, `niro`, `trasparente` and `culore-corrente` have no shade.",
+          "A colour's opacity goes after the `/`: `sfunno-janco/20` is white at 20%. `opacità-60` makes the whole element transparent."
+        ],
+        "nap": [
+          "'E culure so' chille d'o CSS napoletano ca teneno na tavolozza in Tailwind, d'o `50` a 'o `950`: `russo` (red), `arancione` (orange), `giallo` (yellow), `verde` (green), `azzurro` (sky), `blu` (blue), `viola` (purple), `rosa` (pink), `grigio` (gray). 'A sfumatura ce vo': `culore-russo-500`, nun `culore-russo`.",
+          "'A radice dice addò va 'o culore: `culore-` è 'o testo, `sfunno-` 'o sfunno, `bordo-` 'o bordo. `janco`, `niro`, `trasparente` e `culore-corrente` nun teneno sfumatura.",
+          "L'opacità 'e nu culore va doppo 'a `/`: `sfunno-janco/20` è janco a 'o 20%. `opacità-60` fa trasparente tutto l'elemento."
+        ]
+      },
+      "snippets": ["07_culure.emmurt"]
+    },
+    {
+      "id": "varianti",
+      "title": { "it": "Varianti", "en": "Variants", "nap": "'E varianti" },
+      "body": {
+        "it": [
+          "Una variante va davanti alla classe, con i due punti: `passanno:sfunno-blu-700` cambia lo sfondo quando ci passi sopra, `fuoco-visibile:contorno-2` quando ci arrivi col tasto Tab, `stutato:opacità-50` sui bottoni spenti.",
+          "I breakpoint sono quelli di Tailwind: `sm:colonne-2` vale da 40rem in su, `md:` da 48rem, `lg:` da 64rem. Si scrive prima la pagina per il telefono, poi si cambia quello che serve sullo schermo grande.",
+          "`notte:` vale quando il sistema è in tema scuro, `stampa:` quando stampi. Le varianti si mettono una dopo l'altra: `md:passanno:sottolineato`."
+        ],
+        "en": [
+          "A variant goes before the class, with a colon: `passanno:sfunno-blu-700` changes the background when you hover, `fuoco-visibile:contorno-2` when you reach it with Tab, `stutato:opacità-50` on disabled buttons.",
+          "Breakpoints are Tailwind's: `sm:colonne-2` applies from 40rem up, `md:` from 48rem, `lg:` from 64rem. Write the page for phones first, then change what you need on large screens.",
+          "`notte:` applies when the system is in dark mode, `stampa:` when you print. Variants stack: `md:passanno:sottolineato`."
+        ],
+        "nap": [
+          "Na variante va annanze a 'a classe, cu 'e dduje punte: `passanno:sfunno-blu-700` cagna 'o sfunno quanno ce passe ncoppa, `fuoco-visibile:contorno-2` quanno ce arrive c'o tasto Tab, `stutato:opacità-50` ncopp'e bottoni stutate.",
+          "'E breakpoint so' chille 'e Tailwind: `sm:colonne-2` vale 'a 40rem 'ncoppa, `md:` 'a 48rem, `lg:` 'a 64rem. Se scrive primma 'a paggena p'o telefono, po' se cagna chello ca serve ncopp'o schermo gruosso.",
+          "`notte:` vale quanno 'o sistema sta a tema scuro, `stampa:` quanno stampe. 'E varianti se mettono una appriesso a n'ata: `md:passanno:sottolineato`."
+        ]
+      },
+      "snippets": ["08_varianti.emmurt"]
+    },
+    {
+      "id": "parentesi",
+      "title": { "it": "Valori tra parentesi quadre", "en": "Arbitrary values", "nap": "Valori dint'ê parentesi quadre" },
+      "body": {
+        "it": [
+          "Un valore che non sta nel tema va tra parentesi quadre, con `_` al posto degli spazi: `larghezza-[13rem]`, `sfunno-[#bada55]`, `colonne-[1fr_2fr]`.",
+          "Tra parentesi quadre può stare anche una proprietà intera, quando non c'è una classe: `[grid-column:span_2]`. Un `!` in fondo aggiunge `!important`: `spazio-0!`."
+        ],
+        "en": [
+          "A value that is not in the theme goes in square brackets, with `_` for spaces: `larghezza-[13rem]`, `sfunno-[#bada55]`, `colonne-[1fr_2fr]`.",
+          "Square brackets can also hold a whole property, when there is no class for it: `[grid-column:span_2]`. A trailing `!` adds `!important`: `spazio-0!`."
+        ],
+        "nap": [
+          "Nu valore ca nun sta int'o tema va dint'ê parentesi quadre, cu `_` addò ce stanno 'e spazi: `larghezza-[13rem]`, `sfunno-[#bada55]`, `colonne-[1fr_2fr]`.",
+          "Dint'ê parentesi quadre ce pò stà pure na proprietà sana, quanno nun ce sta na classe: `[grid-column:span_2]`. Nu `!` 'nfunno ce mette `!important`: `spazio-0!`."
+        ]
+      },
+      "snippets": ["09_parentesi.emmurt"]
+    },
+    {
+      "id": "tema",
+      "title": { "it": "@tema", "en": "@tema", "nap": "@tema" },
+      "body": {
+        "it": [
+          "`@tema { … }` cambia il tema o lo allarga, come `@theme` di Tailwind. Un colore nuovo diventa subito una classe: con `--culore-pummarola-500` ci sono `culore-pummarola-500`, `sfunno-pummarola-500` e `bordo-pummarola-500`.",
+          "Le chiavi del tema sono in napoletano: `--culore-…` per i colori, `--schermo-…` per i breakpoint (con `--schermo-tablet: 50rem` arriva la variante `tablet:`), `--scrittura-…` per i font, `--spazio` per il passo della spaziatura."
+        ],
+        "en": [
+          "`@tema { … }` changes or extends the theme, like Tailwind's `@theme`. A new colour becomes a class right away: with `--culore-pummarola-500` you get `culore-pummarola-500`, `sfunno-pummarola-500` and `bordo-pummarola-500`.",
+          "Theme keys are in Neapolitan: `--culore-…` for colours, `--schermo-…` for breakpoints (`--schermo-tablet: 50rem` brings the `tablet:` variant), `--scrittura-…` for fonts, `--spazio` for the spacing step."
+        ],
+        "nap": [
+          "`@tema { … }` cagna 'o tema o ll'allarga, comme `@theme` 'e Tailwind. Nu culore nuovo addiventa subbeto na classe: cu `--culore-pummarola-500` ce stanno `culore-pummarola-500`, `sfunno-pummarola-500` e `bordo-pummarola-500`.",
+          "'E chiave d'o tema so' in napoletano: `--culore-…` p'e culure, `--schermo-…` p'e breakpoint (cu `--schermo-tablet: 50rem` arriva 'a variante `tablet:`), `--scrittura-…` p'e font, `--spazio` p'o passo d'a spaziatura."
+        ]
+      },
+      "snippets": ["10_tema.cess"]
+    },
+    {
+      "id": "applica",
+      "title": { "it": "@applica", "en": "@applica", "nap": "@applica" },
+      "body": {
+        "it": [
+          "`@applica` scrive dentro una regola le dichiarazioni di alcune classi, come `@apply` di Tailwind: serve quando la stessa cosa torna tante volte, come un bottone.",
+          "Le varianti diventano regole annidate: `@applica passanno:sfunno-russo-600` dentro `.ordina` vale per `.ordina:hover`. Nella stessa regola puoi scrivere anche le dichiarazioni normali, come `transizione`."
+        ],
+        "en": [
+          "`@applica` writes the declarations of some classes into a rule, like Tailwind's `@apply`: useful when the same thing comes back many times, like a button.",
+          "Variants become nested rules: `@applica passanno:sfunno-russo-600` inside `.ordina` applies to `.ordina:hover`. The same rule can hold plain declarations too, like `transizione`."
+        ],
+        "nap": [
+          "`@applica` scrive dint'a na regola 'e dichiarazioni 'e cierti classi, comme `@apply` 'e Tailwind: serve quanno 'a stessa cosa torna tanta vote, comme nu bottone.",
+          "'E varianti addiventano regole annidate: `@applica passanno:sfunno-russo-600` dint'a `.ordina` vale pe `.ordina:hover`. Int'a stessa regola puoi scrivere pure 'e dichiarazioni normali, comme `transizione`."
+        ]
+      },
+      "snippets": ["11_applica.cess"]
+    },
+    {
+      "id": "pezzi",
+      "title": { "it": "Pezzi", "en": "Pieces", "nap": "'E pezzi" },
+      "body": {
+        "it": [
+          "`@chiamm \"pezzi/carta.cess\"` incolla un altro `.cess` al suo posto quando compila: così lo stile di un componente sta in un file suo. Un percorso che non finisce in `.cess` resta un `@import` del CSS.",
+          "`@chiamm \"par-o-css\"` va una volta sola, in cima al foglio principale; i pezzi usano `@applica` e il tema come il resto. Qui il pezzo è `examples/pezzi/carta.cess` del repository, lo stesso dell'esempio della pizzeria: un errore lì dentro dice in che file sta."
+        ],
+        "en": [
+          "`@chiamm \"pezzi/carta.cess\"` pastes another `.cess` in its place when compiling: a component's style lives in its own file. A path that does not end in `.cess` stays a CSS `@import`.",
+          "`@chiamm \"par-o-css\"` goes only once, at the top of the main sheet; pieces use `@applica` and the theme like everything else. Here the piece is the repository's `examples/pezzi/carta.cess`, the same as in the pizzeria example: an error in it says which file it is in."
+        ],
+        "nap": [
+          "`@chiamm \"pezzi/carta.cess\"` ncolla n'atu `.cess` a 'o posto suoio quanno compila: accussì 'o stile 'e nu componente sta int'a nu file suoio. Nu percorso ca nun fernesce in `.cess` resta nu `@import` d'o CSS.",
+          "`@chiamm \"par-o-css\"` va na vota sola, 'ncoppa a 'o foglio principale; 'e pezzi usano `@applica` e 'o tema comme 'o riesto. Ccà 'o pezzo è `examples/pezzi/carta.cess` d'o repository, 'o stesso d'a pizzeria: n'errore llà dinto dice int'a quale file sta."
+        ]
+      },
+      "snippets": ["12_pezzi.cess"]
+    }
+  ]
+}

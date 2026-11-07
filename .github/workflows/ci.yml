@@ -34,7 +34,7 @@ jobs:
         run: |
           cargo build -p parocss-cli --locked
           ../target/debug/parocss check .
-          ../target/debug/parocss fmt --check . ../packages/playground/src ../packages/playground/esempi
+          ../target/debug/parocss fmt --check . ../packages/playground/src ../packages/playground/esempi ../packages/playground/guida ../packages/playground/scola
 
   web:
     name: npm
@@ -62,4 +62,7 @@ jobs:
           path: packages/vscode-extension/*.vsix
       - name: Playground
         working-directory: packages/playground
-        run: npm ci && npm run build
+        run: npm ci && npm run build && npm test
+      - name: Playground end-to-end in Chromium
+        working-directory: e2e
+        run: npm ci && npx playwright install --with-deps chromium && npm test

@@ -1,0 +1,12 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>'A Pizzeria</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="spazio-8">
+    <cappiell classe="flessibile giustifica-spartuto allinea-cose-miezo spazio-4 bordo bordo-grigio-300 bordo-tunno-lg">
+      <luccolo classe="grassetto scrittura-grannezza-xl">'A Pizzeria</luccolo>
+      <citofono tipo="buttone" classe="spazio-x-3 spazio-y-1 bordo-tunno sfunno-grigio-900 culore-janco">Chiamma</citofono>
+    </cappiell>
+  </panz>
+</cristian>

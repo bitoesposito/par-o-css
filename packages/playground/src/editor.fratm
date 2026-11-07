@@ -1,0 +1,416 @@
+// The editor (CodeMirror), with the theme of FratmScript's playground. Two
+// languages: the .cess (Neapolitan CSS) and the htmlemmurt page. Completion
+// offers only Neapolitan words and par-o-css classes.
+
+chiamm { EditorState, Prec } da "@codemirror/state"
+chiamm { EditorView, keymap, lineNumbers, highlightActiveLine, highlightSpecialChars, drawSelection } da "@codemirror/view"
+chiamm { defaultKeymap, history, historyKeymap, indentWithTab } da "@codemirror/commands"
+chiamm { autocompletion, completionKeymap } da "@codemirror/autocomplete"
+chiamm { htmlLanguage, autoCloseTags } da "@codemirror/lang-html"
+chiamm { css } da "@codemirror/lang-css"
+chiamm { setDiagnostics, lintGutter } da "@codemirror/lint"
+chiamm { HighlightStyle, StreamLanguage, syntaxHighlighting, syntaxTree } da "@codemirror/language"
+chiamm { tags } da "@lezer/highlight"
+
+// The colours are CSS variables of stile.cess, light and dark
+chist è colori = HighlightStyle.define([
+    { tag: tags.tagName, color: "var(--cm-tag)" },
+    { tag: [tags.attributeName, tags.propertyName], color: "var(--cm-attributo)" },
+    { tag: [tags.attributeValue, tags.string], color: "var(--cm-valore)" },
+    { tag: tags.comment, color: "var(--cm-commento)", fontStyle: "italic" },
+    { tag: [tags.angleBracket, tags.punctuation, tags.brace], color: "var(--cm-punteggiatura)" },
+    { tag: [tags.keyword, tags.modifier, tags.meta, tags.constant(tags.className)], color: "var(--cm-parola)" },
+    { tag: [tags.number, tags.unit, tags.color], color: "var(--cm-numero)" },
+    { tag: tags.atom, color: "var(--cm-valore)" },
+    { tag: tags.className, color: "var(--cm-funzione)" },
+    { tag: tags.operator, color: "var(--cm-operatore)" },
+    { tag: [tags.variableName, tags.name], color: "var(--cm-nomme)" },
+])
+
+chist è tema = EditorView.theme({
+    "&": { height: "100%", backgroundColor: "transparent", color: "var(--culore-scritta)" },
+    "&.cm-focused": { outline: "none" },
+    ".cm-content": {
+        fontFamily: "var(--scrittura-mono)",
+        fontSize: "14px",
+        lineHeight: "1.6",
+        padding: "16px 0",
+        caretColor: "var(--cm-cursore)",
+    },
+    ".cm-line": { padding: "0 16px" },
+    ".cm-cursor, .cm-dropCursor": { borderLeftColor: "var(--cm-cursore)", borderLeftWidth: "2px" },
+    ".cm-activeLine, .cm-activeLineGutter": { backgroundColor: "var(--culore-smorto)" },
+    "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection": {
+        backgroundColor: "var(--cm-selezione)",
+    },
+    ".cm-gutters": {
+        backgroundColor: "transparent",
+        borderRight: "1px solid var(--culore-filo)",
+        color: "var(--culore-scritta-smorta)",
+        fontSize: "12px",
+    },
+    ".cm-lineNumbers .cm-gutterElement": { padding: "0 12px 0 8px", minWidth: "40px" },
+    ".cm-scroller": { overflow: "auto", fontFamily: "var(--scrittura-mono)" },
+    ".cm-tooltip": {
+        backgroundColor: "var(--culore-carta)",
+        color: "var(--culore-scritta)",
+        border: "1px solid var(--culore-filo)",
+        borderRadius: "8px",
+    },
+    ".cm-tooltip-autocomplete ul li[aria-selected]": {
+        backgroundColor: "var(--culore-smorto)",
+        color: "var(--culore-scritta)",
+    },
+    ".cm-completionDetail": { color: "var(--culore-scritta-smorta)", fontStyle: "normal" },
+    ".cm-diagnostic-error": { borderLeftColor: "var(--culore-sbaglio)", whiteSpace: "pre-wrap" },
+})
+
+// ---------- The .cess language
+// lang-css reads "culore: russo" with no ";" as a selector, while a .cess ends a
+// declaration at the end of the line: this tokenizer knows it, and @applica
+
+chist è PAROLA = /^-*[\p{L}\p{N}_-]+/u
+chist è NUMMERO = /^[+-]?(\d+\.?\d*|\.\d+)(%|[a-z]+)?/i
+
+facc tokenCess(stream, s) {
+    chist è c = stream.peek()
+    si (s.regola === "@applica" && stream.match(/^[^\s;}]+/)) {
+        piglie "className"
+    }
+    si (stream.match(/^"(?:[^"\\]|\\.)*"?/) || stream.match(/^'(?:[^'\\]|\\.)*'?/) || stream.match(/^url\([^)]*\)?/i)) {
+        piglie "string"
+    }
+    si (stream.match(/^@[\w-]+/)) {
+        s.regola = stream.current()
+        piglie "keyword"
+    }
+    si (stream.match(/^![\w-]+/)) {
+        piglie "keyword"
+    }
+    si (c === "{" || c === "}") {
+        stream.next()
+        s.fonn = Math.max(0, s.fonn + (c === "{" ? 1 : -1))
+        s.valore = sfòls
+        s.regola = ""
+        piglie "brace"
+    }
+    si (c === ";") {
+        stream.next()
+        s.valore = sfòls
+        s.regola = ""
+        piglie "punctuation"
+    }
+    si (c === ":") {
+        si (s.prop) {
+            stream.next()
+            s.prop = sfòls
+            s.valore = overo
+            piglie "punctuation"
+        }
+        stream.match(/^::?[\p{L}\p{N}_-]*/u)
+        piglie "className.constant"
+    }
+    si (s.valore && stream.match(/^#[\da-f]{3,8}\b/i)) {
+        piglie "number"
+    }
+    si (stream.match(NUMMERO)) {
+        piglie "number"
+    }
+    si (stream.match(/^[.#][\p{L}\p{N}_-]+/u)) {
+        piglie "className"
+    }
+    si (stream.match(PAROLA)) {
+        chist è nomme = stream.current()
+        chist è dopo = stream.string.slice(stream.pos)
+        // @quanno (larghezza-massima: 600px): the feature is a property
+        si (s.regola) {
+            s.prop = /^\s*:/.test(dopo)
+            piglie s.prop ? "propertyName" : s.valore ? "atom" : "keyword"
+        }
+        // In a block, "word:" with no "{" after it is a declaration, not a selector
+        si (!s.valore && s.fonn > 0 && /^\s*:(?!:)[^{]*$/.test(dopo)) {
+            s.prop = overo
+            piglie nomme.startsWith("--") ? "variableName" : "propertyName"
+        }
+        si (s.valore) {
+            piglie nomme.startsWith("--") ? "variableName" : "atom"
+        }
+        piglie "tagName"
+    }
+    stream.next()
+    piglie "punctuation"
+}
+
+chist è cessLanguage = StreamLanguage.define({
+    name: "cess",
+    startState: () => ({ fonn: 0, valore: sfòls, prop: sfòls, regola: "", commento: sfòls, virgola: sfòls }),
+    token(stream, s) {
+        si (stream.sol()) {
+            // A new line ends the declaration, unless the last one ended with a comma
+            s.valore = s.valore && s.virgola
+            s.prop = sfòls
+            s.regola = ""
+        }
+        si (s.commento || stream.match("/*")) {
+            s.commento = !stream.skipTo("*/")
+            si (s.commento) {
+                stream.skipToEnd()
+            } sinnò {
+                stream.pos += 2
+            }
+            piglie "comment"
+        }
+        si (stream.eatSpace()) {
+            piglie nisciun
+        }
+        chist è stile = tokenCess(stream, s)
+        s.virgola = stream.current() === ","
+        piglie stile
+    },
+    indent: (s, dopo, cx) => Math.max(0, s.fonn - (/^\s*\}/.test(dopo) ? 1 : 0)) * cx.unit,
+    languageData: { commentTokens: { block: { open: "/*", close: "*/" } }, indentOnInput: /^\s*\}$/ },
+})
+
+// ---------- Completion: only Neapolitan words and classes, never English
+
+tien parole = nisciun
+
+// par-o-css's rules: they are not in the CSS vocabulary
+chist è REGOLE = [
+    ["@chiamm", "@import"],
+    ["@quanno", "@media"],
+    ["@tema", "@theme (Tailwind)"],
+    ["@applica", "@apply (Tailwind)"],
+    ["!importante", "!important"],
+]
+
+/**
+ * The words to complete: htmlemmurt's vocabulary(), par-o-css's, and the
+ * names() of the classes.
+ */
+mann for facc imparaParole(paggena, cess, nomi) {
+    chist è scritto = (n, nomme) => n.che === "radice" ? `${nomme}-` : n.che === "variante" ? `${nomme}:` : nomme
+    parole = {
+        elementi: [
+            ...paggena.tags.map(([nap, h]) => ({ label: nap, detail: `<${h}>`, type: "type" })),
+            { label: "chiamm", detail: "ncolla n'atu file", type: "type" },
+            ...paggena.untranslated.tags.map((label) => ({ label, detail: "HTML", type: "type" })),
+        ],
+        html: Object.fromEntries(paggena.tags.map(([nap, h]) => [nap, h])),
+        attributi: paggena.attributes,
+        eventi: paggena.events.map(([nap, h]) => ({ label: nap, detail: `${h} (FratmScript)`, type: "event" })),
+        // HTML names with no word yet: the compiler lets them pass as they are
+        comeSo: [...paggena.untranslated.attributes, ...paggena.untranslated.events].map((label) => ({ label, detail: "HTML", type: "property" })),
+        // A root takes a value after "-", a variant goes before a class with ":"
+        classi: nomi.map((n) => ({
+            label: scritto(n, n.nomme),
+            detail: scritto(n, n.tailwind),
+            type: n.che === "classe" ? "class" : n.che === "radice" ? "property" : "keyword",
+        })),
+        proprieta: cess.properties.map(([nap, c]) => ({ label: nap, detail: c, type: "property" })),
+        valori: cess.values.map(([nap, c]) => ({ label: nap, detail: c, type: "enum" })),
+        pseudo: cess.pseudo.map(([nap, c]) => ({ label: nap, detail: `:${c}`, type: "keyword" })),
+        tag: cess.tags.map(([nap, h]) => ({ label: nap, detail: h, type: "type" })),
+        regole: REGOLE.map(([label, detail]) => ({ label, detail, type: "keyword" })),
+    }
+}
+
+chist è NOMME = /^[\p{L}\p{N}-]*$/u
+
+// ponytail: counts braces without skipping strings and comments; enough to offer words
+facc fonnale(testo) {
+    tien fonn = 0
+    pe ogni (chist è c dint testo) {
+        fonn += c === "{" ? 1 : c === "}" ? -1 : 0
+    }
+    piglie fonn
+}
+
+// .cess: classes after @applica, values after "property:", pseudo-classes
+// after ":", properties and tags at the start of a line
+facc completaCess(ctx) {
+    si (!parole) {
+        piglie nisciun
+    }
+    chist è riga = ctx.state.doc.lineAt(ctx.pos)
+    chist è prima = riga.text.slice(0, ctx.pos - riga.from)
+    si (/^\s*@applica\s/.test(prima)) {
+        piglie { from: ctx.matchBefore(/\S*/).from, options: parole.classi, validFor: /^\S*$/ }
+    }
+    chist è regola = ctx.matchBefore(/[@!][\w-]*/)
+    si (regola) {
+        piglie { from: regola.from, options: parole.regole, validFor: /^[@!][\w-]*$/ }
+    }
+    chist è dintoBlocco = fonnale(ctx.state.sliceDoc(0, ctx.pos)) > 0
+    chist è valore = prima.match(/^\s*[\p{L}\p{N}-]+\s*:\s(?:[^;{}]*\s)?([\p{L}\p{N}-]*)$/u) ?? prima.match(/^\s*[\p{L}\p{N}-]+\s*:([\p{L}\p{N}-]*)$/u)
+    si (dintoBlocco && valore && !prima.includes("{")) {
+        piglie { from: ctx.pos - valore[1].length, options: parole.valori, validFor: NOMME }
+    }
+    chist è pseudo = prima.match(/:([\p{L}\p{N}-]*)$/u)
+    si (pseudo) {
+        piglie { from: ctx.pos - pseudo[1].length, options: parole.pseudo, validFor: NOMME }
+    }
+    chist è parola = ctx.matchBefore(/[\p{L}\p{N}-]+/u)
+    si (!parola && !ctx.explicit) {
+        piglie nisciun
+    }
+    // In a block, a line starts with a property or a nested selector
+    piglie { from: parola?.from ?? ctx.pos, options: dintoBlocco ? [...parole.proprieta, ...parole.tag] : parole.tag, validFor: NOMME }
+}
+
+// Page: as @codemirror/lang-html does, element, attribute or value depending
+// on where the cursor is; in classe="…" the par-o-css classes
+facc completaPaggena(ctx) {
+    si (!parole) {
+        piglie nisciun
+    }
+    chist è nodo = syntaxTree(ctx.state).resolveInner(ctx.pos, -1)
+    chist è testo = (n) => ctx.state.sliceDoc(n.from, n.to).toLowerCase()
+    si (["StartTag", "IncompleteTag", "StartCloseTag", "IncompleteCloseTag", "TagName"].includes(nodo.name)) {
+        piglie { from: nodo.name === "TagName" ? nodo.from : ctx.pos, options: parole.elementi, validFor: NOMME }
+    }
+    tien tag = nodo
+    mentre che (tag && tag.name !== "OpenTag" && tag.name !== "SelfClosingTag") {
+        tag = tag.parent
+    }
+    chist è nommeTag = tag?.getChild("TagName")
+    si (!nommeTag) {
+        piglie nisciun
+    }
+    chist è elemento = parole.html[testo(nommeTag)] ?? testo(nommeTag)
+    chist è vale = (a) => !a.only || a.only.includes(elemento)
+    si (["OpenTag", "SelfClosingTag", "AttributeName"].includes(nodo.name)) {
+        chist è visti = nu bell Set()
+        chist è opzioni = []
+        pe ogni (chist è a dint parole.attributi) {
+            si (vale(a) && !visti.has(a.nap)) {
+                visti.add(a.nap)
+                opzioni.push({ label: a.nap, detail: a.html, type: "property" })
+            }
+        }
+        piglie { from: nodo.name === "AttributeName" ? nodo.from : ctx.pos, options: [...opzioni, ...parole.eventi, ...parole.comeSo], validFor: NOMME }
+    }
+    si (nodo.name === "AttributeValue" || nodo.name === "UnquotedAttributeValue") {
+        chist è attributo = nodo.parent.getChild("AttributeName")
+        si (attributo && testo(attributo) === "classe") {
+            piglie { from: ctx.matchBefore(/[^\s"']*/).from, options: parole.classi, validFor: /^[^\s"']*$/ }
+        }
+        chist è a = attributo && parole.attributi.find((x) => x.nap === testo(attributo) && vale(x))
+        si (!a?.values) {
+            piglie nisciun
+        }
+        chist è virgulette = /^["']/.test(testo(nodo)) ? 1 : 0
+        chist è opzioni = a.values.map(([label, detail]) => ({ label, detail, type: "enum" }))
+        piglie { from: nodo.from + virgulette, options: opzioni, validFor: /^[^"'\s]*$/ }
+    }
+    piglie nisciun
+}
+
+// ---------- The editor
+
+// As in FratmScript: line numbers, active line, history, Tab to indent
+chist è base = [
+    lineNumbers(),
+    highlightActiveLine(),
+    highlightSpecialChars(),
+    drawSelection(),
+    history(),
+    keymap.of([...completionKeymap, ...defaultKeymap, ...historyKeymap, indentWithTab]),
+]
+
+chist è LINGUAGGI = {
+    cess: [cessLanguage, cessLanguage.data.of({ autocomplete: completaCess })],
+    emmurt: [htmlLanguage, htmlLanguage.data.of({ autocomplete: completaPaggena }), autoCloseTags],
+}
+
+// The wrong word, from the error's column: to underline it
+chist è PAROLA_SBAGLIATA = {
+    cess: /^[^\s:;{}(),"']+(?::[^\s:;{}(),"']+)*/,
+    emmurt: /^[^\s"'<>=\/]+/,
+}
+chist è linguaggioD_e = nu bell WeakMap()
+
+/**
+ * An editor for `linguaggio` ("cess" or "emmurt"). `quannoCagna(codice)` on
+ * each change, `lancia()` on Ctrl/Cmd+Enter, `arrecetta()` on Shift+Alt+F.
+ */
+mann for facc creaEditor({ parent, codice = "", linguaggio, etichetta, quannoCagna, lancia, arrecetta }) {
+    chist è tasti = Prec.highest(keymap.of([
+        { key: "Mod-Enter", run: () => { lancia?.(); piglie overo } },
+        { key: "Shift-Alt-f", run: () => { arrecetta?.(); piglie overo } },
+    ]))
+    chist è vista = nu bell EditorView({
+        parent,
+        state: EditorState.create({
+            doc: codice,
+            extensions: [
+                tasti,
+                base,
+                autocompletion(),
+                LINGUAGGI[linguaggio],
+                syntaxHighlighting(colori),
+                tema,
+                EditorView.lineWrapping,
+                EditorView.contentAttributes.of({ "aria-label": etichetta }),
+                lintGutter(),
+                EditorView.updateListener.of((u) => {
+                    si (u.docChanged) {
+                        quannoCagna?.(u.state.doc.toString())
+                    }
+                }),
+            ],
+        }),
+    })
+    linguaggioD_e.set(vista, linguaggio)
+    piglie vista
+}
+
+/** A read-only view, for the generated CSS. */
+mann for facc creaVista({ parent, etichetta }) {
+    piglie nu bell EditorView({
+        parent,
+        state: EditorState.create({
+            doc: "",
+            extensions: [
+                lineNumbers(),
+                highlightSpecialChars(),
+                css(),
+                syntaxHighlighting(colori),
+                tema,
+                EditorView.lineWrapping,
+                EditorState.readOnly.of(overo),
+                EditorView.editable.of(sfòls),
+                EditorView.contentAttributes.of({ "aria-label": etichetta }),
+            ],
+        }),
+    })
+}
+
+/** Replaces the whole text. */
+mann for facc metti(vista, testo) {
+    vista.dispatch({ changes: { from: 0, to: vista.state.doc.length, insert: testo } })
+}
+
+/** The error under the code, on the wrong word, or nothing. */
+mann for facc segnala(vista, e) {
+    chist è doc = vista.state.doc
+    tien diagnosi = []
+    si (e && e.line <= doc.lines) {
+        chist è riga = doc.line(e.line)
+        chist è inizio = Math.min(riga.from + e.column - 1, riga.to)
+        chist è parola = riga.text.slice(e.column - 1).match(PAROLA_SBAGLIATA[linguaggioD_e.get(vista)] ?? PAROLA_SBAGLIATA.emmurt)
+        chist è fine = Math.min(inizio + (parola ? parola[0].length : 1), riga.to)
+        chist è testoErrore = e.suggestion ? `${e.message}\n${e.suggestion}` : e.message
+        diagnosi = [{ from: inizio, to: Math.max(fine, inizio), severity: "error", message: testoErrore }]
+    }
+    vista.dispatch(setDiagnostics(vista.state, diagnosi))
+}
+
+/** Moves the cursor to a line and column, and focuses the editor. */
+mann for facc vaiA(vista, riga, colonna = 1) {
+    chist è doc = vista.state.doc
+    chist è linea = doc.line(Math.min(Math.max(riga, 1), doc.lines))
+    chist è pos = Math.min(linea.from + colonna - 1, linea.to)
+    vista.dispatch({ selection: { anchor: pos }, scrollIntoView: overo })
+    vista.focus()
+}

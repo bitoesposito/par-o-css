@@ -1,0 +1,5 @@
+@chiamm "par-o-css"
+
+.carta {
+  @applica p-4 bordo-tunno-lg sfunno-giallo-100
+}

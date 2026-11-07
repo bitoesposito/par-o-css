@@ -1,0 +1,40 @@
+<!-- The code panel: the lesson (in the tour), the two files in tabs, the editor and the bar with the examples -->
+<cascett chi="pannello-codice" classe="flessibile direzione-colonna cresce altezza-minima-0 trabocca-nascosto md:bordo-destra-1">
+  <chiamm da="lezione.emmurt" />
+  <cascett classe="flessibile giustifica-spartuto allinea-cose-miezo spazio-mmiez-2 sfunno-carta spazio-destra-4 bordo-sotto-1 [flex-shrink:0]">
+    <cascett classe="flessibile allinea-cose-miezo larghezza-minima-0">
+      <cascett classe="flessibile larghezza-minima-0" ruolo="tablist" data-t-aria="editor.files">
+        <citofono tipo="buttone" classe="scheda-file" ruolo="tab" data-file-scheda="stile.cess" aria-controls="editor-cess" aria-selected="true">
+          <cartulin da="cess.svg" spiegazione="" larghezza="16" altezza="16">
+          <scatulell>stile.cess</scatulell>
+        </citofono>
+        <citofono tipo="buttone" classe="scheda-file" ruolo="tab" data-file-scheda="index.emmurt" aria-controls="editor-paggena" aria-selected="false" turno="-1">
+          <cartulin da="emmurt.svg" spiegazione="" larghezza="16" altezza="16">
+          <scatulell>index.emmurt</scatulell>
+        </citofono>
+      </cascett>
+      <scatulell chi="cagnato" classe="taglia margine-manca-1 scrittura-grannezza-xs culore-scritta-smorta" data-t="editor.edited" annascuso>(cagnato)</scatulell>
+    </cascett>
+    <scatulell chi="versione" classe="distintivo"></scatulell>
+  </cascett>
+  <cascett chi="editor-cess" classe="cresce altezza-minima-0 trabocca-automatico sfunno-paggena" ruolo="tabpanel" data-t-aria="editor.labelCess"></cascett>
+  <cascett chi="editor-paggena" classe="cresce altezza-minima-0 trabocca-automatico sfunno-paggena" ruolo="tabpanel" data-t-aria="editor.labelEmmurt" annascuso></cascett>
+  <cascett classe="flessibile a-capo allinea-cose-miezo giustifica-spartuto spazio-mmiez-2 sfunno-carta spazio-x-4 spazio-y-2.5 bordo-ncoppa-1 [flex-shrink:0]">
+    <cascett chi="esempi-barra" classe="flessibile allinea-cose-miezo spazio-mmiez-3 larghezza-minima-0">
+      <etichetta pe="esempi" classe="scrittura-grannezza-xs culore-scritta-smorta" data-t="editor.examples">Esempi:</etichetta>
+      <scegli chi="esempi" classe="scegli larghezza-56 larghezza-massima-chino"></scegli>
+    </cascett>
+    <cascett classe="flessibile allinea-cose-miezo spazio-mmiez-3 margine-manca-automatico [flex-shrink:0]">
+      <etichetta classe="flessibile allinea-cose-miezo spazio-mmiez-1.5 scrittura-grannezza-xs culore-scritta-smorta cursore-manella selezione-nisciuno">
+        <miett chi="automatico" tipo="spunta" classe="larghezza-3.5 altezza-3.5 [accent-color:var(--culore-primario)]">
+        <scatulell data-t="editor.autoRun">Esecuzione automatica</scatulell>
+      </etichetta>
+      <citofono chi="formatta" tipo="buttone" classe="buttone buttone-contorno buttone-icona" stutato data-t-aria="editor.format" data-t-title="editor.formatTip">
+        <scatulell data-icona="formatta"></scatulell>
+      </citofono>
+      <citofono chi="aiuto-apri" tipo="buttone" classe="buttone buttone-contorno buttone-icona" data-t-aria="help.open" data-t-title="help.open">
+        <scatulell data-icona="aiuto"></scatulell>
+      </citofono>
+    </cascett>
+  </cascett>
+</cascett>

@@ -1,0 +1,18 @@
+.menu {
+  mostra: flessibile
+  direzione: colonna
+  spazio-mmiez: 8px
+}
+
+/* Quanno l'anteprima è larga almeno 30rem, 'e voce vanno in riga */
+@quanno (larghezza-minima: 30rem) {
+  .menu {
+    direzione: riga
+  }
+}
+
+.menu vattenn {
+  spazio: 8px 12px
+  sfunno-culore: #fee2e2
+  bordo-tunno: 6px
+}

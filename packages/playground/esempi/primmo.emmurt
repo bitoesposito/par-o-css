@@ -11,7 +11,7 @@
         Prova: int'o stile scrive <codice>sfunno-culore: russo</codice>,
         o mietti <codice>maiuscolo</codice> int'e classi d'o titolo.
       </chiacchier>
-      <citofono tipo="buttone">Trase</citofono>
+      <citofono tipo="buttone" quanno-tuocche="stamm a dì('Trase, trase!')">Trase</citofono>
     </cascett>
   </panz>
 </cristian>

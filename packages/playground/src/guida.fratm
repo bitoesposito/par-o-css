@@ -1,0 +1,222 @@
+// The guide: par-o-css one section at a time, with examples to edit and run
+// here. Texts are in guida/guida.json; each example is a pair of files,
+// guida/NN_name.cess and guida/NN_name.emmurt (*.sbagliato.cess ones must
+// fail), and guida.json names the one shown first. golden.rs checks that
+// the examples compile.
+
+chiamm dati da "../guida/guida.json"
+chiamm { t, lenguaAttuale, SCORCIATOIA } da "./lingua.fratm"
+chiamm { crea, scriviTesto } da "./dom.fratm"
+chiamm { icona } da "./icone.fratm"
+chiamm { creaEditor, creaVista, metti, segnala } da "./editor.fratm"
+chiamm { compila, creaAnteprima } da "./paggena.fratm"
+
+chist è FILE = import.meta.glob(["../guida/*.cess", "../guida/*.emmurt"], { query: "?raw", import: "default", eager: overo })
+
+mann for chist è SEZIONI = dati.sections.map((s) => ({
+    ...s,
+    esempi: s.snippets.map((nomme) => {
+        chist è [, base, estensione] = nomme.match(/^(.+)\.(cess|emmurt)$/) ?? []
+        chist è cess = FILE[`../guida/${base}.cess`]
+        chist è paggena = FILE[`../guida/${base}.emmurt`]
+        si (cess === boh || paggena === boh) {
+            iett nu bell Error(`guida.json nomina n'esempio ca nun ce sta: ${nomme}`)
+        }
+        piglie { cess, paggena, file: estensione === "cess" ? "stile.cess" : "index.emmurt" }
+    }),
+}))
+
+chist è pesca = (chi) => document.getElementById(chi)
+
+facc bottone(classe, nommeIcona, testo) {
+    chist è b = crea("button", `buttone buttone-piccolo ${classe}`)
+    b.type = "button"
+    b.dataset.azione = nommeIcona
+    b.innerHTML = icona(nommeIcona)
+    si (testo) {
+        b.append(crea("span", "", testo))
+    }
+    piglie b
+}
+
+facc cartaSbaglio(e) {
+    chist è carta = crea("div", "spazio-3 bordo bordo-sbaglio/20 bordo-tunno-md sfunno-sbaglio/5 scrittura-grannezza-sm")
+    carta.append(
+        crea("p", "scrittura-peso-500 culore-sbaglio-scritta", `${t("error.compile")} · ${e.file} · ${t("output.lineColumn", { line: e.line, column: e.column })}`),
+        crea("p", "margine-ncoppa-1 scrittura-mono [white-space:pre-wrap]", e.suggestion ? `${e.message}\n${e.suggestion}` : e.message),
+    )
+    piglie carta
+}
+
+/** A guide example: the two files, Run, Reset, CSS, Open in editor, preview. */
+facc esempio(iniziale, apri) {
+    chist è figura = crea("figure", "bordo bordo-tunno-lg sfunno-carta trabocca-nascosto")
+    chist è schede = crea("div", "flessibile allinea-cose-miezo spazio-mmiez-1 spazio-x-2 spazio-y-1.5 bordo-sotto-1 sfunno-smorto")
+    schede.setAttribute("role", "tablist")
+    schede.setAttribute("aria-label", t("editor.files"))
+    chist è dove = crea("div", "altezza-massima-96 trabocca-automatico")
+    chist è barra = crea("div", "flessibile a-capo giustifica-spartuto allinea-cose-miezo spazio-mmiez-2 sfunno-smorto spazio-x-3 spazio-y-2 bordo-ncoppa-1")
+    chist è sinistra = crea("div", "flessibile allinea-cose-miezo spazio-mmiez-1")
+    chist è destra = crea("div", "flessibile allinea-cose-miezo spazio-mmiez-1")
+    chist è lancia = bottone("buttone-primario", "lancia", t("guide.run"))
+    lancia.setAttribute("aria-label", t("guide.runLabel"))
+    chist è ripristina = bottone("buttone-fantasma", "ricomincia", t("guide.reset"))
+    ripristina.title = t("guide.resetTip")
+    chist è mostraCss = bottone("buttone-fantasma", "codice", t("guide.showCss"))
+    mostraCss.title = t("guide.showCssTip")
+    mostraCss.setAttribute("aria-pressed", "false")
+    chist è apriLo = bottone("buttone-contorno", "apri", t("guide.open"))
+    apriLo.title = t("guide.openTip")
+    sinistra.append(lancia, ripristina)
+    destra.append(mostraCss, apriLo)
+    barra.append(sinistra, destra)
+
+    chist è sotto = crea("figcaption", "flessibile direzione-colonna spazio-mmiez-2 spazio-3 bordo-ncoppa-1")
+    chist è sbagli = crea("div", "flessibile direzione-colonna spazio-mmiez-2")
+    chist è riquadro = crea("div", "altezza-56 bordo bordo-tunno-md trabocca-nascosto")
+    chist è console = crea("ol", "bordo bordo-tunno-md sfunno-paggena")
+    console.hidden = overo
+    chist è vistaCss = crea("div", "altezza-massima-80 bordo bordo-tunno-md trabocca-automatico")
+    vistaCss.hidden = overo
+    sotto.append(sbagli, riquadro, console, vistaCss)
+    figura.append(schede, dove, barra, sotto)
+
+    chist è anteprima = creaAnteprima(riquadro, (tipo, testo) => {
+        console.hidden = sfòls
+        chist è voce = crea("li", "voce-console", testo)
+        voce.dataset.tipo = tipo
+        console.append(voce)
+    })
+    chist è css = creaVista({ parent: vistaCss, etichetta: t("output.css") })
+
+    facc file() {
+        piglie { cess: editori["stile.cess"].state.doc.toString(), paggena: editori["index.emmurt"].state.doc.toString() }
+    }
+
+    facc gira() {
+        chist è r = compila(file())
+        segnala(editori["stile.cess"], r.sbagli.find((e) => e.file === "stile.cess"))
+        segnala(editori["index.emmurt"], r.sbagli.find((e) => e.file === "index.emmurt"))
+        sbagli.replaceChildren(...r.sbagli.map(cartaSbaglio))
+        console.replaceChildren()
+        console.hidden = overo
+        riquadro.hidden = r.html === nisciun
+        si (r.html !== nisciun) {
+            anteprima.mostra(r.html)
+            metti(css, r.css)
+        }
+    }
+
+    // A tab per file, as in the playground
+    tien aperto = iniziale.file
+    chist è editori = {}
+    chist è bottoni = {}
+    pe ogni (chist è [nomme, codice, linguaggio, etichetta] dint [["stile.cess", iniziale.cess, "cess", "editor.labelCess"], ["index.emmurt", iniziale.paggena, "emmurt", "editor.labelEmmurt"]]) {
+        chist è contenitore = crea("div")
+        dove.append(contenitore)
+        editori[nomme] = creaEditor({ parent: contenitore, codice, linguaggio, etichetta: t(etichetta), lancia: gira })
+        chist è b = crea("button", "scheda-piccola scrittura-mono minuscolo", nomme)
+        b.type = "button"
+        b.setAttribute("role", "tab")
+        b.dataset.file = nomme
+        b.addEventListener("click", () => scigli(nomme))
+        bottoni[nomme] = b
+        schede.append(b)
+    }
+
+    facc scigli(nomme) {
+        aperto = nomme
+        pe ogni (chist è [n, b] dint Object.entries(bottoni)) {
+            b.setAttribute("aria-selected", String(n === nomme))
+            editori[n].dom.parentElement.hidden = n !== nomme
+        }
+        editori[nomme].requestMeasure()
+    }
+    scigli(aperto)
+
+    lancia.addEventListener("click", gira)
+    ripristina.addEventListener("click", () => {
+        metti(editori["stile.cess"], iniziale.cess)
+        metti(editori["index.emmurt"], iniziale.paggena)
+        gira()
+    })
+    mostraCss.addEventListener("click", () => {
+        vistaCss.hidden = !vistaCss.hidden
+        mostraCss.setAttribute("aria-pressed", String(!vistaCss.hidden))
+        css.requestMeasure()
+    })
+    apriLo.addEventListener("click", () => apri({ ...file(), file: aperto }))
+    piglie { figura, gira }
+}
+
+/**
+ * The guide page. `vai(i)` opens a section, `apri({ cess, paggena, file })`
+ * takes an example to the playground.
+ */
+mann for facc creaGuida({ vai, apri }) {
+    tien attuale = 0
+
+    facc scrivi() {
+        chist è lingua = lenguaAttuale()
+        chist è sezione = SEZIONI[attuale]
+        pesca("guida-indice").replaceChildren(...SEZIONI.map((s, i) => {
+            chist è voce = crea("li")
+            chist è link = crea("a", `blocco spazio-x-2 spazio-y-1.5 bordo-tunno-md scrittura-grannezza-sm transizione ${i === attuale ? "sfunno-smorto scrittura-peso-500 culore-scritta" : "culore-scritta-smorta passanno:sfunno-smorto passanno:culore-scritta"}`)
+            link.href = `#guida=${s.id}`
+            si (i === attuale) {
+                link.setAttribute("aria-current", "page")
+            }
+            link.append(crea("span", "blocco-in-linea margine-destra-1.5 larghezza-5 allinea-testo-destra culore-scritta-smorta", `${i + 1}.`), s.title[lingua])
+            link.addEventListener("click", (evento) => {
+                evento.preventDefault()
+                vai(i)
+            })
+            voce.append(link)
+            piglie voce
+        }))
+        chist è scegli = pesca("guida-scegli")
+        scegli.replaceChildren(...SEZIONI.map((s, i) => nu bell Option(`${i + 1}. ${s.title[lingua]}`, String(i))))
+        scegli.value = String(attuale)
+        pesca("guida-dove").textContent = `${t("guide.title")} · ${attuale + 1}/${SEZIONI.length}`
+        pesca("guida-titolo").textContent = sezione.title[lingua]
+        pesca("guida-testo").replaceChildren(...sezione.body[lingua].map((p) => {
+            chist è el = crea("p")
+            scriviTesto(el, p)
+            piglie el
+        }))
+        chist è intro = pesca("guida-intro")
+        intro.hidden = attuale !== 0
+        intro.textContent = t("guide.intro", { shortcut: SCORCIATOIA })
+        chist è esempi = sezione.esempi.map((x) => esempio(x, apri))
+        pesca("guida-esempi").replaceChildren(...esempi.map((e) => e.figura))
+        pe ogni (chist è e dint esempi) {
+            e.gira()
+        }
+        chist è arreto = pesca("guida-arreto")
+        arreto.disabled = attuale === 0
+        pesca("guida-arreto-testo").textContent = attuale > 0 ? SEZIONI[attuale - 1].title[lingua] : t("guide.previous")
+        chist è appriesso = pesca("guida-appriesso")
+        appriesso.hidden = attuale === SEZIONI.length - 1
+        si (!appriesso.hidden) {
+            pesca("guida-appriesso-testo").textContent = `${t("guide.next")}: ${SEZIONI[attuale + 1].title[lingua]}`
+        }
+        pesca("guida-scorre").scrollTo({ top: 0 })
+    }
+
+    pesca("guida-scegli").addEventListener("change", (evento) => vai(Number(evento.target.value)))
+    pesca("guida-arreto").addEventListener("click", () => vai(attuale - 1))
+    pesca("guida-appriesso").addEventListener("click", () => vai(attuale + 1))
+
+    piglie {
+        mostra: (i) => {
+            attuale = i
+            pesca("guida-paggena").hidden = sfòls
+            scrivi()
+        },
+        nasconde: () => {
+            pesca("guida-paggena").hidden = overo
+            pesca("guida-esempi").replaceChildren()
+        },
+        scrivi,
+    }
+}
