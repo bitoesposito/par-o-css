@@ -34,6 +34,9 @@ test('a linked .cess goes through the CSS pipeline, with the classes of the page
   assert.equal(id, join(root, 'stile.cess') + '?parocss&lang.css');
   assert.equal(plugin.resolveId('./stile.cess', join(root, 'main.js')), id);
   assert.equal(plugin.resolveId('./a.css', join(root, 'main.js')), null);
+  // `?raw` and `?url` are the text and the URL of the file, as for any file
+  assert.equal(plugin.resolveId('./stile.cess?raw', join(root, 'main.js')), null);
+  assert.equal(plugin.resolveId('./stile.cess?url', join(root, 'main.js')), null);
   const css = plugin.load.call(context(), id);
   assert.match(css, /\.flessibile \{/);
   assert.match(css, /\.carta \{ color: red \}/);
