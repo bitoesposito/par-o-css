@@ -655,6 +655,10 @@ mod tests {
             css("@quanno (larghezza-massima: 600px) { core { mostra: nisciuno } }"),
             "@media (max-width: 600px) { main { display: none } }"
         );
+        assert_eq!(
+            css(".a { mostra: flessibile-in-linea }"),
+            ".a { display: inline-flex }"
+        );
         // Names without a Neapolitan word and class names pass as they are
         assert_eq!(
             css(".red > pizza-card:nth-child(2) { grid-column: 1 / 3 }"),

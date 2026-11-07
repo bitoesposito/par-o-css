@@ -188,8 +188,7 @@ miett {
 }
 
 .file {
-  /* inline-flex has no word in stile yet (flessibile-in-linea would pass as it is) */
-  mostra: inline-flex
+  mostra: flessibile-in-linea
   allinea-cose: miezo
   spazio-mmiez: 0.4rem
   scrittura: var(--scrittura-mono)
