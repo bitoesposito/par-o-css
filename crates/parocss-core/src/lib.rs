@@ -163,6 +163,8 @@ pub fn compile(source: &str, options: &Options) -> Result<Output, Error> {
             .collect();
         out.replace_range(at..at + marker.len(), &lines.join(&format!("\n{indent}")));
     }
+    // The theme properties the stylesheet's own rules use with `var()`
+    classi::vars(&out, &mut used);
 
     let block = match classes_at {
         Some(_) => {
@@ -732,6 +734,21 @@ mod tests {
         // English in @tema is an error too
         let e = error("@tema { --culore-pummarola-500: red }");
         assert_eq!(e.suggestion.as_deref(), Some("Vuoi dire 'russo'?"));
+    }
+
+    #[test]
+    fn theme_properties_used_with_var_are_in_root() {
+        let out = with_classes(
+            "@chiamm \"par-o-css\"\n.carta { bordo-tunno: var(--bordo-tunno-xl) }\n@tema { --culore-mio: var(--culore-blu-500) }",
+            &[],
+        );
+        assert!(out.contains("  --bordo-tunno-xl: 0.75rem;\n"), "{out}");
+        assert!(out.contains("  --culore-blu-500: oklch("), "{out}");
+        // Without @chiamm "par-o-css" too, and only the theme's properties
+        assert_eq!(
+            css(".a { spazio: var(--spazio) var(--mia) }"),
+            ":root {\n  --spazio: 0.25rem;\n}\n.a { padding: var(--spazio) var(--mia) }"
+        );
     }
 
     #[test]
