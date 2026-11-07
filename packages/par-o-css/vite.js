@@ -11,6 +11,8 @@ import { PAGES, fileClasses, pageFiles } from './lib/files.js';
 // Vite's CSS pipeline takes an id ending in `lang.css`, as for Vue's <style>
 const QUERY = '?parocss&lang.css';
 const CESS = /\.cess(?:$|\?)/;
+// The text of the file or its URL, as Vite gives for any file: not compiled
+const ASSET = /\?(?:.*&)?(?:raw|url)(?:&|=|$)/;
 
 const clean = (id) => id.split('?', 1)[0];
 
@@ -44,7 +46,7 @@ export default function parocss() {
     },
 
     resolveId(source, importer) {
-      if (!CESS.test(source)) return null;
+      if (!CESS.test(source) || ASSET.test(source)) return null;
       const path = clean(source);
       let file;
       if (path.startsWith('/') && !existsSync(path)) file = join(root, path);
