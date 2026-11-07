@@ -138,6 +138,15 @@ function activate(context) {
     },
   };
 
+  // The whole document, or nothing when it has a syntax error: the errors say why
+  const formatter = {
+    provideDocumentFormattingEdits(doc) {
+      const text = wasm.format(doc.getText());
+      if (text === undefined || text === doc.getText()) return [];
+      return [vscode.TextEdit.replace(new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length)), text)];
+    },
+  };
+
   // Ctrl+click on @chiamm "x.cess" opens the file
   const linker = {
     provideDocumentLinks(doc) {
@@ -155,6 +164,7 @@ function activate(context) {
     watcher.onDidCreate(findSheets),
     watcher.onDidDelete(findSheets),
     vscode.languages.registerDocumentLinkProvider('cess', linker),
+    vscode.languages.registerDocumentFormattingEditProvider('cess', formatter),
     vscode.languages.registerCompletionItemProvider(SELECTOR, completion, '"', "'", '`', ' ', ':', '-'),
     vscode.languages.registerHoverProvider(SELECTOR, hover),
     vscode.workspace.onDidOpenTextDocument(check),

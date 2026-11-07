@@ -216,12 +216,16 @@ parocss build stile.cess            # scrive stile.css accanto
 parocss build stile/ --out dist/    # tutti i .cess di una cartella
 parocss check stile/                # solo controllo
 parocss watch stile/ --out dist/    # ricompila quando cambia un .cess o una pagina
+parocss fmt stile/                  # rimette a posto rientri e righe vuote
+parocss fmt --check stile/          # dice solo quali file non sono a posto
 parocss classi                      # tutte le classi, radici e varianti
 parocss classi md:flessibile p-4    # il CSS di quelle classi (e cosa scrivere per p-4)
 parocss guida                       # le istruzioni per gli agenti (llms.txt)
 ```
 
 Le classi si cercano nei file della cartella dove lanci il comando (`.emmurt`, `.fratm`, `.html`, `.js`, `.jsx`, `.ts`, `.tsx`, `.vue`, `.svelte`, `.astro`, `.md`), saltando `node_modules`, `dist`, `target` e le cartelle nascoste; `--pagine <cartella>` ne sceglie un'altra. Come Tailwind, la ricerca non conosce il linguaggio del file: trova anche le classi scritte dentro le stringhe del codice. In una cartella, un `.cess` chiamato da un altro con `@chiamm` è un pezzo e non diventa un `.css` per conto suo.
+
+`parocss fmt` cambia solo spazi e a capo: due spazi per ogni `{` aperto, `{` sulla riga del selettore e `}` su una riga sua, una dichiarazione per riga quando sono separate da `;`, un passo in più per le righe che continuano un valore, al massimo una riga vuota di fila. Stringhe e commenti restano come sono. Su un file con un errore di sintassi non fa niente.
 
 `--json` stampa un solo oggetto JSON con gli errori (file, riga, colonna, suggerimento), utile per editor e agenti. `-` legge da stdin.
 

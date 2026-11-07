@@ -9,7 +9,7 @@ use std::collections::BTreeSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use parocss_core::{compile, scan, Options};
+use parocss_core::{compile, format, scan, Options};
 
 fn repo() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
@@ -83,4 +83,17 @@ fn golden() {
         }
     }
     assert!(failures.is_empty(), "\n{}", failures.join("\n\n"));
+}
+
+/// Formatting a formatted file changes nothing, for every example and case
+/// that has no syntax error.
+#[test]
+fn formatting_is_stable() {
+    for (source, _) in cases() {
+        let text = fs::read_to_string(repo().join(&source)).unwrap();
+        let Ok(once) = format(&text, &source) else {
+            continue;
+        };
+        assert_eq!(format(&once, &source).unwrap(), once, "{source}");
+    }
 }

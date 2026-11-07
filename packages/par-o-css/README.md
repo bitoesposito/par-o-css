@@ -19,7 +19,7 @@ const { css, dependencies, errors } = compile('@chiamm "par-o-css"\ncitofono:pas
 
 `compile` non lancia mai eccezioni: gli errori stanno in `errors`, con `message`, `file`, `line`, `column` e `suggestion`, in napoletano. Le opzioni sono `filename`, `classes` (le parole delle pagine che possono essere classi: `findClasses(cartella)` le cerca nei file `.emmurt`, `.fratm`, `.html`, `.js`… di una cartella), `root` (la cartella per i percorsi che cominciano con `/`) e `read` (per leggere i file in un altro modo).
 
-C'è anche `scan(testo)` (le parole che possono essere classi), `suggestion('p-4')` (`'spazio-4'`), `isClass(nome)`, `classCss(classi)` (il CSS di alcune classi col tema di partenza) e `names()` (tutte le classi, radici e varianti).
+C'è anche `format(sorgente)` (il `.cess` in ordine, come `parocss fmt`, o `null` se ha un errore di sintassi), `vocabulary()` (le parole napoletane del CSS), `scan(testo)` (le parole che possono essere classi), `suggestion('p-4')` (`'spazio-4'`), `isClass(nome)`, `classCss(classi)` (il CSS di alcune classi col tema di partenza) e `names()` (tutte le classi, radici e varianti).
 
 ## Con Vite
 

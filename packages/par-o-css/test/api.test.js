@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { classCss, compile, findClasses, formatError, isClass, names, scan, suggestion, version } from '../index.js';
+import { classCss, compile, findClasses, format, formatError, isClass, names, scan, suggestion, version, vocabulary } from '../index.js';
 
 test('compiles Neapolitan CSS', () => {
   const { css, errors } = compile('citofono:passanno { culore: russo }');
@@ -34,6 +34,12 @@ test('files named by @chiamm are read from disk, /… from root', () => {
   assert.deepEqual(dependencies, ['/pezzi/carta.cess']);
   assert.ok(findClasses(root).has('spazio-4'));
   rmSync(root, { recursive: true });
+});
+
+test('format and vocabulary', () => {
+  assert.equal(format('.a{culore:russo}'), '.a {\n  culore:russo\n}\n');
+  assert.equal(format('.a {'), null);
+  assert.ok(vocabulary().properties.some(([nap, css]) => nap === 'culore' && css === 'color'));
 });
 
 test('scan, suggestion, isClass, classCss, names, version', () => {

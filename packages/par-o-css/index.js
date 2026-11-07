@@ -8,7 +8,7 @@ import { fileClasses, pageFiles } from './lib/files.js';
 const wasm = createRequire(import.meta.url)('./wasm/node/parocss_wasm.js');
 const api = createApi(wasm);
 
-export const { scan, suggestion, isClass, classCss, names, version } = api;
+export const { format, vocabulary, scan, suggestion, isClass, classCss, names, version } = api;
 export { formatError } from './lib/api.js';
 
 /**
