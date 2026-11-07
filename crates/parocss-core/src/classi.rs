@@ -601,7 +601,10 @@ fn declarations(body: &str, theme: &Theme) -> Option<(usize, Vec<(String, String
     let inner = body.strip_prefix('[')?.strip_suffix(']')?;
     let (property, value) = inner.split_once(':')?;
     let property = property.trim();
-    if property.is_empty() || !property.chars().all(|c| c.is_alphanumeric() || c == '-') {
+    if property.is_empty()
+        || !property.chars().all(|c| c.is_alphanumeric() || c == '-')
+        || english(&format!("{property}:x"))
+    {
         return None;
     }
     let property = stile::PROPERTIES
@@ -688,7 +691,8 @@ fn keyword(value: &str) -> Option<String> {
 }
 
 /// The value inside `[…]`: `_` is a space (`\_` an underscore) and the
-/// Neapolitan words are translated as in a `stile` value.
+/// Neapolitan words are translated as in a `stile` value. `None` when it
+/// has an English word that has a Neapolitan one: `[red]` is `[russo]`.
 fn arbitrary(value: &str) -> Option<String> {
     let inner = value.strip_prefix('[')?.strip_suffix(']')?;
     if inner.is_empty() {
@@ -706,7 +710,55 @@ fn arbitrary(value: &str) -> Option<String> {
             c => text.push(c),
         }
     }
+    if english(&format!("x:{text}")) {
+        return None;
+    }
     Some(stile::style_value(&text))
+}
+
+/// Whether a declaration has an English name that has a Neapolitan word.
+fn english(declaration: &str) -> bool {
+    stile::english_words(&[declaration.to_string()]).map_or(true, |w| !w.is_empty())
+}
+
+/// The class with the English words inside its brackets written in
+/// Neapolitan (`[color:red]` is `[culore:russo]`), or `None` when there are
+/// none to change.
+fn neapolitan_brackets(class: &str) -> Option<String> {
+    let mut out = String::new();
+    let mut changed = false;
+    let mut rest = class;
+    while let Some(open) = rest.find('[') {
+        let Some(close) = rest[open..].find(']').map(|c| open + c) else {
+            break;
+        };
+        out.push_str(&rest[..=open]);
+        let inner = &rest[open + 1..close];
+        let declaration = inner.split_once(':').is_some_and(|(p, _)| {
+            !p.is_empty() && p.chars().all(|c| c.is_alphanumeric() || c == '-')
+        });
+        // `_` and the space are one char each, so the places stay the same
+        let (text, skip) = match declaration {
+            true => (inner.replace('_', " "), 0),
+            false => (format!("x:{}", inner.replace('_', " ")), 2),
+        };
+        let mut chars: Vec<char> = inner.chars().collect();
+        if !inner.contains('\\') {
+            let mut words = stile::english_words(&[text]).unwrap_or_default();
+            words.sort_by_key(|w| std::cmp::Reverse(w.position.column));
+            for w in words {
+                let at = w.position.column - skip;
+                let len = w.word.chars().count();
+                chars.splice(at..at + len, w.neapolitan.chars());
+                changed = true;
+            }
+        }
+        out.extend(chars);
+        out.push(']');
+        rest = &rest[close + 1..];
+    }
+    out.push_str(rest);
+    changed.then_some(out)
 }
 
 /// A colour of the theme, `trasparente` or `culore-corrente`, with an
@@ -907,6 +959,12 @@ pub fn suggestion(class: &str) -> Option<String> {
     let theme = Theme::default();
     if is_class(class, &theme) {
         return None;
+    }
+    // English inside the brackets: `[color:red]` is `[culore:russo]`
+    let fixed = neapolitan_brackets(class);
+    let class = fixed.as_deref().unwrap_or(class);
+    if fixed.is_some() && is_class(class, &theme) {
+        return Some(class.to_string());
     }
     let parts = parts(class);
     let (body, names) = parts.split_last()?;
@@ -1185,6 +1243,41 @@ mod tests {
         assert_eq!(one("[culore:russo]"), "color: red");
         assert_eq!(one("contenuto-['★']"), "content: '★'");
         assert_eq!(one("-ncoppa-[3px]"), "top: calc(3px * -1)");
+    }
+
+    #[test]
+    fn english_in_brackets_is_not_a_class() {
+        let theme = Theme::default();
+        for class in [
+            "[color:red]",
+            "sfunno-[white]",
+            "larghezza-[auto]",
+            "[white-space:nowrap]",
+            "culore-[red]",
+        ] {
+            assert!(!is_class(class, &theme), "{class}");
+        }
+        for class in [
+            "[culore:russo]",
+            "sfunno-[janco]",
+            "larghezza-[automatico]",
+            "[white-space:nun-va-a-capo]",
+            "sfunno-[url(red.png)]",
+            "contenuto-['red']",
+            "[grid-column:span_2]",
+        ] {
+            assert!(is_class(class, &theme), "{class}");
+        }
+        for (english, nap) in [
+            ("[color:red]", "[culore:russo]"),
+            ("[white-space:nowrap]", "[white-space:nun-va-a-capo]"),
+            ("sfunno-[white]", "sfunno-[janco]"),
+            ("md:larghezza-[auto]", "md:larghezza-[automatico]"),
+            ("bg-[white]", "sfunno-[janco]"),
+            ("w-[auto]", "larghezza-[automatico]"),
+        ] {
+            assert_eq!(suggestion(english).as_deref(), Some(nap), "{english}");
+        }
     }
 
     #[test]
