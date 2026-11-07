@@ -1,0 +1,7 @@
+@chiamm "par-o-css"
+
+@tema {
+  --culore-pummarola-500: oklch(58% 0.21 28)
+  --culore-mozzarella: #fffdf7
+  --scrittura-sans: Georgia, serif
+}

@@ -1,0 +1,96 @@
+// A lesson is done when the user's page and the solution's have the same
+// styles: the same tree of elements and, for each element, the same computed
+// style for the properties below. How you get there does not matter: a class
+// in the page or a rule in the .cess are the same thing.
+//
+// Each page is rendered in a hidden frame 1024px wide (so md: and lg: apply),
+// without scripts. Its root gets display: none, so getComputedStyle gives the
+// computed value instead of the used one: width and height count only where
+// they are set ("auto" otherwise) and do not change with the text.
+// :passanno and notte: cannot be seen this way: lessons do not check them.
+// `albero` and `differenza` do not need a browser: test/confronta.test.js.
+
+/**
+ * The properties compared: colour and background, padding and margin,
+ * display, flex and grid (direction, wrapping, alignment, gaps, columns and
+ * rows, growing), width and height where set, borders (width, style, colour
+ * and radius), font (family, size, weight, style, line height, letter
+ * spacing), text (alignment, decoration, transform), box shadow, opacity and
+ * position.
+ */
+mann for chist è PROPRIETA = [
+    "color", "background-color", "background-image",
+    "padding-top", "padding-right", "padding-bottom", "padding-left",
+    "margin-top", "margin-right", "margin-bottom", "margin-left",
+    "display", "flex-direction", "flex-wrap", "flex-grow", "flex-shrink", "flex-basis",
+    "justify-content", "align-items", "align-content", "align-self",
+    "row-gap", "column-gap", "grid-template-columns", "grid-template-rows", "grid-column", "grid-row",
+    "width", "height", "min-width", "min-height", "max-width", "max-height",
+    "border-top-width", "border-right-width", "border-bottom-width", "border-left-width",
+    "border-top-style", "border-right-style", "border-bottom-style", "border-left-style",
+    "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
+    "border-top-left-radius", "border-top-right-radius", "border-bottom-right-radius", "border-bottom-left-radius",
+    "font-family", "font-size", "font-weight", "font-style", "line-height", "letter-spacing",
+    "text-align", "text-decoration-line", "text-transform",
+    "box-shadow", "opacity", "position", "top", "right", "bottom", "left",
+]
+
+// Elements that are not seen are not compared
+chist è SALTA = nu bell Set(["script", "style", "template", "noscript"])
+
+/** The tree of an element: tag, computed style of PROPRIETA, children. */
+mann for facc albero(el) {
+    chist è calcolato = el.ownerDocument.defaultView.getComputedStyle(el)
+    piglie {
+        tag: el.localName,
+        stile: Object.fromEntries(PROPRIETA.map((p) => [p, calcolato.getPropertyValue(p)])),
+        figli: [...el.children].filter((f) => !SALTA.has(f.localName)).map(albero),
+    }
+}
+
+/**
+ * Where two trees differ, as in "body > div:2: color rgb(…) ≠ rgb(…)", or
+ * null when they are the same.
+ */
+mann for facc differenza(a, b, dove = a.tag) {
+    si (a.tag !== b.tag) {
+        piglie `${dove}: <${a.tag}> ≠ <${b.tag}>`
+    }
+    pe ogni (chist è p dint PROPRIETA) {
+        si (a.stile[p] !== b.stile[p]) {
+            piglie `${dove}: ${p} ${a.stile[p]} ≠ ${b.stile[p]}`
+        }
+    }
+    si (a.figli.length !== b.figli.length) {
+        piglie `${dove}: ${a.figli.length} figli ≠ ${b.figli.length}`
+    }
+    pe ogni (chist è [i, uno] dint a.figli.entries()) {
+        chist è d = differenza(uno, b.figli[i], `${dove} > ${uno.tag}:${i + 1}`)
+        si (d !== nisciun) {
+            piglie d
+        }
+    }
+    piglie nisciun
+}
+
+/** The tree of the <body> of an HTML page, rendered in a hidden frame. */
+mann for facc fotografa(html) {
+    piglie nu bell Promise((risolvi) => {
+        chist è fenestella = document.createElement("iframe")
+        // No allow-scripts: the page does nothing, and we can read it
+        fenestella.setAttribute("sandbox", "allow-same-origin")
+        fenestella.setAttribute("aria-hidden", "true")
+        fenestella.tabIndex = -1
+        fenestella.style.cssText = "position:fixed;left:-10000px;top:0;width:1024px;height:768px;visibility:hidden;border:0"
+        fenestella.addEventListener("load", () => {
+            chist è doc = fenestella.contentDocument
+            doc.documentElement.style.setProperty("display", "none", "important")
+            chist è risultato = albero(doc.body)
+            fenestella.remove()
+            risolvi(risultato)
+        })
+        // Scripts would not run anyway: without them the browser does not log that they are blocked
+        fenestella.srcdoc = html.replace(/<script\b[\s\S]*?<\/script>/gi, "")
+        document.body.append(fenestella)
+    })
+}

@@ -1,0 +1,7 @@
+<cascett classe="larghezza-massima-md margine-x-automatico margine-ncoppa-4 spazio-6 sfunno-giallo-100 bordo-tunno-lg">
+  <luccolo classe="margine-sotto-4 grassetto">'O menù</luccolo>
+  <cascett classe="griglia colonne-2 spazio-mmiez-4">
+    <scatulell classe="spazio-x-3 spazio-y-2 sfunno-janco bordo-tunno">Margherita</scatulell>
+    <scatulell classe="spazio-x-3 spazio-y-2 sfunno-janco bordo-tunno">Marinara</scatulell>
+  </cascett>
+</cascett>

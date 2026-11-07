@@ -1,0 +1,13 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>'O menù</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="spazio-8">
+    <list classe="griglia spazio-mmiez-4">
+      <voce classe="spazio-4 bordo bordo-grigio-300 bordo-tunno-lg">Margherita</voce>
+      <voce classe="spazio-4 bordo bordo-grigio-300 bordo-tunno-lg">Marinara</voce>
+      <voce classe="spazio-4 bordo bordo-grigio-300 bordo-tunno-lg">Diavola</voce>
+    </list>
+  </panz>
+</cristian>

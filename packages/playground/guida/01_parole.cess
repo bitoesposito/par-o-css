@@ -1,0 +1,17 @@
+/* culore è color, sfunno-culore è background-color, russo è red */
+panz {
+  scrittura: system-ui, sans-serif
+  sfunno-culore: #fffdf7
+  spazio: 2rem
+}
+
+luccolone {
+  culore: russo
+  allinea-testo: miezo
+}
+
+chiacchier {
+  culore: #555
+  scrittura-grannezza: 1.1rem
+  altezza-riga: 1.6
+}

@@ -1,0 +1,42 @@
+// Small helpers for every part of the playground
+
+/** An element with classes and, when given, text. */
+mann for facc crea(tag, classe = "", testo) {
+    chist è el = document.createElement(tag)
+    si (classe) {
+        el.className = classe
+    }
+    si (testo !== boh) {
+        el.textContent = testo
+    }
+    piglie el
+}
+
+/** Text with `code` between backticks, as in lessons and the guide. */
+mann for facc scriviTesto(el, testo) {
+    el.replaceChildren()
+    pe ogni (chist è [i, pezzo] dint testo.split(/`([^`]+)`/).entries()) {
+        si (i % 2 === 1) {
+            el.append(crea("code", "", pezzo))
+        } sinnò si (pezzo) {
+            el.append(pezzo)
+        }
+    }
+}
+
+/** Reading and writing localStorage without throwing (private browsing). */
+mann for facc leggiSalvato(chiave) {
+    pruvamm {
+        piglie localStorage.getItem(chiave)
+    } e si schiatta (e) {
+        piglie nisciun
+    }
+}
+
+mann for facc salva(chiave, valore) {
+    pruvamm {
+        localStorage.setItem(chiave, valore)
+    } e si schiatta (e) {
+        // It lasts for this visit
+    }
+}

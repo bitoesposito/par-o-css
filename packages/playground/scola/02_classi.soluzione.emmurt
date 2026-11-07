@@ -1,0 +1,9 @@
+<cristian lingua="it">
+  <capa>
+    <titolo>'E classi</titolo>
+    <attacca rapporto="stile" addo="stile.cess">
+  </capa>
+  <panz classe="spazio-8">
+    <citofono tipo="buttone" classe="spazio-x-4 spazio-y-2 bordo-tunno-lg sfunno-blu-500 culore-janco">Ordina</citofono>
+  </panz>
+</cristian>

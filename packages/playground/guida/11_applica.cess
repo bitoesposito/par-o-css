@@ -1,0 +1,7 @@
+@chiamm "par-o-css"
+
+.ordina {
+  @applica spazio-x-4 spazio-y-2 bordo-tunno-lg sfunno-russo-500 culore-janco grassetto
+  @applica passanno:sfunno-russo-600
+  transizione: sfunno-culore 0.2s facile
+}

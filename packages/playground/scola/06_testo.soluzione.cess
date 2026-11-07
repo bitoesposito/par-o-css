@@ -1,0 +1,11 @@
+@chiamm "par-o-css"
+
+luccolone {
+  trasforma-testo: maiuscolo
+  allinea-testo: miezo
+}
+
+chiacchier {
+  scrittura-stile: corsivo
+  allinea-testo: miezo
+}
