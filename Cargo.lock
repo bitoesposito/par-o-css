@@ -17,7 +17,7 @@ checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 [[package]]
 name = "fratm-core"
 version = "0.17.1"
-source = "git+https://github.com/bitoesposito/fratmscript?rev=705846174e2e6c6bb50ef86a0a0ad340af290b0f#705846174e2e6c6bb50ef86a0a0ad340af290b0f"
+source = "git+https://github.com/kkratterf/fratmscript?rev=d533b342f933e77e2d629a8a13b0472efe17d2a5#d533b342f933e77e2d629a8a13b0472efe17d2a5"
 dependencies = [
  "serde",
  "serde_json",
